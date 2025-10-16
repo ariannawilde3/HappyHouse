@@ -1,8 +1,8 @@
-import ProfilePage from './pages/ProfilePage';
+import Login from './pages/Login';
 
 function App() {
   return (
-    <ProfilePage />
+    <Login />
   );
 }
 

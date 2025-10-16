@@ -28,7 +28,7 @@ export default function LoginPage() {
         <div className="content-area">
           <div className="logo-container">
             <div className="logo-circle">
-              <span className="logo-text">HM</span>
+              <span className="logo-text">HH</span>
             </div>
           </div>
 
