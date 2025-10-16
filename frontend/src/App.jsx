@@ -1,8 +1,8 @@
-import ProfilePage from './pages/ProfilePage';
+import Forum from './pages/Forum';
 
 function App() {
   return (
-    <ProfilePage />
+    <Forum />
   );
 }
 
