@@ -1,0 +1,161 @@
+/* Outer container - gray background */
+.guest-settings-outer-container {
+  min-height: 100vh;
+  width: 100%;
+  background-color: #e5e5e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* Phone frame */
+.guest-settings-phone-frame {
+  width: 100%;
+  max-width: 375px;
+  min-height: 667px;
+  background-color: #f5f5f0;
+  border-radius: 30px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  border: 8px solid #1f2937;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Status bar */
+.guest-settings-status-bar {
+  background-color: #1f2937;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  color: white;
+  font-size: 12px;
+}
+
+/* Content area */
+.guest-settings-content-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1.5rem;
+  padding-top: 3rem;
+  min-height: calc(667px - 24px - 65px);
+}
+
+/* Header section */
+.guest-settings-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.guest-settings-your-text {
+  color: #6b7280;
+  font-size: 1.5rem;
+  margin: 0;
+  margin-bottom: 0.25rem;
+}
+
+.guest-settings-app-title {
+  color: #7a9b7e;
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Guest message card */
+.guest-settings-guest-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 2rem 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 320px;
+}
+
+.guest-settings-greeting {
+  font-size: 1.75rem;
+  color: #374151;
+  margin: 0;
+  margin-bottom: 1rem;
+  font-weight: 600;
+}
+
+.guest-settings-message {
+  font-size: 1rem;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+  margin-bottom: 1.5rem;
+}
+
+/* Button */
+.guest-settings-btn {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  font-weight: 500;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 1rem;
+}
+
+.guest-settings-btn-primary {
+  background-color: #7a9b7e;
+  color: white;
+}
+
+.guest-settings-btn-primary:hover {
+  background-color: #6a8b6e;
+}
+
+/* Navigation Bar */
+.guest-settings-nav-bar {
+  position: absolute;
+  width: 100%;
+  height: 65px;
+  bottom: 0;
+  background: #7FA58A;
+  display: flex;
+  border-radius: 0 0 22px 22px;
+}
+
+/* Nav buttons */
+.guest-settings-chat-btn, .guest-settings-forum-btn, .guest-settings-profile-btn {
+  flex: 1;
+  height: 65px;
+  padding-top: 4px;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s, transform 0.2s;
+  position: relative;
+}
+
+.guest-settings-chat-btn:hover, .guest-settings-forum-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transform: scale(1.05);
+}
+
+/* Notification badge */
+.guest-settings-notification-badge {
+  position: absolute;
+  top: 8px;
+  left: calc(50% + 15px);
+  background-color: white;
+  color: #7a9b7e;
+  font-size: 0.75rem;
+  font-weight: bold;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
