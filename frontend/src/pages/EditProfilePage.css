@@ -1,0 +1,203 @@
+/* Outer container - gray background */
+.edit-outer-container {
+  min-height: 100vh;
+  width: 100%;
+  background-color: #e5e5e5;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+/* Phone frame */
+.edit-phone-frame {
+  width: 100%;
+  max-width: 375px;
+  min-height: 667px;
+  background-color: #f5f5f0;
+  border-radius: 30px;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.25);
+  border: 8px solid #1f2937;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Status bar */
+.edit-status-bar {
+  background-color: #1f2937;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  color: white;
+  font-size: 12px;
+}
+
+/* Content area */
+.edit-content-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 2rem 1.5rem;
+  padding-top: 3rem;
+  min-height: calc(667px - 24px - 65px);
+}
+
+/* Header section */
+.edit-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.edit-your-text {
+  color: #6b7280;
+  font-size: 1.5rem;
+  margin: 0;
+  margin-bottom: 0.25rem;
+}
+
+.edit-app-title {
+  color: #7a9b7e;
+  font-size: 2.5rem;
+  font-weight: 600;
+  margin: 0;
+}
+
+/* Profile card */
+.edit-profile-card {
+  background-color: white;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 320px;
+}
+
+/* Input groups */
+.edit-input-group {
+  margin-bottom: 1.25rem;
+}
+
+.edit-label {
+  display: block;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+}
+
+.edit-input-field {
+  width: 100%;
+  padding: 0.625rem 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+  box-sizing: border-box;
+  color: #374151;
+}
+
+.edit-input-field:focus {
+  outline: none;
+  border-color: #7a9b7e;
+  box-shadow: 0 0 0 3px rgba(122, 155, 126, 0.1);
+}
+
+/* Username section */
+.edit-username-section {
+  margin-bottom: 1.25rem;
+}
+
+.edit-username-label {
+  font-size: 0.875rem;
+  color: #6b7280;
+  margin: 0;
+  margin-bottom: 0.25rem;
+}
+
+.edit-username-value {
+  font-size: 1rem;
+  color: #7a9b7e;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Buttons */
+.edit-btn {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  font-weight: 500;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.edit-btn-primary {
+  background-color: #7a9b7e;
+  color: white;
+}
+
+.edit-btn-primary:hover {
+  background-color: #6a8b6e;
+}
+
+.edit-btn-secondary {
+  background-color: #9ca3af;
+  color: white;
+  margin-bottom: 0;
+}
+
+.edit-btn-secondary:hover {
+  background-color: #6b7280;
+}
+
+/* Navigation Bar */
+.edit-nav-bar {
+  position: absolute;
+  width: 100%;
+  height: 65px;
+  bottom: 0;
+  background: #7FA58A;
+  display: flex;
+  border-radius: 0 0 22px 22px;
+}
+
+/* Nav buttons */
+.edit-chat-btn, .edit-forum-btn, .edit-settings-btn {
+  flex: 1;
+  height: 65px;
+  padding-top: 4px;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+  position: relative;
+}
+
+.edit-chat-btn:hover, .edit-forum-btn:hover, .edit-settings-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+  transform: scale(1.05);
+}
+
+/* Notification badge */
+.edit-notification-badge {
+  position: absolute;
+  top: 8px;
+  right: calc(50% - 32px);
+  background-color: white;
+  color: #7a9b7e;
+  font-size: 0.75rem;
+  font-weight: bold;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}

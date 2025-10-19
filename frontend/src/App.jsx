@@ -1,8 +1,8 @@
-import Forum from './pages/Forum';
+import EditProfilePage from './pages/EditProfilePage.jsx';
 
 function App() {
   return (
-    <Forum />
+    <EditProfilePage />
   );
 }
 
