@@ -1,8 +1,8 @@
-import ProfilePage from './pages/ProfilePage';
+import EditProfilePage from './pages/EditProfilePage.jsx';
 
 function App() {
   return (
-    <ProfilePage />
+    <EditProfilePage />
   );
 }
 
