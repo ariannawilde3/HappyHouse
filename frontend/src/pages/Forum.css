@@ -64,11 +64,113 @@
   margin: 0;
 }
 
+/* Search Bar Styles */
+.searchBar {
+  width: 100%;
+  margin-bottom: 1.5rem;
+  padding: 0 1rem;
+}
+
+.search-form {
+  width: 100%;
+}
+
+.search-input-container {
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border: 2px solid #e5e7eb;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.search-input-container:focus-within {
+  border-color: #7a9b7e;
+  box-shadow: 0 0 0 3px rgba(122, 155, 126, 0.1);
+}
+
+.search-input {
+  flex: 1;
+  padding: 12px;
+  border: none;
+  outline: none;
+  font-size: 16px;
+  background: white;
+  color: #374151;
+  width: 100%;
+}
+
+.search-input::placeholder {
+  color: #9ca3af;
+}
+
+.search-btn, .filter-btn {
+  border: none;
+  padding-inline: 12px;
+  background: transparent;
+  cursor: pointer;
+}
+
+.search-btn:hover img {
+  transform: scale(1.05);
+  filter: brightness(0.7);
+}
+
+/* Tags */
+.tags-container {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  height: 24px;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+}
+
+.tags-label {
+  color:#374151;
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.tag {
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 12px;
+  background:#374151;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.25);
+  border-radius: 4px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.tag:hover {
+  transform: scale(1.05); /* grow effect on hover */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  background-color: #6a8b6e;
+}
+
+/* No Posts Placeholder Text */
+.no-posts-txt-container {
+  padding: 24px;
+}
+
+.no-posts-txt1, .no-posts-txt2 {
+  color: #6a8b6e;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 /* Post button */
 .post-btn {
   position: absolute;
-  bottom: 80px; /* 65px (nav height) + 15px spacing */
-  right: 20px; /* 20px from right edge */
+  bottom: 80px; 
+  right: 20px;
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -80,16 +182,14 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer; /* Added cursor pointer */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Added shadow for better visibility */
-  transition: transform 0.2s, box-shadow 0.2s; /* Added smooth animation */
-  z-index: 10; /* Ensure it stays above other content */
+  cursor: pointer;
+  z-index: 10;
 }
 
 .post-btn:hover {
-  transform: scale(1.05); /* Slight grow effect on hover */
+  transform: scale(1.05); /* grow effect on hover */
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-  background-color: #6a8b6e; /* Slightly darker green on hover */
+  background-color: #6a8b6e;
 }
 
 /* Nav Bar */
