@@ -1,8 +1,8 @@
-import Erm from './pages/CreatePoll.jsx';
+import PostViewing from './pages/PostViewing.jsx';
 
 function App() {
   return (
-    <Erm />
+    <PostViewing />
   );
 }
 

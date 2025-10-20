@@ -49,6 +49,16 @@ function App() {
 
 export default App;
 
+import Chat from './pages/Chat.jsx';
+
+function App() {
+  return (
+    <Chat />
+  );
+}
+
+export default App;
+
 import Pins from './pages/Pins.jsx';
 
 function App() {
@@ -84,6 +94,16 @@ import Forum from './pages/Forum.jsx';
 function App() {
   return (
     <Forum />
+  );
+}
+
+export default App;
+
+import PostViewing from './pages/PostViewing.jsx';
+
+function App() {
+  return (
+    <PostViewing />
   );
 }
 
