@@ -77,15 +77,24 @@
   padding: 8px;
   align-items: center;
   justify-content: center;
-  background-color: dimgray;
+  background-color: #9ca3af;
   color: white;
   border-radius: 10px;
   border: hidden;
   box-shadow: 0px 3px 3px #C8C8C8;
+  transition: background-color 0.2s;
+}
+
+.chat-bar-btn:hover {
+	background-color: #6b7280;
 }
 
 .active-chat-bar-btn {
   background-color: #7a9b7e;
+}
+
+.active-chat-bar-btn:hover {
+  background-color: #6a8b6e;
 }
 
 .poll-title {
