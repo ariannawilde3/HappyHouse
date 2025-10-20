@@ -1,8 +1,8 @@
-import Chat from './pages/Chat.jsx';
+import Erm from './pages/CreatePoll.jsx';
 
 function App() {
   return (
-    <Chat />
+    <Erm />
   );
 }
 

@@ -77,15 +77,24 @@
   padding: 8px;
   align-items: center;
   justify-content: center;
-  background-color: dimgray;
+  background-color: #9ca3af;
   color: white;
   border-radius: 10px;
   border: hidden;
   box-shadow: 0px 3px 3px #C8C8C8;
+  transition: background-color 0.2s;
+}
+
+.chat-bar-btn:hover {
+	background-color: #6b7280;
 }
 
 .active-chat-bar-btn {
   background-color: #7a9b7e;
+}
+
+.active-chat-bar-btn:hover {
+  background-color: #6a8b6e;
 }
 
 .poll-title {
@@ -118,8 +127,8 @@
   width: 0px;
   height: 0px;
 
-  border: 5px solid #f5f5f0;
-  box-shadow: 0 0 0 2px #f5f5f0,
+  border: 5px solid white;
+  box-shadow: 0 0 0 2px white,
 			  0 0 0 4px #7a9b7e;
 
   margin-right: 10px;
@@ -142,12 +151,13 @@
   box-shadow: 0px 2px 5px gray;
   font-size: 0.9rem;
   text-align: center;
+  background-color: white;
 }
 
 .poll-option-btn {
 	margin: 20px;
 	padding: 10px;
-	background-color: #f5f5f0;
+	background-color: white;
 	border-radius: 10px;
   border: hidden;
   box-shadow: 0px 2px 5px gray;
@@ -168,7 +178,7 @@
   box-shadow: 0px 3px 3px #C8C8C8;
 }
 
-.create-btn {
+/*.create-btn {
   border: none;
   border-radius: 50%;
   color: white;
@@ -179,7 +189,33 @@
   bottom: 75px;
   right: 10px;
   position: absolute;
+}*/
+
+.create-btn {
+  position: absolute;
+  bottom: 80px; 
+  right: 20px;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  font-size: 30px;
+  font-weight: bold;
+  border: none;
+  background-color: #7a9b7e;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
 }
+
+.create-btn:hover {
+  transform: scale(1.05); /* grow effect on hover */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  background-color: #6a8b6e;
+}
+
 
 /* Nav Bar */
 .polls-nav-bar {
@@ -208,7 +244,7 @@
   filter: brightness(1000%);
 }
 
-.inactive-btn:hover {
+.nav-btn:hover, {
   background-color: rgba(255, 255, 255, 0.1);
   cursor: pointer;
 }
