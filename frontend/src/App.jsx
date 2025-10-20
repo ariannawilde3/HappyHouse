@@ -1,8 +1,8 @@
-import Erm from './pages/CreatePoll.jsx';
+import PGCSettings from './pages/PGCSettings.jsx';
 
 function App() {
   return (
-    <Erm />
+    <Pins />
   );
 }
 
