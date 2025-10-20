@@ -1,8 +1,8 @@
-import MakePost from './pages/MakePost.jsx';
+import Erm from './pages/CreatePoll.jsx';
 
 function App() {
   return (
-    <MakePost />
+    <Erm />
   );
 }
 

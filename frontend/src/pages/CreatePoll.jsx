@@ -51,7 +51,7 @@ export default function CreatePoll() {
 							<input className="poll-option-text" type="text" placeholder="Option 2"></input>
 						</div>
 					</div>
-					<button className="poll-finish-btn" style={{ backgroundColor: '#7a9b7e'}}>Send Poll</button>
+					<button className="poll-finish-btn primary-btn">Send Poll</button>
 					<button className="poll-finish-btn">Cancel</button>
                 </div>
 
