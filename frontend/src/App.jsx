@@ -1,8 +1,8 @@
-import Forum from './pages/Forum.jsx';
+import Chat from './pages/Chat.jsx';
 
 function App() {
   return (
-    <Forum />
+    <Chat />
   );
 }
 
