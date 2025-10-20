@@ -1,8 +1,8 @@
-import PostViewing from './pages/PostViewing.jsx';
+import MakePost from './pages/MakePost.jsx';
 
 function App() {
   return (
-    <PostViewing />
+    <MakePost />
   );
 }
 

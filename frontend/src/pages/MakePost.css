@@ -98,7 +98,7 @@
 }
 
 .desc-input {
-  height: 120px;
+  height: 180px;
   vertical-align: top;
   text-align: left;
   line-height: 1.4;
@@ -211,7 +211,7 @@
 }
 
 /* Buttons */
-.chat-btn, .post-btn, .profile-btn {
+.chat-btn, .forum-btn, .profile-btn {
   flex: 1;
   height: 65px;
   padding-top: 4px;
@@ -221,6 +221,10 @@
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s;
+}
+
+.forum-btn {
+  filter: brightness(1000%);
 }
 
 .chat-btn:hover, .profile-btn:hover {
