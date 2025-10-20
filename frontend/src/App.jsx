@@ -1,8 +1,8 @@
-import Chat from './pages/Chat.jsx';
+import MakePost from './pages/MakePost.jsx';
 
 function App() {
   return (
-    <Chat />
+    <MakePost />
   );
 }
 

@@ -90,7 +90,7 @@ export default function MakePostPage() {
                             <img src={house} desc="House Chat" style={{ width: '50px', height: '50px' }}/>
                         </button>
 
-                        <button className="post-btn">
+                        <button className="forum-btn">
                             <img src={neighborhood} desc="Forum" style={{ width: '115px', height: '50px' }}/>
                         </button>
 
