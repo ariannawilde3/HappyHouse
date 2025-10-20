@@ -1,5 +1,5 @@
 /* Outer container - gray background */
-.forum-outer-container {
+.post-outer-container {
   min-height: 100vh;
   width: 100%;
   background-color: #e5e5e5;
@@ -10,7 +10,7 @@
 }
 
 /* Phone frame */
-.forum-phone-frame {
+.post-phone-frame {
   width: 100%;
   max-width: 375px;
   min-height: 667px;
@@ -23,7 +23,7 @@
 }
 
 /* Status bar */
-.forum-status-bar {
+.post-status-bar {
   background-color: #1f2937;
   height: 24px;
   display: flex;
@@ -35,7 +35,7 @@
 }
 
 /* Content area */
-.forum-content-area {
+.post-content-area {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -45,75 +45,98 @@
 }
 
 /* Welcome section */
-.forum-welcome-section {
+.post-welcome-section {
   text-align: center;
-  margin-bottom: 2rem;
+  margin-bottom: 0;
 }
 
-.forum-welcome-subtitle {
+.post-welcome-subtitle {
   color: #6b7280;
   font-size: 1.125rem;
   margin: 0;
   margin-bottom: 0.25rem;
 }
 
-.forum-welcome-title {
+.post-welcome-title {
   font-size: 2.25rem;
   font-weight: 600;
   color: #7a9b7e;
   margin: 0;
 }
 
-/* Search Bar Styles */
-.searchBar {
-  width: 100%;
-  margin-bottom: 1.5rem;
-  padding: 0 1rem;
-}
-
-.search-form {
-  width: 100%;
-}
-
-.search-input-container {
+/* Input fields */
+.post-form {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  width: 100%;
+  gap: 1rem;
+}
+
+.post-container {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  overflow: visible;
+  gap: 1rem;
+  padding: 20px;
+  width: 100%;
+}
+
+.title-input, .desc-input {
   background-color: white;
   border: 2px solid #e5e7eb;
-  border-radius: 15px;
+  border-radius: 6px;
   overflow: hidden;
-}
-
-.search-input-container:focus-within {
-  border-color: #7a9b7e;
-  box-shadow: 0 0 0 3px rgba(122, 155, 126, 0.1);
-}
-
-.search-input {
-  flex: 1;
-  padding: 12px;
-  border: none;
+  font-size: 14px;
   outline: none;
-  font-size: 16px;
-  background: white;
-  color: #374151;
   width: 100%;
+  padding: 12px 16px;
+  box-sizing: border-box;
+  min-height: 48px; 
+  color: #374151;
+  font-family: inherit;
 }
 
-.search-input::placeholder {
-  color: #9ca3af;
+.desc-input {
+  height: 120px;
+  vertical-align: top;
+  text-align: left;
+  line-height: 1.4;
 }
 
-.search-btn, .filter-btn {
+.title-input:focus-within, .desc-input:focus-within {
+  border-color: #7a9b7e;
+}
+
+/* Post buttons */
+.submit-post-btn, .cancel-post-btn {
+  width: 100%;
+  padding: 0.875rem 1.5rem;
+  font-weight: 500;
+  border-radius: 8px;
   border: none;
-  padding-inline: 12px;
-  background: transparent;
   cursor: pointer;
+  transition: background-color 0.2s;
+  font-size: 1rem;
+  margin-bottom: 0.75rem;
+  color: white;
 }
 
-.search-btn:hover img {
-  transform: scale(1.05);
-  filter: brightness(0.7);
+.submit-post-btn {
+  background-color: #7a9b7e;
+}
+
+.submit-post-btn:hover {
+  background-color: #6a8b6e;
+}
+
+.cancel-post-btn {
+  background-color: #9ca3af;
+  margin-bottom: 0;
+}
+
+.cancel-post-btn:hover {
+  background-color: #6b7280;
 }
 
 /* Tags */
@@ -177,45 +200,8 @@
   background-color: #6a8b6e;
 }
 
-/* No Posts Placeholder Text */
-.no-posts-txt-container {
-  padding: 24px;
-  color: #6a8b6e;
-  font-size: 15px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-}
-
-/* Post button */
-.post-btn {
-  position: absolute;
-  bottom: 80px; 
-  right: 20px;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  font-size: 30px;
-  font-weight: bold;
-  border: none;
-  background-color: #7a9b7e;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  z-index: 10;
-}
-
-.post-btn:hover {
-  transform: scale(1.05); /* grow effect on hover */
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-  background-color: #6a8b6e;
-}
-
 /* Nav Bar */
-.forum-nav-bar {
+.post-nav-bar {
   position: absolute;
   width: 100%;
   height: 65px;
@@ -225,7 +211,7 @@
 }
 
 /* Buttons */
-.chat-btn, .forum-btn, .profile-btn {
+.chat-btn, .post-btn, .profile-btn {
   flex: 1;
   height: 65px;
   padding-top: 4px;
