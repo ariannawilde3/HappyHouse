@@ -1,8 +1,8 @@
-import EditProfilePage from './pages/EditProfilePage.jsx';
+import Chat from './pages/Chat.jsx';
 
 function App() {
   return (
-    <EditProfilePage />
+    <Chat />
   );
 }
 
