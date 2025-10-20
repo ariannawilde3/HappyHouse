@@ -104,6 +104,7 @@
   border-radius: 10px;
   border: hidden;
   box-shadow: 0px 2px 5px gray;
+  background-color: white;
 }
 
 /* Nav Bar */
@@ -133,7 +134,7 @@
   filter: brightness(1000%);
 }
 
-.inactive-btn:hover {
+.nav-btn:hover {
   background-color: rgba(255, 255, 255, 0.1);
   cursor: pointer;
 }
