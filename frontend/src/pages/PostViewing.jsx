@@ -1,6 +1,5 @@
 /*Keira*/
 
-/*copied code*/
 import React, { useState } from 'react';
 import './PostViewing.css';
 import house from '../assets/images/house.png';

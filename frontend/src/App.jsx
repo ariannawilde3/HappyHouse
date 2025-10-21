@@ -1,8 +1,8 @@
-import PGCSettings from './pages/PGCSettings.jsx';
+import Chat from './pages/Chat.jsx';
 
 function App() {
   return (
-    <Pins />
+    <Chat />
   );
 }
 

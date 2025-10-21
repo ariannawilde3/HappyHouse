@@ -1,5 +1,5 @@
 /* Outer container - gray background */
-.forum-outer-container {
+.chat-outer-container {
   min-height: 100vh;
   width: 100%;
   background-color: #e5e5e5;
@@ -10,7 +10,7 @@
 }
 
 /* Phone frame */
-.forum-phone-frame {
+.chat-phone-frame {
   width: 100%;
   max-width: 375px;
   min-height: 667px;
@@ -20,10 +20,13 @@
   border: 8px solid #1f2937;
   overflow: hidden;
   position: relative;
+
+  display: flex; 
+  flex-direction: column;
 }
 
 /* Status bar */
-.forum-status-bar {
+.chat-status-bar {
   background-color: #1f2937;
   height: 24px;
   display: flex;
@@ -35,65 +38,110 @@
 }
 
 /* Content area */
-.forum-content-area {
+.chat-content-area {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
   padding-top: 3rem;
+
+
+  overflow-y: auto; /* ADD THIS - enables scrolling */
+  max-height: calc(667px - 24px - 65px);
+  padding-bottom: 85px;
+
 }
 
 /* Welcome section */
-.forum-welcome-section {
+.chat-welcome-section {
   text-align: center;
   margin-bottom: 2rem;
 }
 
-.forum-welcome-subtitle {
+.chat-welcome-subtitle {
   color: #6b7280;
   font-size: 1.125rem;
   margin: 0;
   margin-bottom: 0.25rem;
 }
 
-.forum-welcome-title {
+.chat-welcome-title {
   font-size: 2.25rem;
   font-weight: 600;
   color: #7a9b7e;
   margin: 0;
 }
 
-/* Post button */
-.post-btn {
-  position: absolute;
-  bottom: 80px; /* 65px (nav height) + 15px spacing */
-  right: 20px; /* 20px from right edge */
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  font-size: 30px;
-  font-weight: bold;
-  border: none;
-  background-color: #7a9b7e;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer; /* Added cursor pointer */
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* Added shadow for better visibility */
-  transition: transform 0.2s, box-shadow 0.2s; /* Added smooth animation */
-  z-index: 10; /* Ensure it stays above other content */
+.chat-btn-bar {
+  text-align: center;
+  width: 100%;
+  height: 100%;
 }
 
-.post-btn:hover {
-  transform: scale(1.05); /* Slight grow effect on hover */
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-  background-color: #6a8b6e; /* Slightly darker green on hover */
+.chat-bar-btn {
+  width: 30%;
+  margin: 1.5%;
+  padding: 8px;
+  align-items: center;
+  justify-content: center;
+  background-color: #9ca3af; /*background color of messages and polls buttons*/
+  color: white; /*text color*/
+  border-radius: 10px;
+  border: hidden;
+  box-shadow: 0px 3px 3px #C8C8C8;
+  transition: background-color 0.2s;
+}
+
+.chat-bar-btn:hover {
+	background-color: #6b7280;
+}
+
+.active-chat-bar-btn {
+  background-color: #7a9b7e;
+}
+
+.active-chat-bar-btn:hover {
+  background-color: #6a8b6e;
+}
+
+.message-date {
+  margin-top: 0px;
+  text-align: center;
+}
+
+.message-content {
+  font-weight: 2;
+}
+
+.message {
+  margin-top: 15px;
+  width: 80%;
+  margin-right: auto;
+  margin-left: 0;
+  padding: 10px;
+  border-radius: 10px;
+  border: hidden;
+  box-shadow: 0px 2px 5px gray;
+  background-color: #d5e5e0;
+  outline: 2px solid #648a6f;
+}
+
+.your-message {
+  margin-top: 15px;
+  width: 80%;
+  margin-right: 0;
+  margin-left: auto;
+  padding: 10px;
+  border-radius: 10px;
+  border: hidden;
+  box-shadow: 0px 2px 5px gray;
+  background-color: #efefef;
+  outline: 2px solid #595959;
 }
 
 /* Nav Bar */
-.forum-nav-bar {
+.chat-nav-bar {
   position: absolute;
   width: 100%;
   height: 65px;
@@ -103,7 +151,7 @@
 }
 
 /* Buttons */
-.chat-btn, .forum-btn, .profile-btn {
+.nav-btn {
   flex: 1;
   height: 65px;
   padding-top: 4px;
@@ -115,9 +163,11 @@
   transition: background-color 0.2s;
 }
 
-.chat-btn:hover, .profile-btn:hover {
-  /* changes background color, cursor, and makes the icon pop out */
+.active-btn {
+  filter: brightness(1000%);
+}
+
+.nav-btn:hover {
   background-color: rgba(255, 255, 255, 0.1);
   cursor: pointer;
-  transform: scale(1.05); 
 }
