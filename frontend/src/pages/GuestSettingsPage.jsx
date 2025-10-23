@@ -1,19 +1,25 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import './GuestSettingsPage.css';
 import house from '../assets/images/house.png';
 import neighborhood from '../assets/images/neighborhood.png';
 import settings from '../assets/images/settings.png';
 
 export default function GuestSettingsPage() {
+  const navigate = useNavigate();
+
   const goToChat = () => {
+    navigate('/house');
     console.log('House icon clicked');
   };
 
   const goToForum = () => {
+    navigate('/neighborhood');
     console.log('Forum icon clicked');
   };
 
   const handleProceedToLogin = () => {
+    navigate('/');
     console.log('Proceed to Login clicked');
   };
 
@@ -46,19 +52,18 @@ export default function GuestSettingsPage() {
           </div>
         </div>
 
-        {/* Navigation Bar - WITH IMAGES */}
+        {/* Navigation Bar */}
         <div className="guest-settings-nav-bar">
-          <button onClick={goToChat} className="guest-settings-chat-btn">
-            <span className="guest-settings-notification-badge">1</span>
-            <img src={house} alt="House Chat" style={{ width: '50px', height: '50px' }}/>
+          <button onClick={goToChat} className="nav-btn inactive-btn">
+            <img src={house} desc="House Chat" style={{ width: '50px', height: '50px'}}/>
           </button>
-
-          <button onClick={goToForum} className="guest-settings-forum-btn">
-            <img src={neighborhood} alt="Forum" style={{ width: '115px', height: '50px' }}/>
+        
+          <button onClick={goToForum} className="nav-btn inactive-btn">
+            <img src={neighborhood} desc="Forum" style={{ width: '115px', height: '50px' }}/>
           </button>
-
-          <button className="guest-settings-profile-btn">
-            <img src={settings} alt="Settings" style={{ width: '50px', height: '50px' }}/>
+        
+          <button className="nav-btn active-btn">
+            <img src={settings} desc="Settings" style={{ width: '50px', height: '50px' }}/>
           </button>
         </div>
       </div>

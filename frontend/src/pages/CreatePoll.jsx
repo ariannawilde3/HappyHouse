@@ -1,17 +1,41 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './CreatePoll.css';
 import house from '../assets/images/house.png';
 import neighborhood from'../assets/images/neighborhood.png';
 import settings from '../assets/images/settings.png';
 
 export default function CreatePoll() {
+    const navigate = useNavigate();
 
-    const goToChat = () => {
+    const goToForum = () => {
+        navigate('/neighborhood');
         console.log('House icon clicked');
     }
 
     const goToProfile = () => {
+        navigate('/profile');
         console.log('Settings icon clicked');
+    };
+
+    const goToChat = () => {
+        navigate('/house');
+        console.log('chat icon clicked');
+    };
+
+    const goToPins = () => {
+        navigate('/pins');
+        console.log('pins icon clicked');
+    };
+
+    const sendPoll = () => {
+        navigate('/polls');
+        console.log('polls icon clicked');
+    };
+
+    const cancelPoll = () => {
+        navigate('/polls');
+        console.log('polls icon clicked');
     };
 
     return (
@@ -32,8 +56,8 @@ export default function CreatePoll() {
                         <h1 className="polls-welcome-title">HouseName</h1>
                     </div>
 					<div className="chat-btn-bar">
-						<button className="chat-bar-btn">Messages</button>
-						<button className="chat-bar-btn">Pinned</button>
+						<button onClick={goToChat} className="chat-bar-btn">Messages</button>
+						<button onClick={goToPins} className="chat-bar-btn">Pinned</button>
 						<button className="chat-bar-btn active-chat-bar-btn">Polls</button>
 					</div>
 					
@@ -51,26 +75,25 @@ export default function CreatePoll() {
 							<input className="poll-option-text" type="text" placeholder="Option 2"></input>
 						</div>
 					</div>
-					<button className="poll-finish-btn primary-btn">Send Poll</button>
-					<button className="poll-finish-btn">Cancel</button>
+					<button onClick={sendPoll} className="poll-finish-btn primary-btn">Send Poll</button>
+					<button onClick={cancelPoll} className="poll-finish-btn">Cancel</button>
                 </div>
 
 
         
                 {/* Navigation Bar */}
                 <div className="polls-nav-bar">
-                    <button onClick={goToChat} className="nav-btn active-btn">
+                    <button className="nav-btn active-btn">
                         <img src={house} desc="House Chat" style={{ width: '50px', height: '50px'}}/>
                     </button>
 
-                    <button className="nav-btn inactive-btn">
+                    <button onClick={goToForum} className="nav-btn inactive-btn">
                         <img src={neighborhood} desc="Forum" style={{ width: '115px', height: '50px' }}/>
                     </button>
 
                     <button onClick={goToProfile} className="nav-btn inactive-btn">
                         <img src={settings} desc="Settings" style={{ width: '50px', height: '50px' }}/>
                     </button>
-
                 </div>
             </div>
         </div>

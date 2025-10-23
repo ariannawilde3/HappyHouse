@@ -1,19 +1,24 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
   const handleSignIn = () => {
+    navigate('/neighborhood');
     console.log('Sign in clicked', { email, password });
   };
 
   const handleGoogleSignIn = () => {
+
     console.log('Google sign in clicked');
   };
 
   const handleGuestSignIn = () => {
+    navigate('/neighborhood');
     console.log('Guest sign in clicked');
   };
 

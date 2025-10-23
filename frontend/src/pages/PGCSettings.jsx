@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./PGCSettings.css";
 import house from "../assets/images/house.png";
 import neighborhood from "../assets/images/neighborhood.png";
@@ -6,9 +7,20 @@ import settings from "../assets/images/settings.png";
 
 export default function PGCSettings() {
     const [housename, setHouseName] = useState('');
+    const navigate = useNavigate();
 
   const handleHouseName = () => {
     console.log("housenameentered", { housename });
+  };
+
+  const goToForum = () => {
+    navigate('/neighborhood');
+    console.log('forum clicked');
+  };
+
+  const goToProfile = () => {
+    navigate('/profile');
+    console.log('settings clicked');
   };
 
   return (
@@ -83,14 +95,14 @@ export default function PGCSettings() {
               style={{ width: "50px", height: "50px" }}
             />
           </button>
-          <button className="nav-btn inactive-btn">
+          <button onClick={goToForum} className="nav-btn inactive-btn">
             <img
               src={neighborhood}
               desc="Forum"
               style={{ width: "115px", height: "50px" }}
             />
           </button>
-          <button className="nav-btn inactive-btn">
+          <button onClick={goToProfile} className="nav-btn inactive-btn">
             <img
               src={settings}
               desc="Settings"

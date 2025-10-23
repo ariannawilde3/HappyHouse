@@ -49,6 +49,16 @@ function App() {
 
 export default App;
 
+import Chat from './pages/Chat.jsx';
+
+function App() {
+  return (
+    <Chat />
+  );
+}
+
+export default App;
+
 import Pins from './pages/Pins.jsx';
 
 function App() {
@@ -133,7 +143,7 @@ import GuestSettingsPage from './pages/GuestSettingsPage.jsx';
 
 function App() {
   return (
-    <ChGuestSettingsPageat />
+    <GuestSettingsPage />
   );
 }
 

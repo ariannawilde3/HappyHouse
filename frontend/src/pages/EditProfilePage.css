@@ -154,19 +154,18 @@
   background-color: #6b7280;
 }
 
-/* Navigation Bar */
-.edit-nav-bar {
+/* Nav Bar */
+.edit-profile-nav-bar {
   position: absolute;
   width: 100%;
   height: 65px;
   bottom: 0;
   background: #7FA58A;
   display: flex;
-  border-radius: 0 0 22px 22px;
 }
 
-/* Nav buttons */
-.edit-chat-btn, .edit-forum-btn, .edit-settings-btn {
+/* Buttons */
+.nav-btn {
   flex: 1;
   height: 65px;
   padding-top: 4px;
@@ -176,13 +175,23 @@
   align-items: center;
   justify-content: center;
   transition: background-color 0.2s;
-  position: relative;
 }
 
-.edit-chat-btn:hover, .edit-forum-btn:hover, .edit-settings-btn:hover {
+.active-btn {
+  filter: brightness(1000%);
+}
+
+.nav-btn:hover {
   background-color: rgba(255, 255, 255, 0.1);
   cursor: pointer;
-  transform: scale(1.05);
+}
+
+.active-chat-bar-btn, .primary-btn {
+  background-color: #7a9b7e;
+}
+
+.active-chat-bar-btn:hover, .primary-btn:hover {
+  background-color: #6a8b6e;
 }
 
 /* Notification badge */

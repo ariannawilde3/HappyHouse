@@ -1,10 +1,12 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./PGCMake.css";
 import house from '../assets/images/house.png';
 import neighborhood from'../assets/images/neighborhood.png';
 import settings from '../assets/images/settings.png';
 
 export default function PGCMake() {
+  const navigate = useNavigate();
 
         const [invitecode, setInviteCode] = useState('');
       
@@ -16,6 +18,15 @@ export default function PGCMake() {
           console.log('CreateGC Clicked');
         };
 
+        const goToForum = () => {
+          navigate('/neighborhood');
+          console.log('forum clicked');
+        };
+
+        const goToProfile = () => {
+          navigate('/profile');
+          console.log('settings clicked');
+        };
       
         return (
           <div className="login-container">
@@ -66,11 +77,11 @@ export default function PGCMake() {
                         <img src={house} desc="House Chat" style={{ width: '50px', height: '50px'}}/>
                     </button>
 
-                    <button className="nav-btn inactive-btn">
+                    <button onClick={goToForum} className="nav-btn inactive-btn">
                         <img src={neighborhood} desc="Forum" style={{ width: '115px', height: '50px' }}/>
                     </button>
 
-                    <button  className="nav-btn inactive-btn">
+                    <button conClick={goToProfile} lassName="nav-btn inactive-btn">
                         <img src={settings} desc="Settings" style={{ width: '50px', height: '50px' }}/>
                     </button>
 

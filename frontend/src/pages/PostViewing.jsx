@@ -1,6 +1,7 @@
 /*Keira*/
 
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './PostViewing.css';
 import house from '../assets/images/house.png';
 import neighborhood from'../assets/images/neighborhood.png';
@@ -28,6 +29,8 @@ export default function ForumPage() {
         { id: 4, text: "comment", votes: 927, userVote: null },
         { id: 5, text: "comment", votes: 927, userVote: null }
     ]);
+
+    const navigate = useNavigate();
 
     /* Vote handling function*/
     // const handleVote = (type) => {
@@ -63,14 +66,17 @@ export default function ForumPage() {
     };
 
     const addPost = () => {
+        navigate('/makePost');
         console.log('Post added to forum');
     };
 
     const goToChat = () => {
+        navigate('/house');
         console.log('House icon clicked');
     };
 
     const goToProfile = () => {
+        navigate('/profile');
         console.log('Settings icon clicked');
     };
 

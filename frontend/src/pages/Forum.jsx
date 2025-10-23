@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Forum.css';
 import filter from '../assets/images/filter.png';
 import house from '../assets/images/house.png';
@@ -9,6 +10,7 @@ import settings from '../assets/images/settings.png';
 export default function ForumPage() {
     // Add state for search
     const [searchQuery, setSearchQuery] = useState('');
+    const navigate = useNavigate();
 
     const handleSearchSubmit = (e) => {
         e.preventDefault();
@@ -29,14 +31,17 @@ export default function ForumPage() {
     };
 
     const addPost = () => {
+        navigate('/makePost');
         console.log('Post added to forum');
     };
 
     const goToChat = () => {
+        navigate('/house');
         console.log('House icon clicked');
     };
 
     const goToProfile = () => {
+        navigate('/profile');
         console.log('Settings icon clicked');
     };
 
@@ -81,16 +86,16 @@ export default function ForumPage() {
 
                     {/* Tags */}
                     <div className="tags-container">
-                            <p className="tags-label">Tags:</p>
-                            <button type="button" onClick={updateTags} className="tag">
-                                Most Popular
-                            </button>
-                            <button type="button" onClick={updateTags} className="tag">
-                                Finding a Roommate
-                            </button>
-                            <button type="button" onClick={updateTags} className="tag">
-                                Safety
-                            </button>
+                        <p className="tags-label">Tags:</p>
+                        <button type="button" onClick={updateTags} className="tag">
+                            Most Popular
+                        </button>
+                        <button type="button" onClick={updateTags} className="tag">
+                            Finding a Roommate
+                        </button>
+                        <button type="button" onClick={updateTags} className="tag">
+                            Safety
+                        </button>
                     </div>
 
                     {/* No Posts Placeholder */}
@@ -106,18 +111,18 @@ export default function ForumPage() {
             
                     {/* Navigation Bar */}
                     <div className="forum-nav-bar">
-                        <button onClick={goToChat} className="chat-btn">
-                            <img src={house} desc="House Chat" style={{ width: '50px', height: '50px' }}/>
+                        <button onClick={goToChat} className="nav-btn inactive-btn">
+                            <img src={house} desc="House Chat" style={{ width: '50px', height: '50px'}}/>
                         </button>
 
-                        <button className="forum-btn">
+                        <button className="nav-btn active-btn">
                             <img src={neighborhood} desc="Forum" style={{ width: '115px', height: '50px' }}/>
                         </button>
 
-                        <button onClick={goToProfile} className="profile-btn">
+                        <button onClick={goToProfile} className="nav-btn inactive-btn">
                             <img src={settings} desc="Settings" style={{ width: '50px', height: '50px' }}/>
                         </button>
-                    </div> 
+                    </div>
                 </div>
             </div>
         </div>

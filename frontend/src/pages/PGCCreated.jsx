@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./PGCCreated.css";
 import house from "../assets/images/house.png";
 import neighborhood from "../assets/images/neighborhood.png";
@@ -6,9 +7,20 @@ import settings from "../assets/images/settings.png";
 
 export default function PGCCreated() {
     const [waitingtojoin, setoff] = useState('');
+    const navigate = useNavigate();
 
   const handleOff = () => {
     console.log("button pressed but off", { waitingtojoin });
+  };
+
+  const goToForum = () => {
+    navigate('/neighborhood');
+    console.log('forum clicked');
+  };
+
+  const goToProfile = () => {
+    navigate('/profile');
+    console.log('profile clicked');
   };
 
   return (
@@ -49,14 +61,14 @@ export default function PGCCreated() {
               style={{ width: "50px", height: "50px" }}
             />
           </button>
-          <button className="nav-btn inactive-btn">
+          <button onClick={goToForum} className="nav-btn inactive-btn">
             <img
               src={neighborhood}
               desc="Forum"
               style={{ width: "115px", height: "50px" }}
             />
           </button>
-          <button className="nav-btn inactive-btn">
+          <button onClick={goToProfile} className="nav-btn inactive-btn">
             <img
               src={settings}
               desc="Settings"

@@ -1,20 +1,37 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './ProfilePage.css';
+import house from '../assets/images/house.png';
+import neighborhood from '../assets/images/neighborhood.png';
+import settings from '../assets/images/settings.png';
 
 export default function ProfilePage() {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
+  const navigate = useNavigate();
 
   const handleEditProfile = () => {
+    navigate('/editProfile');
     console.log('Edit Profile clicked');
   };
 
   const handleLogout = () => {
+    navigate('/guestProfile');
     console.log('Logout clicked');
   };
 
   const handleSave = () => {
     console.log('Save clicked');
+  };
+
+  const goToChat = () => {
+    navigate('/house');
+    console.log('house icon clicked');
+  };
+
+  const goToForum = () => {
+    navigate('/neighborhood');
+    console.log('forum icon clicked');
   };
 
   return (
@@ -59,6 +76,21 @@ export default function ProfilePage() {
 
             <button onClick={handleLogout} className="profile-btn profile-btn-secondary">
               Logout
+            </button>
+          </div>
+
+          {/* Navigation Bar */}
+          <div className="profile-nav-bar">
+            <button onClick={goToChat} className="nav-btn inactive-btn">
+              <img src={house} desc="House Chat" style={{ width: '50px', height: '50px'}}/>
+            </button>
+                  
+            <button onClick={goToForum} className="nav-btn inactive-btn">
+              <img src={neighborhood} desc="Forum" style={{ width: '115px', height: '50px' }}/>
+            </button>
+                  
+            <button className="nav-btn active-btn">
+              <img src={settings} desc="Settings" style={{ width: '50px', height: '50px' }}/>
             </button>
           </div>
         </div>

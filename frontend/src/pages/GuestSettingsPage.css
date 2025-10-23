@@ -112,7 +112,7 @@
   background-color: #6a8b6e;
 }
 
-/* Navigation Bar */
+/* Nav Bar */
 .guest-settings-nav-bar {
   position: absolute;
   width: 100%;
@@ -120,11 +120,10 @@
   bottom: 0;
   background: #7FA58A;
   display: flex;
-  border-radius: 0 0 22px 22px;
 }
 
-/* Nav buttons */
-.guest-settings-chat-btn, .guest-settings-forum-btn, .guest-settings-profile-btn {
+/* Buttons */
+.nav-btn {
   flex: 1;
   height: 65px;
   padding-top: 4px;
@@ -133,14 +132,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s, transform 0.2s;
-  position: relative;
+  transition: background-color 0.2s;
 }
 
-.guest-settings-chat-btn:hover, .guest-settings-forum-btn:hover {
+.active-btn {
+  filter: brightness(1000%);
+}
+
+.nav-btn:hover {
   background-color: rgba(255, 255, 255, 0.1);
   cursor: pointer;
-  transform: scale(1.05);
+}
+
+.active-chat-bar-btn, .primary-btn {
+  background-color: #7a9b7e;
+}
+
+.active-chat-bar-btn:hover, .primary-btn:hover {
+  background-color: #6a8b6e;
 }
 
 /* Notification badge */

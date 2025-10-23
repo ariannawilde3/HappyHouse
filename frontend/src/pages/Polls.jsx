@@ -1,17 +1,36 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Polls.css';
 import house from '../assets/images/house.png';
 import neighborhood from'../assets/images/neighborhood.png';
 import settings from '../assets/images/settings.png';
 
 export default function Polls() {
+    const navigate = useNavigate();
 
-    const goToChat = () => {
+    const goToForum = () => {
+        navigate('/neighborhood');
         console.log('House icon clicked');
     }
 
     const goToProfile = () => {
+        navigate('/profile');
         console.log('Settings icon clicked');
+    };
+
+    const goToChat = () => {
+        navigate('/house');
+        console.log('chat icon clicked');
+    };
+
+    const goToPins = () => {
+        navigate('/pins');
+        console.log('pins icon clicked');
+    };
+
+    const createPoll = () => {
+        navigate('/makePoll');
+        console.log('make poll icon clicked');
     };
 
     return (
@@ -32,8 +51,8 @@ export default function Polls() {
                         <h1 className="polls-welcome-title">HouseName</h1>
                     </div>
 					<div className="chat-btn-bar">
-						<button className="chat-bar-btn">Messages</button>
-						<button className="chat-bar-btn">Pinned</button>
+						<button onClick={goToChat} className="chat-bar-btn">Messages</button>
+						<button onClick={goToPins} className="chat-bar-btn">Pinned</button>
 						<button className="chat-bar-btn active-chat-bar-btn">Polls</button>
 					</div>
 					
@@ -56,18 +75,18 @@ export default function Polls() {
 					</div>
 					
 					{/* Create button */}
-					<button className="create-btn">+</button>
+					<button onClick={createPoll} className="create-btn">+</button>
                 </div>
 
 
         
                 {/* Navigation Bar */}
                 <div className="polls-nav-bar">
-                    <button onClick={goToChat} className="nav-btn active-btn">
+                    <button className="nav-btn active-btn">
                         <img src={house} desc="House Chat" style={{ width: '50px', height: '50px'}}/>
                     </button>
 
-                    <button className="nav-btn inactive-btn">
+                    <button onClick={goToForum} className="nav-btn inactive-btn">
                         <img src={neighborhood} desc="Forum" style={{ width: '115px', height: '50px' }}/>
                     </button>
 

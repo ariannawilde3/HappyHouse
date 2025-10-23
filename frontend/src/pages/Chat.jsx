@@ -1,17 +1,31 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Chat.css';
 import house from '../assets/images/house.png';
 import neighborhood from'../assets/images/neighborhood.png';
 import settings from '../assets/images/settings.png';
 
 export default function Chat() {
+    const navigate = useNavigate();
 
-    const goToChat = () => {
+    const goToForum = () => {
+        navigate('/neighborhood');
         console.log('House icon clicked');
     };
 
     const goToProfile = () => {
+        navigate('/profile');
         console.log('Settings icon clicked');
+    };
+
+    const goToPins = () => {
+        navigate('/pins');
+        console.log('pins icon clicked');
+    };
+
+    const goToPolls = () => {
+        navigate('/polls');
+        console.log('polls icon clicked');
     };
 
     return (
@@ -33,8 +47,8 @@ export default function Chat() {
                     </div>
 					<div className="chat-btn-bar">
 						<button className="chat-bar-btn active-chat-bar-btn">Messages</button>
-						<button className="chat-bar-btn">Pinned</button>
-						<button className="chat-bar-btn">Polls</button>
+						<button onClick={goToPins} className="chat-bar-btn">Pinned</button>
+						<button onClick={goToPolls} className="chat-bar-btn">Polls</button>
 					</div>
 					
                     <p className="message-date">Tuesday 5:16pm</p>
@@ -80,11 +94,11 @@ export default function Chat() {
         
                 {/* Navigation Bar */}
                 <div className="chat-nav-bar">
-                    <button onClick={goToChat} className="nav-btn active-btn">
+                    <button className="nav-btn active-btn">
                         <img src={house} desc="House Chat" style={{ width: '50px', height: '50px'}}/>
                     </button>
 
-                    <button className="nav-btn inactive-btn">
+                    <button onClick={goToForum} className="nav-btn inactive-btn">
                         <img src={neighborhood} desc="Forum" style={{ width: '115px', height: '50px' }}/>
                     </button>
 

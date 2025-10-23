@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './EditProfilePage.css';
 import house from '../assets/images/house.png';
 import neighborhood from '../assets/images/neighborhood.png';
@@ -8,24 +9,30 @@ export default function EditProfilePage() {
   const [name, setName] = useState('Drew');
   const [username, setUsername] = useState('purple.lion.palace');
   const [email, setEmail] = useState('name@gmail.com');
+  const navigate = useNavigate();
 
   const goToChat = () => {
+    navigate('/house');
     console.log('House icon clicked');
   };
 
   const goToForum = () => {
+    navigate('/neighborhood');
     console.log('Forum icon clicked');
   };
 
   const goToSettings = () => {
+    navigate('/profile');
     console.log('Settings icon clicked');
   };
 
   const handleSaveProfile = () => {
+    navigate('/profile');
     console.log('Save Profile clicked', { name, username, email });
   };
 
   const handleCancel = () => {
+    navigate('/profile');
     console.log('Cancel clicked');
   };
 
@@ -85,18 +92,17 @@ export default function EditProfilePage() {
         </div>
 
         {/* Navigation Bar */}
-        <div className="edit-nav-bar">
-          <button onClick={goToChat} className="edit-chat-btn">
-            <span className="edit-notification-badge">1</span>
-            <img src={house} alt="House Chat" style={{ width: '50px', height: '50px' }}/>
+        <div className="edit-profile-nav-bar">
+          <button onClick={goToChat} className="nav-btn inactive-btn">
+            <img src={house} desc="House Chat" style={{ width: '50px', height: '50px'}}/>
           </button>
-
-          <button onClick={goToForum} className="edit-forum-btn">
-            <img src={neighborhood} alt="Forum" style={{ width: '115px', height: '50px' }}/>
+        
+          <button onClick={goToForum} className="nav-btn inactive-btn">
+            <img src={neighborhood} desc="Forum" style={{ width: '115px', height: '50px' }}/>
           </button>
-
-          <button onClick={goToSettings} className="edit-settings-btn">
-            <img src={settings} alt="Settings" style={{ width: '50px', height: '50px' }}/>
+        
+          <button className="nav-btn active-btn">
+            <img src={settings} desc="Settings" style={{ width: '50px', height: '50px' }}/>
           </button>
         </div>
       </div>

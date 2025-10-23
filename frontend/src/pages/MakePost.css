@@ -211,7 +211,7 @@
 }
 
 /* Buttons */
-.chat-btn, .forum-btn, .profile-btn {
+.nav-btn {
   flex: 1;
   height: 65px;
   padding-top: 4px;
@@ -223,13 +223,11 @@
   transition: background-color 0.2s;
 }
 
-.forum-btn {
+.active-btn {
   filter: brightness(1000%);
 }
 
-.chat-btn:hover, .profile-btn:hover {
-  /* changes background color, cursor, and makes the icon pop out */
+.nav-btn:hover {
   background-color: rgba(255, 255, 255, 0.1);
   cursor: pointer;
-  transform: scale(1.05); 
 }
