@@ -41,19 +41,18 @@ export default function Chat() {
 					
 					{/* message 1 */}
 					<div className="message">
+                        <b>archnemesis.pink</b>
 						<div className="message-content">
-							<b>archnemesis.pink</b>
-							<ul>
-								so sorry, but you guys need to refill the brita when you drink it... im dying of thirst
-							</ul>
+							so sorry, but you guys need to refill the brita when you drink it... im dying of thirst
 						</div>
 					</div>
 					
 					{/* Message 2 made by*/}
 					<div className="your-message">
+                        <b>purple.lion.palace</b>
 						<div className="message-content">
-                            <b>purple.lion.palace</b>
-							So sorry I had to run out this morning
+                            So sorry I had to run out this morning
+                            
 						</div>
 					</div>
 
