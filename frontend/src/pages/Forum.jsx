@@ -6,6 +6,9 @@ import house from '../assets/images/house.png';
 import neighborhood from'../assets/images/neighborhood.png';
 import search from '../assets/images/search.png';
 import settings from '../assets/images/settings.png';
+import ThumbsUp from '../assets/images/ThumbsUp.png';
+import ThumbsDown from '../assets/images/ThumbsDown.png';
+
 
 export default function ForumPage() {
     // Add state for search
@@ -28,6 +31,15 @@ export default function ForumPage() {
 
     const updateTags = () => {
         console.log('Added/removed tag');
+    };
+
+    const viewPost = () => {
+        navigate('/viewPost');
+        console.log('post clicked');
+    };
+
+    const updateVotes = () => {
+        console.log('voted');
     };
 
     const addPost = () => {
@@ -98,31 +110,57 @@ export default function ForumPage() {
                         </button>
                     </div>
 
-                    {/* No Posts Placeholder */}
+                    {/* No Posts Placeholder
                     <div className="no-posts-txt-container">
                         <p className="no-posts-txt1">No posts...</p>
                         <p className="no-posts-txt2">Maybe try expanding your search?</p>
-                    </div>
+                    </div>*/}
 
-                    {/* Post Button */}
-                    <button onClick={addPost} className="post-btn">
-                        +
-                    </button>
+                    {/* Ex. Post */}
+                    <div onClick={viewPost} className="post-container">
+                        {/* Post Content */}
+                        <h3 className="post-title">My roommate is allergic to peanuts. Why?</h3>
+                        <p className="post-content">My roommate is allergic to peanuts and it really weirds me out. She won’t ever tell me how it happened or where it started so I just give up. I’m looking for new roommates to take her place, she has two beds in her room, for some odd reason so I can defintely house more people. BLAH BLAH BALAH BALHABLHAJHDFHDOSFHDFUIWEFPBEFBEF</p>
+                        
+                        {/* Tags and Voting */}
+                        <div className="post-stats-container">
+                            {/* Tags */}
+                            <div className="post-tag">
+                                <p>Most Popular</p>
+                            </div>
+                            <div className="post-tag">
+                                <p>Finding a Roommate</p>
+                            </div>
+
+                            {/* Voting Buttons */}
+                            <div className="votes-container">
+                                <p className="votes-label"> 927 Votes</p>
+                                <button onClick={updateVotes} className="up-votes">
+                                    <img src={ThumbsUp} desc="Like" style={{width: '24px', height: '24px'}}/>
+                                </button>
+                                <button onClick={updateVotes} className="down-votes">
+                                    <img src={ThumbsDown} desc="Dislike" style={{width: '24px', height: '24px'}}/>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {/* Post Button */}
+                <button onClick={addPost} className="post-btn">
+                    +
+                </button>
             
-                    {/* Navigation Bar */}
-                    <div className="forum-nav-bar">
-                        <button onClick={goToChat} className="nav-btn inactive-btn">
-                            <img src={house} desc="House Chat" style={{ width: '50px', height: '50px'}}/>
-                        </button>
-
-                        <button className="nav-btn active-btn">
-                            <img src={neighborhood} desc="Forum" style={{ width: '115px', height: '50px' }}/>
-                        </button>
-
-                        <button onClick={goToProfile} className="nav-btn inactive-btn">
-                            <img src={settings} desc="Settings" style={{ width: '50px', height: '50px' }}/>
-                        </button>
-                    </div>
+                {/* Navigation Bar */}
+                <div className="forum-nav-bar">
+                    <button onClick={goToChat} className="nav-btn inactive-btn">
+                        <img src={house} desc="House Chat" style={{ width: '50px', height: '50px'}}/>
+                    </button>
+                    <button className="nav-btn active-btn">
+                        <img src={neighborhood} desc="Forum" style={{ width: '115px', height: '50px' }}/>
+                    </button>
+                    <button onClick={goToProfile} className="nav-btn inactive-btn">
+                        <img src={settings} desc="Settings" style={{ width: '50px', height: '50px' }}/>
+                    </button>
                 </div>
             </div>
         </div>

@@ -330,19 +330,18 @@ export default function ForumPage() {
                 </button>
         
                 {/* Navigation Bar */}
-                <div className="forum-nav-bar">
-                    <button onClick={goToChat} className="chat-btn">
-                        <img src={house} desc="House Chat" style={{ width: '50px', height: '50px' }}/>
+                <div className="view-post-nav-bar">
+                    <button onClick={goToChat} className="nav-btn inactive-btn">
+                        <img src={house} desc="House Chat" style={{ width: '50px', height: '50px'}}/>
                     </button>
-
-                    <button className="forum-btn">
+                
+                    <button className="nav-btn active-btn">
                         <img src={neighborhood} desc="Forum" style={{ width: '115px', height: '50px' }}/>
                     </button>
-
-                    <button onClick={goToProfile} className="profile-btn">
+                
+                    <button onClick={goToProfile} className="nav-btn inactive-btn">
                         <img src={settings} desc="Settings" style={{ width: '50px', height: '50px' }}/>
                     </button>
-
                 </div>
             </div>
         </div>
