@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login.jsx';
+import Signup from './pages/Signup.jsx';  // ADD THIS LINE
 import Forum from './pages/Forum.jsx';
 import PostViewing from './pages/PostViewing.jsx';
 import MakePost from './pages/MakePost.jsx';
@@ -20,6 +21,7 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path='/' element={<Login />} />
+        <Route path='/signup' element={<Signup />} />  {/* ADD THIS LINE */}
         <Route path='/neighborhood' element={<Forum />} />
         <Route path='/viewPost' element={<PostViewing />} />
         <Route path='/makePost' element={<MakePost />} />
