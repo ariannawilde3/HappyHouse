@@ -1,30 +1,48 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import './Login.css';
+import './Login.css'; // Reusing Login.css for consistent styling
 
 const API_URL = 'http://localhost:5000/api';
 
-export default function LoginPage() {
+export default function SignupPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleSignIn = async () => {
+  const handleSignup = async () => {
     // Clear any previous errors
     setError('');
     
     // Validate inputs
-    if (!email || !password) {
-      setError('Please enter both email and password');
+    if (!email || !password || !confirmPassword) {
+      setError('Please fill in all fields');
+      return;
+    }
+
+    if (password !== confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    if (password.length < 6) {
+      setError('Password must be at least 6 characters');
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setError('Please enter a valid email address');
       return;
     }
 
     setLoading(true);
 
     try {
-      const response = await fetch(`${API_URL}/auth/login`, {
+      const response = await fetch(`${API_URL}/auth/signup`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -42,75 +60,33 @@ export default function LoginPage() {
         localStorage.setItem('anonymousUsername', data.anonymousUsername);
         localStorage.setItem('userType', data.userType);
         
-        console.log('✅ Login successful!', data);
+        console.log('✅ Signup successful!', data);
         console.log('Anonymous Username:', data.anonymousUsername);
         
         // Navigate to forum
         navigate('/neighborhood');
       } else {
         // Handle error response
-        setError(data.message || 'Invalid email or password');
-        console.error('❌ Login failed:', data);
+        setError(data.message || 'Signup failed. Please try again.');
+        console.error('❌ Signup failed:', data);
       }
     } catch (error) {
-      console.error('❌ Login error:', error);
+      console.error('❌ Signup error:', error);
       setError('Unable to connect to server. Please try again.');
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleGoogleSignIn = () => {
-    // Google OAuth will be implemented later
-    console.log('Google sign in clicked');
-    alert('Google Sign In coming soon! Use email/password or guest for now.');
-  };
-
-  const handleGuestSignIn = async () => {
-    setError('');
-    setLoading(true);
-
-    try {
-      const response = await fetch(`${API_URL}/auth/guest`, {
-        method: 'POST',
-      });
-
-      const data = await response.json();
-
-      if (response.ok) {
-        // Store authentication data in localStorage
-        localStorage.setItem('token', data.token);
-        localStorage.setItem('refreshToken', data.refreshToken);
-        localStorage.setItem('userId', data.userId);
-        localStorage.setItem('anonymousUsername', data.anonymousUsername);
-        localStorage.setItem('userType', data.userType);
-        
-        console.log('✅ Guest login successful!', data);
-        console.log('Anonymous Username:', data.anonymousUsername);
-        
-        // Navigate to forum
-        navigate('/neighborhood');
-      } else {
-        setError('Guest registration failed. Please try again.');
-        console.error('❌ Guest login failed:', data);
-      }
-    } catch (error) {
-      console.error('❌ Guest login error:', error);
-      setError('Unable to connect to server. Please try again.');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const goToSignup = () => {
-    navigate('/signup');
   };
 
   // Allow Enter key to submit
   const handleKeyPress = (e) => {
     if (e.key === 'Enter') {
-      handleSignIn();
+      handleSignup();
     }
+  };
+
+  const goToLogin = () => {
+    navigate('/');
   };
 
   return (
@@ -129,7 +105,7 @@ export default function LoginPage() {
           </div>
 
           <div className="welcome-section">
-            <p className="welcome-subtitle">Welcome To</p>
+            <p className="welcome-subtitle">Join</p>
             <h1 className="welcome-title">HappyHouse</h1>
           </div>
 
@@ -162,55 +138,50 @@ export default function LoginPage() {
               />
             </div>
 
-            <div className="input-group-password">
+            <div className="input-group">
               <label className="input-label">Password</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 onKeyPress={handleKeyPress}
-                placeholder="Enter your password"
+                placeholder="At least 6 characters"
+                className="input-field"
+                disabled={loading}
+              />
+            </div>
+
+            <div className="input-group-password">
+              <label className="input-label">Confirm Password</label>
+              <input
+                type="password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                onKeyPress={handleKeyPress}
+                placeholder="Re-enter your password"
                 className="input-field"
                 disabled={loading}
               />
             </div>
 
             <button 
-              onClick={handleSignIn} 
+              onClick={handleSignup} 
               className="btn btn-primary"
               disabled={loading}
             >
-              {loading ? 'Signing In...' : 'Sign In'}
-            </button>
-
-            <div className="divider">or</div>
-
-            <button 
-              onClick={handleGoogleSignIn} 
-              className="btn btn-primary"
-              disabled={loading}
-            >
-              Continue with Google
-            </button>
-
-            <button 
-              onClick={handleGuestSignIn} 
-              className="btn btn-primary"
-              disabled={loading}
-            >
-              {loading ? 'Creating Guest...' : 'Register as Guest'}
+              {loading ? 'Creating Account...' : 'Create Account'}
             </button>
 
             <div className="forgot-password-container">
               <span style={{ color: '#6b7280', fontSize: '0.875rem' }}>
-                Don't have an account?{' '}
+                Already have an account?{' '}
               </span>
               <a 
-                onClick={goToSignup} 
+                onClick={goToLogin} 
                 className="forgot-password-link"
                 style={{ cursor: 'pointer' }}
               >
-                Create Account
+                Sign In
               </a>
             </div>
           </div>
