@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Pins.css';
 import house from '../assets/images/house.png';
