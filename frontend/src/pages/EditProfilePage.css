@@ -136,7 +136,7 @@
 }
 
 .edit-btn-primary {
-  background-color: #7a9b7e;
+  background-color: #465D4A;
   color: white;
 }
 
@@ -145,7 +145,7 @@
 }
 
 .edit-btn-secondary {
-  background-color: #9ca3af;
+  background-color: #525866;
   color: white;
   margin-bottom: 0;
 }
@@ -200,7 +200,7 @@
   top: 8px;
   right: calc(50% - 32px);
   background-color: white;
-  color: #7a9b7e;
+  color: #465D4A;
   font-size: 0.75rem;
   font-weight: bold;
   width: 20px;

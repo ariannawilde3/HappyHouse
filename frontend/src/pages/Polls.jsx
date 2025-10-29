@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Polls.css';
 import house from '../assets/images/house.png';
@@ -64,11 +63,11 @@ export default function Polls() {
 						a responsibility of everyone's?
 						<div className="poll-option-btn">
 							<input className="poll-radio" type="radio" name="poll-1"></input>
-							Yes
+							{/* */}Yes
 						</div>
 						<div className="poll-option-btn">
 							<input className="poll-radio" type="radio" name="poll-1"></input>
-							No, everyone's
+							{/* */}No, everyone's
 						</div>
 						Poll Expires in 2hrs<br></br>
 						2/3 Roommates Voted
@@ -83,15 +82,15 @@ export default function Polls() {
                 {/* Navigation Bar */}
                 <div className="polls-nav-bar">
                     <button className="nav-btn active-btn">
-                        <img src={house} desc="House Chat" style={{ width: '50px', height: '50px'}}/>
+                        <img src={house} alt="House Chat" style={{ width: '50px', height: '50px'}}/>
                     </button>
 
                     <button onClick={goToForum} className="nav-btn inactive-btn">
-                        <img src={neighborhood} desc="Forum" style={{ width: '115px', height: '50px' }}/>
+                        <img src={neighborhood} alt="Forum" style={{ width: '115px', height: '50px' }}/>
                     </button>
 
                     <button onClick={goToProfile} className="nav-btn inactive-btn">
-                        <img src={settings} desc="Settings" style={{ width: '50px', height: '50px' }}/>
+                        <img src={settings} alt="Settings" style={{ width: '50px', height: '50px' }}/>
                     </button>
 
                 </div>

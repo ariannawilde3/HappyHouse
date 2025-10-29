@@ -74,15 +74,15 @@ export default function PGCMake() {
               {/* Navigation Bar */}
               <div className="forum-nav-bar">
                     <button  className="nav-btn active-btn">
-                        <img src={house} desc="House Chat" style={{ width: '50px', height: '50px'}}/>
+                        <img src={house} alt="House Chat" style={{ width: '50px', height: '50px'}}/>
                     </button>
 
                     <button onClick={goToForum} className="nav-btn inactive-btn">
-                        <img src={neighborhood} desc="Forum" style={{ width: '115px', height: '50px' }}/>
+                        <img src={neighborhood} alt="Forum" style={{ width: '115px', height: '50px' }}/>
                     </button>
 
                     <button conClick={goToProfile} lassName="nav-btn inactive-btn">
-                        <img src={settings} desc="Settings" style={{ width: '50px', height: '50px' }}/>
+                        <img src={settings} alt="Settings" style={{ width: '50px', height: '50px' }}/>
                     </button>
 
                 </div>
