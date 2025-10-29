@@ -213,3 +213,34 @@
   color: #9ca3af;
   font-size: 1.25rem;
 }
+
+
+.slider-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  width: 300px;
+  margin: 2rem auto;
+  font-family: "Inter", sans-serif;
+}
+
+.slider {
+  width: 100%;
+  appearance: none;
+  height: 6px;
+  border-radius: 3px;
+  background: #9ca3af;
+  outline: none;
+  cursor: pointer;
+}
+
+/* Slider thumb */
+.slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: #4e6957;
+  cursor: pointer;
+}
+

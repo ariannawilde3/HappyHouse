@@ -6,11 +6,10 @@ import neighborhood from "../assets/images/neighborhood.png";
 import settings from "../assets/images/settings.png";
 
 export default function PGCSettings() {
-    const [housename, setHouseName] = useState('');
-    const navigate = useNavigate();
+  const [housename, setHouseName] = useState("");
 
-  const handleHouseName = () => {
-    console.log("housenameentered", { housename });
+  const handleHouseName = (value) => {
+    setHouseName(value);
   };
 
   const goToForum = () => {
@@ -22,6 +21,9 @@ export default function PGCSettings() {
     navigate('/profile');
     console.log('settings clicked');
   };
+
+  const [svalue, setValue] = useState(1);
+
 
   return (
     <div className="login-container">
@@ -69,11 +71,28 @@ export default function PGCSettings() {
             </label>
           </div>
 
+          {/*roommate selection slider*/}
+          <div className="slider-container">
+          <label htmlFor="roommates" className="divider">
+            How many roommates? (Including you): {svalue}
+          </label>
+                <input
+                  id="roommates"
+                  type="range"
+                  min="1"
+                  max="10"
+                  className="slider"
+                  svalue={svalue}
+                  onChange={(e) => setValue(e.target.value)}
+                />
+            </div>
 
+
+          {/*house name form*/}
             <div className="divider">Choose a House Name</div>
             <div className="input-group">
               <input
-                type="housename"
+                type="text"
                 value={housename}
                 onChange={(e) => handleHouseName(e.target.value)}
                 placeholder="Enter your group chat name"
@@ -81,11 +100,15 @@ export default function PGCSettings() {
               />
             </div>
 
-            <button onClick={handleHouseName} className="btn btn-primary">
+
+          {/*create button */}
+            <button className="btn btn-primary">
               Create
             </button>
           </div>
         </div>
+
+
         {/* Navigation Bar */}
         <div className="forum-nav-bar">
           <button className="nav-btn active-btn">
