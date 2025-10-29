@@ -6,8 +6,6 @@ import neighborhood from '../assets/images/neighborhood.png';
 import settings from '../assets/images/settings.png';
 
 export default function ProfilePage() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
   const navigate = useNavigate();
 
   const handleEditProfile = () => {
@@ -18,10 +16,6 @@ export default function ProfilePage() {
   const handleLogout = () => {
     navigate('/guestProfile');
     console.log('Logout clicked');
-  };
-
-  const handleSave = () => {
-    console.log('Save clicked');
   };
 
   const goToChat = () => {

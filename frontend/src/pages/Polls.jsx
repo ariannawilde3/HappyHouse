@@ -63,11 +63,11 @@ export default function Polls() {
 						a responsibility of everyone's?
 						<div className="poll-option-btn">
 							<input className="poll-radio" type="radio" name="poll-1"></input>
-							Yes
+							{/* */}Yes
 						</div>
 						<div className="poll-option-btn">
 							<input className="poll-radio" type="radio" name="poll-1"></input>
-							No, everyone's
+							{/* */}No, everyone's
 						</div>
 						Poll Expires in 2hrs<br></br>
 						2/3 Roommates Voted
