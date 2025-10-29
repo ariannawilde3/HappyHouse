@@ -91,21 +91,21 @@ export default function PGCSettings() {
           <button className="nav-btn active-btn">
             <img
               src={house}
-              desc="House Chat"
+              alt="House Chat"
               style={{ width: "50px", height: "50px" }}
             />
           </button>
           <button onClick={goToForum} className="nav-btn inactive-btn">
             <img
               src={neighborhood}
-              desc="Forum"
+              alt="Forum"
               style={{ width: "115px", height: "50px" }}
             />
           </button>
           <button onClick={goToProfile} className="nav-btn inactive-btn">
             <img
               src={settings}
-              desc="Settings"
+              alt="Settings"
               style={{ width: "50px", height: "50px" }}
             />
           </button>
