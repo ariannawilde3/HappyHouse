@@ -85,7 +85,7 @@
   padding: 8px;
   align-items: center;
   justify-content: center;
-  background-color: #9ca3af; /*background color of messages and polls buttons*/
+  background-color: #595959; /*background color of messages and polls buttons*/
   color: white; /*text color*/
   border-radius: 10px;
   border: hidden;
