@@ -9,7 +9,7 @@ export default function PGCSettings() {
     const [housename, setHouseName] = useState('');
     const navigate = useNavigate();
 
-  const handleHouseName = () => {
+  const handleHouseName = (housename) => {
     console.log("housenameentered", { housename });
   };
 
