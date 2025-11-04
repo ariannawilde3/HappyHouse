@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Document(collection = "users")
+// Models are the Entities of our system
 public class User {
     
     @Id

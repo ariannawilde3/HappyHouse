@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
+// Services act as the controller and have logic for specific functions
 public class AnonymousUsernameScheduler {
     
     private static final Logger logger = LoggerFactory.getLogger(AnonymousUsernameScheduler.class);

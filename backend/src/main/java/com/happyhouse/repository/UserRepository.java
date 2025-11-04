@@ -7,6 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
+// Repositories allow the backend to interact with the database
 public interface UserRepository extends MongoRepository<User, String> {
     
     Optional<User> findByEmail(String email);
