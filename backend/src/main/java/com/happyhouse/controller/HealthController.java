@@ -13,6 +13,7 @@ import java.util.Map;
 @RestController
 @RequestMapping("/api")
 @CrossOrigin(origins = "*")
+// does all of the stuff that shows up when backend is running properly and creates the health check for backend
 public class HealthController {
     
     @GetMapping("/health")

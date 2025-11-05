@@ -2,7 +2,8 @@ package com.happyhouse.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
-
+// deals with the request to log in and ensures that the email format is valid
+// frontend sends data to authservice which calls login request on the data to ensure valid format
 public class LoginRequest {
     
     @NotBlank(message = "Email is required")

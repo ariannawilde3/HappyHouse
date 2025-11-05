@@ -8,6 +8,7 @@ import java.util.Optional;
 
 @Repository
 // Repositories allow the backend to interact with the database
+// this connects to our mongo db and allows us to use the stored data and filter it
 public interface UserRepository extends MongoRepository<User, String> {
     
     Optional<User> findByEmail(String email);

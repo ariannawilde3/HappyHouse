@@ -3,7 +3,7 @@ package com.happyhouse.dto;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-
+// same as login request, frontend sends info useing fetch and JSON then authservice calls signup request on the data
 public class SignupRequest {
     
     @NotBlank(message = "Email is required")

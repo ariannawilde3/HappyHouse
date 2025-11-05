@@ -66,13 +66,21 @@ export default function ForumPage() {
     };
 
     const addPost = () => {
+        const userType = localStorage.getItem('userType');
+        if (userType === 'GUEST') {
+            alert('Guests cannot create posts. Please sign up!');
+            return;
+        }
         navigate('/makePost');
-        console.log('Post added to forum');
     };
 
     const goToChat = () => {
+        const userType = localStorage.getItem('userType');
+        if (userType == 'GUEST') {
+            alert('Guests cannot access private chats. Please sign up!');
+            return;
+        }
         navigate('/house');
-        console.log('House icon clicked');
     };
 
     const goToProfile = () => {
