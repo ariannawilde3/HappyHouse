@@ -86,9 +86,10 @@ public class AuthService {
         user.setAnonymousUsernameGeneratedAt(LocalDateTime.now());
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
+        user.setActive(true);
         
         // Save user
-        user = userRepository.save(user);
+        User saved = userRepository.save(user);
         
         // Generate tokens
         String token = jwtUtil.generateToken(user.getEmail(), user.getId());

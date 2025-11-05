@@ -14,13 +14,20 @@ backend/node_modules/
 *.env
 .env.*
 !.env.example
+backend/.env
+frontend/.env
+
+# Application properties with secrets (create a template instead)
+**/application-local.properties
 
 # Build outputs
 frontend/build/
 frontend/dist/
 backend/dist/
+target/
 build/
 dist/
+node_modules/
 *.tsbuildinfo
 
 # Logs
@@ -48,6 +55,7 @@ Desktop.ini
 *.swp
 *.swo
 *.swn
+*.iml
 *~
 .project
 .classpath
@@ -55,6 +63,7 @@ Desktop.ini
 *.sublime-project
 *.sublime-workspace
 .vs/
+.DS_Store
 
 # Testing
 coverage/

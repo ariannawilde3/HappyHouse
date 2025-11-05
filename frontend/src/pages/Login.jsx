@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Login.css';
 
@@ -9,7 +9,106 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [googleLoaded, setGoogleLoaded] = useState(false);
   const navigate = useNavigate();
+
+  // Load Google Identity Services
+  useEffect(() => {
+    const loadGoogleScript = () => {
+      if (window.google) {
+        initializeGoogleSignIn();
+        return;
+      }
+
+      const script = document.createElement('script');
+      script.src = 'https://accounts.google.com/gsi/client';
+      script.onload = initializeGoogleSignIn;
+      script.onerror = () => {
+        console.error('Failed to load Google Identity Services');
+      };
+      document.body.appendChild(script);
+    };
+
+    const initializeGoogleSignIn = () => {
+      if (window.google) {
+        window.google.accounts.id.initialize({
+          client_id: "291819576173-dn0jkt0lj92e13ubfqjo8ham8qbh8v0u.apps.googleusercontent.com",
+          callback: handleGoogleCredentialResponse,
+        });
+        setGoogleLoaded(true);
+      }
+    };
+
+    loadGoogleScript();
+  }, []);
+
+  // Render Google button when loaded
+  useEffect(() => {
+    if (googleLoaded && window.google) {
+      window.google.accounts.id.renderButton(
+        document.getElementById("google-signin-button"),
+        { 
+          theme: "outline", 
+          size: "large",
+          width: "100%",
+          text: "signin_with"
+        }
+      );
+    }
+  }, [googleLoaded]);
+
+  const handleGoogleCredentialResponse = async (response) => {
+    setError('');
+    setLoading(true);
+
+    try {
+      // Send the raw id_token to backend and let server verify it
+      console.log('GSI credential received (first 40 chars):', response.credential?.slice(0,40));
+      const res = await fetch(`${API_URL}/auth/google`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ credential: response.credential })
+      });
+
+      // Always log status and body for debugging
+      const dataText = await res.text();
+      let data;
+      try { data = JSON.parse(dataText); } catch(e) { data = { raw: dataText }; }
+      console.log('POST /api/auth/google status=', res.status, 'body=', data);
+
+      if (res.ok) {
+        // support both backends that return accessToken or token
+        const accessToken = data.accessToken || data.token || data.access_token;
+        const refreshToken = data.refreshToken || data.refresh_token || null;
+        const user = data.user || data; // adjust if backend returns flattened fields
+
+        if (!accessToken) {
+          // Backend responded 200 but didn't return tokens
+          console.warn('No access token returned by backend', data);
+          setError('Google sign-in failed (no token returned).');
+        } else {
+          localStorage.setItem('token', accessToken);
+          if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
+          if (user && (user.id || user.userId)) {
+            localStorage.setItem('userId', user.id || user.userId);
+          }
+          if (user && user.anonymousUsername) localStorage.setItem('anonymousUsername', user.anonymousUsername);
+          if (user && user.userType) localStorage.setItem('userType', user.userType);
+
+          console.log('✅ Google login successful, navigating', { user, accessToken });
+          navigate('/neighborhood');
+        }
+      } else {
+        // show backend error message if present
+        setError(data.message || data.error || `Google sign-in failed (${res.status})`);
+      }
+    } catch (err) {
+      console.error('Google sign-in network/error', err);
+      setError('Google sign-in failed. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const handleSignIn = async () => {
     // Clear any previous errors
@@ -58,12 +157,6 @@ export default function LoginPage() {
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleGoogleSignIn = () => {
-    // Google OAuth will be implemented later
-    console.log('Google sign in clicked');
-    alert('Google Sign In coming soon! Use email/password or guest for now.');
   };
 
   const handleGuestSignIn = async () => {
@@ -185,13 +278,21 @@ export default function LoginPage() {
 
             <div className="divider">or</div>
 
-            <button 
-              onClick={handleGoogleSignIn} 
-              className="btn btn-primary"
-              disabled={loading}
-            >
-              Continue with Google
-            </button>
+            <div className="google-signin-container">
+              <div id="google-signin-button"></div>
+              {!googleLoaded && (
+                <div style={{ 
+                  padding: '12px', 
+                  textAlign: 'center', 
+                  backgroundColor: '#f3f4f6',
+                  borderRadius: '8px',
+                  color: '#6b7280',
+                  marginBottom: '1rem'
+                }}>
+                  Loading Google Sign-In...
+                </div>
+              )}
+            </div>
 
             <button 
               onClick={handleGuestSignIn} 
