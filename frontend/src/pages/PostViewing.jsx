@@ -31,6 +31,8 @@ export default function ForumPage() {
     ]);
 
     const navigate = useNavigate();
+    const userType = localStorage.getItem('userType');
+    const isGuest = userType === 'GUEST';
 
     /* Vote handling function*/
     // const handleVote = (type) => {
@@ -64,6 +66,18 @@ export default function ForumPage() {
             ));
         }
     };
+
+    const verfiyCommenter = () => {
+        if (isGuest) {
+            alert('Guests cannot comment on forum posts. Please sign up!');
+            return;
+        }
+        return;
+    };
+
+    const handleCommentSubmit = () => {
+        console.log("comment submitted");
+    }
 
     const addPost = () => {
         const userType = localStorage.getItem('userType');
@@ -214,6 +228,22 @@ export default function ForumPage() {
                                     />
                                 </button>
                             </div>
+                        </div>
+                        {/* Comment input field */}
+                        <div onClick={verfiyCommenter} className="comment-input-container">
+                            <form onSubmit={handleCommentSubmit} className="comment-input-field">
+                                <input
+                                    type="text"
+                                    placeholder={isGuest ? 'Sign up to comment!' : 'Leave a Comment'}
+                                    className="comment-input"
+                                    style={{
+                                        cursor: isGuest ? 'not-allowed' : 'text',
+                                        backgroundColor: isGuest ? '#f3f4f6' : 'white',
+                                        opacity: isGuest ? 0.7 : 1
+                                    }}
+                                    readOnly={isGuest}
+                                />
+                            </form>
                         </div>
                     </div>
                     {/* END OF MAIN POST SECTION */}
