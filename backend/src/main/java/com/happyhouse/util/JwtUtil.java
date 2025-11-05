@@ -1,13 +1,17 @@
+// notes this as a utility class
 package com.happyhouse.util;
-
+// imports all JWT library classes
 import io.jsonwebtoken.*;
+// imports key generation ability
 import io.jsonwebtoken.security.Keys;
+// spring imports
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
-
+// crypts for encoding data
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -15,10 +19,10 @@ import java.util.function.Function;
 
 @Component
 public class JwtUtil {
-    
+    // reads the jwt secret which is used to create tokens
     @Value("${jwt.secret}")
     private String secret;
-    
+    // expiration time for tokens
     @Value("${jwt.expiration}")
     private Long expiration;
     
@@ -32,7 +36,8 @@ public class JwtUtil {
         return createToken(claims, email, expiration);
     }
     
-    // Generate refresh token
+    // Generate refresh token (lasts longer than a normal token)
+    // the normal tokens expire after use, then the refresh tokens are used to see if there are new normal tokens
     public String generateRefreshToken(String email, String userId) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userId", userId);
@@ -40,7 +45,7 @@ public class JwtUtil {
         return createToken(claims, email, refreshExpiration);
     }
     
-    // Create token with claims
+    // Create token with claims (claims are ways to store all of the user info in the token)
     private String createToken(Map<String, Object> claims, String subject, Long expirationTime) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expirationTime);
@@ -54,7 +59,7 @@ public class JwtUtil {
                 .compact();
     }
     
-    // Get signing key
+    // Get signing key (converts the JWT secret into a crypt key)
     private SecretKey getSigningKey() {
         byte[] keyBytes = secret.getBytes(StandardCharsets.UTF_8);
         return Keys.hmacShaKeyFor(keyBytes);
@@ -95,7 +100,7 @@ public class JwtUtil {
         return extractExpiration(token).before(new Date());
     }
     
-    // Validate token
+    // Validate token (with access to user details)
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String email = extractEmail(token);
         return (email.equals(userDetails.getUsername()) && !isTokenExpired(token));
