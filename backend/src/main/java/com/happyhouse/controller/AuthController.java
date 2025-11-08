@@ -1,21 +1,27 @@
+// labels file as part of the controllers folder
 package com.happyhouse.controller;
-
+// defines structure of reguests to log in API
 import com.happyhouse.dto.AuthResponse;
 import com.happyhouse.dto.LoginRequest;
 import com.happyhouse.dto.SignupRequest;
+
 import com.happyhouse.service.AuthService;
 import com.happyhouse.repository.UserRepository;
+// imports valid email formats
 import jakarta.validation.Valid;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+// helps to parse inputted info (emails, etc.)
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-
+// connects to Google's token info to verify users
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
@@ -33,7 +39,7 @@ public class AuthController {
     @Autowired // Spring automatically creates an instance of the service
     private AuthService authService;
 
-    @Autowired
+    @Autowired // and of the database
     private UserRepository userRepository;
     
     /**
@@ -54,6 +60,7 @@ public class AuthController {
      * POST /api/auth/signup
      */
     @PostMapping("/signup")
+    // authorizes users trying to sign up
     public ResponseEntity<AuthResponse> signup(@Valid @RequestBody SignupRequest signupRequest) {
         AuthResponse response = authService.signup(signupRequest);
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -64,6 +71,7 @@ public class AuthController {
      * POST /api/auth/guest
      */
     @PostMapping("/guest")
+    // authorizes users trying to register as guests
     public ResponseEntity<AuthResponse> guestSignup() {
         AuthResponse response = authService.guestSignup();
         return ResponseEntity.status(HttpStatus.CREATED).body(response);
@@ -74,17 +82,18 @@ public class AuthController {
      * POST /api/auth/google
      */
     @PostMapping("/google")
+    // deals with logging in with google
     public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> payload) {
         try {
             // Debug log for incoming payload
             System.out.println("POST /api/auth/google payload: " + payload);
 
-            String credential = payload.get("credential"); // preferred: ID token from GSI
+            String credential = payload.get("credential");
             String googleId = payload.get("googleId");
             String email = payload.get("email");
 
             if (credential != null && !credential.isBlank()) {
-                // Verify ID token with Google's tokeninfo endpoint
+                // Verifies ID token with Google API
                 String verifyUrl = "https://oauth2.googleapis.com/tokeninfo?id_token=" + credential;
                 HttpClient client = HttpClient.newHttpClient();
                 HttpRequest request = HttpRequest.newBuilder()
@@ -99,13 +108,13 @@ public class AuthController {
                             .body(Map.of("error", "Invalid ID token"));
                 }
 
-                // Parse response JSON to get sub (google id) and email
+                // Parses responses to get google ids and emails
                 ObjectMapper mapper = new ObjectMapper();
                 Map<String, Object> info = mapper.readValue(resp.body(), Map.class);
                 googleId = (String) info.get("sub");
                 email = (String) info.get("email");
 
-                // Optional: verify aud matches your client id
+                // verifies aud matches client ids
                 String aud = (String) info.get("aud");
                 System.out.println("Verified token aud=" + aud + " sub=" + googleId + " email=" + email);
             }
@@ -114,7 +123,7 @@ public class AuthController {
                 return ResponseEntity.badRequest().body(Map.of("error", "Missing googleId or email"));
             }
 
-            // call your service
+            // calls Google service
             AuthResponse response = authService.googleLogin(googleId, email);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -129,6 +138,7 @@ public class AuthController {
      * POST /api/auth/refresh
      */
     @PostMapping("/refresh")
+    // deals with refresh button
     public ResponseEntity<AuthResponse> refreshToken(@RequestBody Map<String, String> payload) {
         String refreshToken = payload.get("refreshToken");
         

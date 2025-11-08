@@ -10,12 +10,14 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 
+// allows us to do stuff with the database that we need for validating user log ins
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
     
     @Autowired
     private UserRepository userRepository;
     
+    // checks that a user can be accessed in the database with their email
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(email)
@@ -28,6 +30,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         );
     }
     
+    // checks that a user can be found in the database by their ID
     public UserDetails loadUserById(String id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new UsernameNotFoundException("User not found with id: " + id));

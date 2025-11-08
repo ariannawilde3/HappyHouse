@@ -1,5 +1,5 @@
 package com.happyhouse.exception;
-
+// specific exception handling
 public class ResourceNotFoundException extends RuntimeException {
     
     public ResourceNotFoundException(String message) {

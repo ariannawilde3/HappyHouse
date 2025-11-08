@@ -1,12 +1,18 @@
+// part of the data transfer object package, deals with data
+// dtos hide data that is sensitive during api responses and transfer between front and backend for security
 package com.happyhouse.dto;
-
+// imports user entity
 import com.happyhouse.model.User;
-
+// authenticates data from sign up and log in
+// frontend fetches the response from this file which is either success or failure
+// if it is awaited and succeeds then the data is stored because we know it is correct
 public class AuthResponse {
-    
+    // way to store the authentication request and data while processing
     private String token;
+    // used to access tokens
     private String refreshToken;
     private String type = "Bearer";
+    // stores the data if the authentication is correct
     private String userId;
     private String email;
     private String anonymousUsername;

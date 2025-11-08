@@ -1,5 +1,5 @@
 package com.happyhouse.model;
-
+// settings for private group chats
 public class SettingsForm {
     private int roomieCount;
     private boolean anonNamesOn;

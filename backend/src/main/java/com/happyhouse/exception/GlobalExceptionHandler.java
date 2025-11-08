@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
-
+// handles exceptions for loading default application urls
 @RestControllerAdvice
 public class GlobalExceptionHandler {
     

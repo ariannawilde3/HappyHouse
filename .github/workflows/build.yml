@@ -26,7 +26,7 @@ jobs:
           java-version: 17
 
       - name: SonarQube Scan
-        uses: SonarSource/sonarqube-scan-action@fd88b7d699a67fcaea73e308ab7edcfcdbb8e93d
+        uses: SonarSource/sonarqube-scan-action@v2.0.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         # If you want the pipeline to stay green even when the Quality Gate fails, uncomment:
