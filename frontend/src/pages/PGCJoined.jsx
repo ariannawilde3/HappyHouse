@@ -11,7 +11,7 @@ export default function PGCJoined() {
 
   const handleOff = () => {
     console.log("button pressed but off", { waitingtojoin });
-  };
+  }; {/*where the gc lock will come into play */}
 
   const goToForum = () => {
     navigate('/neighborhood');

@@ -22,7 +22,7 @@ export default function MakePostPage() {
     };
 
     const goToChat = () => {
-        navigate('/house');
+        navigate('/makeGC');
         console.log('House icon clicked');
     };
 

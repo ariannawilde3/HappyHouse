@@ -159,61 +159,6 @@
   cursor: pointer;
 }
 
-/* Checkbox Container */
-.checkbox-container {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    margin-bottom: 20px;
-    text-align: left;
-    margin-top: 10px;
-  }
-  
-  .checkbox-wrapper input[type="checkbox"] {
-    appearance: none;
-    width: 24px;
-    height: 24px;
-    border: 2px solid #7a9b7e;
-    border-radius: 4px;
-    background-color: white;
-    cursor: pointer;
-    position: relative;
-    transition: all 0.2s ease;
-  }
-  
-  .checkbox-wrapper input[type="checkbox"]:checked {
-    background-color: #7a9b7e;
-    border-color: #7a9b7e;
-  }
-  
-  /* Checkmark */
-  .checkbox-wrapper input[type="checkbox"]:checked::after {
-    content: "✓";
-    position: absolute;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-  }
-  
-  
-  .checkbox-label {
-    color: #666;
-    font-size: 16px;
-    font-weight: 500;
-    margin-bottom: 4px;
-  }
-
-
-/* "or" divider */
-.divider {
-  text-align: center;
-  color: #9ca3af;
-  font-size: 1.25rem;
-}
-
 
 .slider-container {
   display: flex;
