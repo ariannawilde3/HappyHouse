@@ -41,12 +41,7 @@ export default function ProfilePage() {
   };
 
   const goToChat = () => {
-<<<<<<< Updated upstream
     navigate('/house');
-=======
-    navigate('/makeGC');
-    console.log('house icon clicked');
->>>>>>> Stashed changes
   };
 
   const goToForum = () => {

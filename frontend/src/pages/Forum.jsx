@@ -9,8 +9,37 @@ import settings from '../assets/images/settings.png';
 import ThumbsUp from '../assets/images/ThumbsUp.png';
 import ThumbsDown from '../assets/images/ThumbsDown.png';
 
+const API_URL = 'http://localhost:5000/api';
 
 export default function ForumPage() {
+	
+	const [postList, setPostList] = useState({loaded: false, posts: []});
+		
+	const loadContent = async () => {
+		// add setError later
+		var data = await fetch(`${API_URL}/viewpost/`)
+		.then(response => response.json());
+		console.log(data);
+		
+		/*for the main post part*/
+		/*const [post, setPost] = useState({
+			id: 1,
+			title: "My roommate is allergic to peanuts. Why?",
+			content: "My roommate is allergic to peanuts and it really weirds me out. She won't ever tell me how it happened or where it started so I just give up. I'm looking for new roommates to take her place, she has two beds in her room, for some odd reason so I can definitely house more people. BLAH BLAH BALAH BALHABLHAJHDFHDOSFHDFUIWEFPBEFBEF",
+			votes: 927,
+			userVote: null,
+			tags: ["Most Popular", "Finding a Roommate"]
+		});*/
+		
+		setPostList({
+			loaded: true,
+			posts: data
+		});
+		
+	};
+	
+	useEffect(() => {loadContent();}, []);
+	
     const [searchQuery, setSearchQuery] = useState('');
     const [anonymousUsername, setAnonymousUsername] = useState('');
     const navigate = useNavigate();
@@ -49,8 +78,8 @@ export default function ForumPage() {
         console.log('Added/removed tag');
     };
 
-    const viewPost = () => {
-        navigate('/viewPost');
+    const viewPost = (id) => {
+        navigate('/viewPost', {state: id});
         console.log('post clicked');
     };
 
@@ -59,26 +88,17 @@ export default function ForumPage() {
     };
 
     const addPost = () => {
-        const userType = localStorage.getItem('userType');
-        if (userType === 'GUEST') {
-            alert('Guests cannot create posts. Please sign up!');
-            return;
-        }
         navigate('/makePost');
+        console.log('Post added to forum');
     };
 
     const goToChat = () => {
-<<<<<<< Updated upstream
         const userType = localStorage.getItem('userType');
         if (userType == 'GUEST') {
             alert('Guests cannot access private chats. Please sign up!');
             return;
         }
         navigate('/house');
-=======
-        navigate('/makeGC');
-        console.log('House icon clicked');
->>>>>>> Stashed changes
     };
 
     const goToProfile = () => {
@@ -169,15 +189,12 @@ export default function ForumPage() {
                         <p className="no-posts-txt2">Maybe try expanding your search?</p>
                     </div>*/}
 
-                    {/* Ex. Post */}
+                    {/* Ex. Post
                     <div onClick={viewPost} className="post-container">
-                        {/* Post Content */}
                         <h3 className="post-title">My roommate is allergic to peanuts. Why?</h3>
                         <p className="post-content">My roommate is allergic to peanuts and it really weirds me out. She won't ever tell me how it happened or where it started so I just give up. I'm looking for new roommates to take her place, she has two beds in her room, for some odd reason so I can defintely house more people. BLAH BLAH BALAH BALHABLHAJHDFHDOSFHDFUIWEFPBEFBEF</p>
                         
-                        {/* Tags and Voting */}
                         <div className="post-stats-container">
-                            {/* Tags */}
                             <div className="post-tag">
                                 <p>Most Popular</p>
                             </div>
@@ -185,7 +202,6 @@ export default function ForumPage() {
                                 <p>Finding a Roommate</p>
                             </div>
 
-                            {/* Voting Buttons */}
                             <div className="votes-container">
                                 <p className="votes-label"> 927 Votes</p>
                                 <button onClick={updateVotes} className="up-votes">
@@ -196,7 +212,36 @@ export default function ForumPage() {
                                 </button>
                             </div>
                         </div>
-                    </div>
+					</div>*/}
+					
+					{/* Ex. Post */}
+					{postList.posts.map((post, index) => (
+					<React.Fragment>
+						<div onClick={() => viewPost(post.id)} className="post-container">
+							<h3 className="post-title"> {post.title} </h3>
+							<p className="post-content"> {post.content} </p>
+						
+						<div className="post-stats-container">
+						{post.tags.map((tag, index) => (
+							<div className="post-tag">
+                                <p>{tag}</p>
+                            </div>
+						))}
+							
+
+                            <div className="votes-container">
+                                <p className="votes-label"> {post.votes} Votes</p>
+                                <button onClick={updateVotes} className="up-votes">
+                                    <img src={ThumbsUp} alt="Like" style={{width: '24px', height: '24px'}}/>
+                                </button>
+                                <button onClick={updateVotes} className="down-votes">
+                                    <img src={ThumbsDown} alt="Dislike" style={{width: '24px', height: '24px'}}/>
+                                </button>
+                            </div>
+                        </div>
+						</div>
+					</React.Fragment>
+					))}
 
                     {/* Logout Button (temporary - you can move this to settings page later) */}
                     <button 

@@ -7,13 +7,8 @@ import settings from "../assets/images/settings.png";
 
 export default function PGCSettings() {
   const [housename, setHouseName] = useState("");
-<<<<<<< Updated upstream
-  const navigate = useNavigate();
-=======
-  
   const navigate = useNavigate();
 
->>>>>>> Stashed changes
 
   const handleHouseName = (value) => {
     setHouseName(value); }

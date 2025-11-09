@@ -1,7 +1,18 @@
 /*Keira*/
 
+
+/*
+TODO: add line break between tags and votes
+TODO: send post id in fetch
+TODO: make content area consistent size and consistent with comments
+TODO: add anonymous usernames to comment
+TODO: add adding comments
+TODO: store uservote in user
+*/
 import React, { useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useLocation } from "react-router-dom";
 import './PostViewing.css';
 import house from '../assets/images/house.png';
 import neighborhood from'../assets/images/neighborhood.png';
@@ -9,30 +20,74 @@ import settings from '../assets/images/settings.png';
 import ThumbsUp from '../assets/images/ThumbsUp.png';
 import ThumbsDown from '../assets/images/ThumbsDown.png';
 
-export default function ForumPage() {
+const API_URL = 'http://localhost:5000/api';
 
-    /*for the main post part*/
+export default function ForumPage() {
+	
+	/*for the main post part*/
     const [post, setPost] = useState({
-        id: 1,
-        title: "My roommate is allergic to peanuts. Why?",
-        content: "My roommate is allergic to peanuts and it really weirds me out. She won't ever tell me how it happened or where it started so I just give up. I'm looking for new roommates to take her place, she has two beds in her room, for some odd reason so I can definitely house more people. BLAH BLAH BALAH BALHABLHAJHDFHDOSFHDFUIWEFPBEFBEF",
-        votes: 927,
+        id: -1,
+        title: "404 Error",
+        content: "Post not found",
+        votes: 0,
         userVote: null,
-        tags: ["Most Popular", "Finding a Roommate"]
+        tags: [],
+		comments: []
     });
+	
+	const location = useLocation();
+	console.log(location.state);
+	
+	const loadContent = async () => {
+		// add setError later
+		var data = await fetch(`${API_URL}/viewpost/${location.state}`)
+		.then(response => response.json());
+		console.log(data);
+		console.log(data.title);
+		
+		/*for the main post part*/
+		/*const [post, setPost] = useState({
+			id: 1,
+			title: "My roommate is allergic to peanuts. Why?",
+			content: "My roommate is allergic to peanuts and it really weirds me out. She won't ever tell me how it happened or where it started so I just give up. I'm looking for new roommates to take her place, she has two beds in her room, for some odd reason so I can definitely house more people. BLAH BLAH BALAH BALHABLHAJHDFHDOSFHDFUIWEFPBEFBEF",
+			votes: 927,
+			userVote: null,
+			tags: ["Most Popular", "Finding a Roommate"]
+		});*/
+		
+		setPost({
+			id: 1,
+			title: data.title,
+			content: data.content,
+			votes: data.votes,
+			userVote: null,
+			tags: data.tags,
+			comments: data.comments
+		});
+		
+		setComments(data.comments);
+	};
+	
+	useEffect(() => {loadContent();}, []);
+
+
 
     /*comments*/
      const [comments, setComments] = useState([
-        { id: 1, text: "thats rough buddy", votes: 927, userVote: null },
-        { id: 2, text: "im interested! heres my instagram: @ljsdhfisdgh", votes: 927, userVote: null },
-        { id: 3, text: "comment", votes: 927, userVote: null },
-        { id: 4, text: "comment", votes: 927, userVote: null },
-        { id: 5, text: "comment", votes: 927, userVote: null }
-    ]);
+        ]);
 
     const navigate = useNavigate();
-    const userType = localStorage.getItem('userType');
-    const isGuest = userType === 'GUEST';
+
+    /* Vote handling function*/
+    // const handleVote = (type) => {
+    //     setPost(prev => ({
+    //         ...prev,
+    //         votes: prev.userVote === type ? prev.votes - (type === 'up' ? 1 : -1) : 
+    //                prev.userVote ? prev.votes + (type === 'up' ? 2 : -2) :
+    //                prev.votes + (type === 'up' ? 1 : -1),
+    //         userVote: prev.userVote === type ? null : type
+    //     }));
+    // };
 
     const handleVote = (type, itemId, isPost = false) => {
         if (isPost) {
@@ -56,39 +111,18 @@ export default function ForumPage() {
         }
     };
 
-    const verfiyCommenter = () => {
-        if (isGuest) {
-            alert('Guests cannot comment on forum posts. Please sign up!');
-            return;
-        }
-        return;
-    };
-
-    const handleCommentSubmit = () => {
-        console.log("comment submitted");
-    }
-
     const addPost = () => {
-        const userType = localStorage.getItem('userType');
-        if (userType === 'GUEST') {
-            alert('Guests cannot create posts. Please sign up!');
-            return;
-        }
         navigate('/makePost');
+        console.log('Post added to forum');
     };
 
     const goToChat = () => {
-<<<<<<< Updated upstream
         const userType = localStorage.getItem('userType');
         if (userType == 'GUEST') {
             alert('Guests cannot access private chats. Please sign up!');
             return;
         }
         navigate('/house');
-=======
-        navigate('/makeGC');
-        console.log('House icon clicked');
->>>>>>> Stashed changes
     };
 
     const goToProfile = () => {
@@ -112,7 +146,7 @@ export default function ForumPage() {
                     <div className="forum-welcome-section">
                         <p className="forum-welcome-subtitle">
                             {/* takes you back to previous page*/}
-                            <button onClick={() => globalThis.history.back()} style={{ 
+                            <button onClick={() => window.history.back()} style={{ 
                                 background: 'none', 
                                 border: 'none', 
                                 color: '#6b7280', 
@@ -223,27 +257,11 @@ export default function ForumPage() {
                                 </button>
                             </div>
                         </div>
-                        {/* Comment input field */}
-                        <div onClick={verfiyCommenter} className="comment-input-container">
-                            <form onSubmit={handleCommentSubmit} className="comment-input-field">
-                                <input
-                                    type="text"
-                                    placeholder={isGuest ? 'Sign up to comment!' : 'Leave a Comment'}
-                                    className="comment-input"
-                                    style={{
-                                        cursor: isGuest ? 'not-allowed' : 'text',
-                                        backgroundColor: isGuest ? '#f3f4f6' : 'white',
-                                        opacity: isGuest ? 0.7 : 1
-                                    }}
-                                    readOnly={isGuest}
-                                />
-                            </form>
-                        </div>
                     </div>
                     {/* END OF MAIN POST SECTION */}
 
                     {/* ADD COMMENTS SECTION HERE */}
-                    {/* Vertical connecting line */}
+                    {/* Vertical connecting line 
                     <div style={{
                         width: '3px',
                         height: '30px',
@@ -251,7 +269,7 @@ export default function ForumPage() {
                         alignSelf: 'flex-start',
                         marginLeft: '1.5rem',
                         marginBottom: '0.5rem'
-                    }}></div>
+                    }}></div>*/}
 
                     {/* Comments */}
                     {comments.map((comment, index) => (
@@ -276,7 +294,7 @@ export default function ForumPage() {
                                     margin: 0,
                                     flex: 1
                                 }}>
-                                    {comment.text}
+                                    {comment.content}
                                 </p>
 
                                 {/* Vote section */}
