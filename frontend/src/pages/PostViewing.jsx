@@ -34,17 +34,6 @@ export default function ForumPage() {
     const userType = localStorage.getItem('userType');
     const isGuest = userType === 'GUEST';
 
-    /* Vote handling function*/
-    // const handleVote = (type) => {
-    //     setPost(prev => ({
-    //         ...prev,
-    //         votes: prev.userVote === type ? prev.votes - (type === 'up' ? 1 : -1) : 
-    //                prev.userVote ? prev.votes + (type === 'up' ? 2 : -2) :
-    //                prev.votes + (type === 'up' ? 1 : -1),
-    //         userVote: prev.userVote === type ? null : type
-    //     }));
-    // };
-
     const handleVote = (type, itemId, isPost = false) => {
         if (isPost) {
             setPost(prev => ({
@@ -118,7 +107,7 @@ export default function ForumPage() {
                     <div className="forum-welcome-section">
                         <p className="forum-welcome-subtitle">
                             {/* takes you back to previous page*/}
-                            <button onClick={() => window.history.back()} style={{ 
+                            <button onClick={() => globalThis.history.back()} style={{ 
                                 background: 'none', 
                                 border: 'none', 
                                 color: '#6b7280', 

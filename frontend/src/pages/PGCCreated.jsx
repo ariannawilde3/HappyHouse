@@ -1,4 +1,4 @@
-import React, { use, useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./PGCCreated.css";
 import house from "../assets/images/house.png";
@@ -6,7 +6,7 @@ import neighborhood from "../assets/images/neighborhood.png";
 import settings from "../assets/images/settings.png";
 
 export default function PGCCreated() {
-    const [waitingtojoin, setoff] = useState('');
+    const [waitingtojoin] = useState('');
     const navigate = useNavigate();
 
   const handleOff = () => {

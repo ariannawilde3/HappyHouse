@@ -81,7 +81,7 @@ export default function PGCMake() {
                         <img src={neighborhood} alt="Forum" style={{ width: '115px', height: '50px' }}/>
                     </button>
 
-                    <button conClick={goToProfile} lassName="nav-btn inactive-btn">
+                    <button onClick={goToProfile} className="nav-btn inactive-btn">
                         <img src={settings} alt="Settings" style={{ width: '50px', height: '50px' }}/>
                     </button>
 

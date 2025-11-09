@@ -6,7 +6,7 @@ import neighborhood from "../assets/images/neighborhood.png";
 import settings from "../assets/images/settings.png";
 
 export default function PGCJoined() {
-    const [waitingtojoin, setoff] = useState('');
+    const [waitingtojoin] = useState('');
     const navigate = useNavigate();
 
   const handleOff = () => {
