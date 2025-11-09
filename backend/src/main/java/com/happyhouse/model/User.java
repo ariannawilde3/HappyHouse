@@ -18,6 +18,8 @@ public class User {
     @Indexed(unique = true)
     private String email;
     
+    private String name; 
+
     private String password;
     
     private String anonymousUsername;
@@ -71,6 +73,14 @@ public class User {
         this.email = email;
     }
     
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public String getPassword() {
         return password;
     }

@@ -1,58 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ProfilePage.css';
+import { getCurrentUser } from "../api";
 import house from '../assets/images/house.png';
 import neighborhood from '../assets/images/neighborhood.png';
 import settings from '../assets/images/settings.png';
 
 export default function ProfilePage() {
   const navigate = useNavigate();
+  
+  const [name, setName] = useState('Loading...');
+  const [email, setEmail] = useState('Loading...');
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // Fetch user data when component mounts
+    const fetchUserData = async () => {
+      try {
+        const user = await getCurrentUser();  // ← Now it's being used!
+        setName(user.name);
+        setEmail(user.email);
+      } catch (error) {
+        console.error('Error fetching user:', error);
+        navigate('/');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserData();
+  }, [navigate]);
 
   const handleEditProfile = () => {
     navigate('/editProfile');
-    console.log('Edit Profile clicked');
   };
 
   const handleLogout = () => {
-    navigate('/guestProfile');
-    console.log('Logout clicked');
+    localStorage.removeItem('token');
+    navigate('/');
   };
 
   const goToChat = () => {
     navigate('/house');
-    console.log('house icon clicked');
   };
 
   const goToForum = () => {
     navigate('/neighborhood');
-    console.log('forum icon clicked');
   };
+
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="profile-outer-container">
       <div className="profile-phone-frame">
-        {/* Status bar */}
         <div className="profile-status-bar">
           <span>9:41</span>
           <span>📶 📡 🔋</span>
         </div>
         
-        {/* Content */}
         <div className="profile-content-area">
-          {/* Logo */}
           <div className="profile-logo-container">
             <div className="profile-logo-circle">
               <span className="profile-logo-text">HH</span>
             </div>
           </div>
 
-          {/* Welcome text */}
           <div className="profile-welcome-section">
             <p className="profile-welcome-subtitle">Your Profile</p>
             <h1 className="profile-welcome-title">HappyHouse</h1>
           </div>
 
-          {/* Profile info card */}
           <div className="profile-info-card">
             <div className="profile-info-row">
               <label className="profile-info-label">Name</label>
@@ -73,7 +92,6 @@ export default function ProfilePage() {
             </button>
           </div>
 
-          {/* Navigation Bar */}
           <div className="profile-nav-bar">
             <button onClick={goToChat} className="nav-btn inactive-btn">
               <img src={house} alt="House Chat" style={{ width: '50px', height: '50px'}}/>
