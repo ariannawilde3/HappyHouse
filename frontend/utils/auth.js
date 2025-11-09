@@ -104,7 +104,7 @@ export const auth = {
         // Refresh failed, logout user
         console.log('❌ Token refresh failed, logging out');
         auth.logout();
-        window.location.href = '/';
+        globalThis.location.href = '/';
       }
     }
 
