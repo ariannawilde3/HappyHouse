@@ -11,16 +11,20 @@ import com.happyhouse.util.AnonymousUsernameGenerator;
 import com.happyhouse.util.JwtUtil;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired; 
 
 import java.time.LocalDateTime;
 
 @Service
 public class AuthService {
 
+    @Autowired
     private UserRepository userRepository;
 
+    @Autowired
     private PasswordEncoder passwordEncoder;
 
+    @Autowired
     private JwtUtil jwtUtil;
 
     

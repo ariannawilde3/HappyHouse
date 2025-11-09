@@ -22,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.beans.factory.annotation.Autowired; 
 // allow frontend and backend to talk to each other
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
@@ -34,13 +35,17 @@ import java.util.Arrays;
 @EnableMethodSecurity
 public class SecurityConfig {
 
+    @Autowired
+    private CustomUserDetailsService userDetailsService;
+
+    @Autowired
+    private JwtAuthenticationFilter jwtAuthenticationFilter;
     // loads the ports for backend and frontend
     @Value("${cors.allowed.origins}")
     private String allowedOrigins;
     // deals with authentification of https allowed when starting application
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        JwtAuthenticationFilter jwtAuthenticationFilter;
         http
             .csrf(csrf -> csrf.disable())
             // connecting with configuration on frontend
@@ -68,7 +73,6 @@ public class SecurityConfig {
     // handles authentification of log in information
     @Bean
     public AuthenticationProvider authenticationProvider() {
-        CustomUserDetailsService userDetailsService;
         // connects to database
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         // gets information about users from database

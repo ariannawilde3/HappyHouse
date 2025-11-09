@@ -14,6 +14,7 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 // more spring imports
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
+import org.springframework.beans.factory.annotation.Autowired; 
 
 import java.io.IOException;
 
@@ -21,8 +22,10 @@ import java.io.IOException;
 // or when we use the database, it allows the request to proceed to the controllers once done
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    @Autowired
     private JwtUtil jwtUtil;
     // this is provided by spring and allows us to load user details from mongo
+    @Autowired
     private CustomUserDetailsService userDetailsService;
     // this is called for every HTTP request 
     @Override

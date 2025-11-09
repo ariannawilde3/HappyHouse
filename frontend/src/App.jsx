@@ -1,6 +1,6 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login.jsx';
-import Signup from './pages/Signup.jsx';  // ADD THIS LINE
+import Signup from './pages/Signup.jsx';
 import Forum from './pages/Forum.jsx';
 import PostViewing from './pages/PostViewing.jsx';
 import MakePost from './pages/MakePost.jsx';
