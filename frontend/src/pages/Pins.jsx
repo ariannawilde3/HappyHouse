@@ -18,7 +18,7 @@ export default function Pins() {
     };
 
     const goToChat = () => {
-        navigate('/house');
+        navigate('/makeGC');
         console.log('chat icon clicked');
     };
 

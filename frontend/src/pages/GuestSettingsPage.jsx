@@ -9,9 +9,9 @@ export default function GuestSettingsPage() {
   const navigate = useNavigate();
 
   const goToChat = () => {
-    navigate('/house');
+    navigate('/makeGC');
     console.log('House icon clicked');
-  };
+};
 
   const goToForum = () => {
     navigate('/neighborhood');

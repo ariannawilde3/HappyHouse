@@ -10,11 +10,19 @@ export default function PGCMake() {
 
         const [invitecode, setInviteCode] = useState('');
       
-        const handleInviteJoin = () => {
-          console.log('Invite Entered', { email, password });
+        const handleInviteJoin = (e) => {
+          e.preventDefault();
+          {/* hard coded CHANGE THIS ONCE DATABASE GETS ADDED */}
+          if (invitecode == 128934) {
+            navigate('/gcJoinedWaiting');
+            console.log('Invite Entered and Valid: ', { invitecode });
+          } else {
+            console.log('Invite Entered and Not Valid: ', { invitecode });
+          }
         };
-      
+
         const handleCreateGC = () => {
+          navigate('/gcSettings');
           console.log('CreateGC Clicked');
         };
 

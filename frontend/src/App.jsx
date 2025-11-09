@@ -36,6 +36,11 @@ function App() {
         <Route path='/profile' element={<ProfilePage />} />
         <Route path='/editProfile' element={<EditProfilePage />} />
         <Route path='/guestProfile' element={<GuestSettingsPage />} />
+        <Route path='/makeGC' element={<PGCMake />} />
+        <Route path='/gcSettings' element={<PGCSettings />} />
+        <Route path='/createdWaitingRoom' element={<PGCCreated />} />
+        <Route path='/gcJoinedWaiting' element={<PGCJoined />} />
+
       </Routes>
     </BrowserRouter>
   );
