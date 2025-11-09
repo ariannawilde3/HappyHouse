@@ -1,7 +1,4 @@
-<<<<<<< HEAD
 import React, { useState, useEffect } from 'react';
-=======
->>>>>>> a991bf3b492ef7b48de3e43c342e955b03211070
 import { useNavigate } from 'react-router-dom';
 import './ProfilePage.css';
 import { getCurrentUser } from "../api";
