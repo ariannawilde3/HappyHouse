@@ -1,5 +1,7 @@
 package com.happyhouse.service;
 
+
+import com.happyhouse.dto.UpdateProfileRequest;
 import com.happyhouse.dto.AuthResponse;
 import com.happyhouse.dto.LoginRequest;
 import com.happyhouse.dto.SignupRequest;
@@ -27,6 +29,11 @@ public class AuthService {
     @Autowired
     private JwtUtil jwtUtil;
 
+
+    public User findByEmail(String email) {
+        return userRepository.findByEmail(email)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+    }
     
     /**
      * Login with email and password
@@ -214,4 +221,47 @@ public class AuthService {
             user.getUserType()
         );
     }
+
+    public User updateProfile(String userId, UpdateProfileRequest request) {
+
+        // find the user in the database 
+        User user = userRepository.findById(userId)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+    
+        // update the username in the database 
+        user.setName(request.getName());
+    
+        // if the email is changed then update the email
+        if (!user.getEmail().equals(request.getEmail())) {
+            // second check to see if the email is already being used
+            if (userRepository.findByEmail(request.getEmail()).isPresent()) {
+                throw new RuntimeException("Email already in use");
+            }
+            // set the email
+            user.setEmail(request.getEmail());
+        }
+    
+        // if the password is ot be changed, change the password 
+        if (request.getCurrentPassword() != null && !request.getCurrentPassword().isEmpty()) {
+
+            //if current password not inputted correctly through error
+            if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
+                throw new RuntimeException("Current password is incorrect");
+            }
+            
+            // check password length requirments 
+            if (request.getNewPassword() == null || request.getNewPassword().length() < 6) {
+                throw new RuntimeException("New password must be at least 6 characters");
+            }
+            
+            // set password 
+            user.setPassword(passwordEncoder.encode(request.getNewPassword()));
+        }
+        
+        // save user data in database 
+        return userRepository.save(user);
+    }
+
+
+
 }
