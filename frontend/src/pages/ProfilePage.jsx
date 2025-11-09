@@ -1,4 +1,3 @@
-import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ProfilePage.css';
 import house from '../assets/images/house.png';
@@ -55,12 +54,12 @@ export default function ProfilePage() {
           {/* Profile info card */}
           <div className="profile-info-card">
             <div className="profile-info-row">
-              <label className="profile-info-label">Name</label>
+              <p className="profile-info-label">Name</p>
               <p className="profile-info-value">{name}</p>
             </div>
 
             <div className="profile-info-row">
-              <label className="profile-info-label">Email</label>
+              <p className="profile-info-label">Email</p>
               <p className="profile-info-value">{email}</p>
             </div>
 

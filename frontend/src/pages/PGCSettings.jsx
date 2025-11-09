@@ -7,6 +7,7 @@ import settings from "../assets/images/settings.png";
 
 export default function PGCSettings() {
   const [housename, setHouseName] = useState("");
+  const navigate = useNavigate();
 
   const handleHouseName = (value) => {
     setHouseName(value); }

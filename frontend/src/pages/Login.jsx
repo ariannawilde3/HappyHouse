@@ -15,7 +15,7 @@ export default function LoginPage() {
   // Load Google Identity Services
   useEffect(() => {
     const loadGoogleScript = () => {
-      if (window.google) {
+      if (globalThis.google) {
         initializeGoogleSignIn();
         return;
       }
@@ -30,8 +30,8 @@ export default function LoginPage() {
     };
 
     const initializeGoogleSignIn = () => {
-      if (window.google) {
-        window.google.accounts.id.initialize({
+      if (globalThis.google) {
+        globalThis.google.accounts.id.initialize({
           client_id: "291819576173-dn0jkt0lj92e13ubfqjo8ham8qbh8v0u.apps.googleusercontent.com",
           callback: handleGoogleCredentialResponse,
         });
@@ -44,8 +44,8 @@ export default function LoginPage() {
 
   // Render Google button when loaded
   useEffect(() => {
-    if (googleLoaded && window.google) {
-      window.google.accounts.id.renderButton(
+    if (googleLoaded && globalThis.google) {
+      globalThis.google.accounts.id.renderButton(
         document.getElementById("google-signin-button"),
         { 
           theme: "outline", 

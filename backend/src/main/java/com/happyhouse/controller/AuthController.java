@@ -24,7 +24,8 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-import java.util.logging.Logger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -46,8 +47,7 @@ public class AuthController {
 
     private static final String ERR = "error";
 
-    Logger logger = Logger.getLogger(getClass().getName());
-    
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);    
     /**
      * Login endpoint
      * POST /api/auth/login
@@ -92,7 +92,7 @@ public class AuthController {
     public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> payload) {
         try {
             // Debug log for incoming payload
-            logger.info("POST /api/auth/google payload: " + payload);
+            logger.info("POST /api/auth/google payload: {}", payload);
 
             String credential = payload.get("credential");
             String googleId = payload.get("googleId");
@@ -109,7 +109,7 @@ public class AuthController {
                 HttpResponse<String> resp = client.send(request, HttpResponse.BodyHandlers.ofString());
 
                 if (resp.statusCode() != 200) {
-                    logger.info("Google tokeninfo returned status: " + resp.statusCode() + " body: " + resp.body());
+                    logger.info("Google tokeninfo returned status: {} body: {}", resp.statusCode(), resp.body());
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                             .body(Map.of(ERR, "Invalid ID token"));
                 }
@@ -122,7 +122,7 @@ public class AuthController {
 
                 // verifies aud matches client ids
                 String aud = (String) info.get("aud");
-                logger.info("Verified token aud=" + aud + " sub=" + googleId + " email=" + email);
+                logger.info("Verified token aud={} sub={} email={}", aud, googleId, email);
             }
 
             if (googleId == null || email == null) {
@@ -133,7 +133,7 @@ public class AuthController {
             AuthResponse response = authService.googleLogin(googleId, email);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error("Googel login failed: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of(ERR, "Google login failed", "details", e.getMessage()));
         }
