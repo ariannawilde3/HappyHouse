@@ -6,8 +6,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-// for spring
-import org.springframework.beans.factory.annotation.Autowired;
 // so spring can work with security of data
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -23,11 +21,8 @@ import java.io.IOException;
 // or when we use the database, it allows the request to proceed to the controllers once done
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    
-    @Autowired
     private JwtUtil jwtUtil;
     // this is provided by spring and allows us to load user details from mongo
-    @Autowired
     private CustomUserDetailsService userDetailsService;
     // this is called for every HTTP request 
     @Override
@@ -43,7 +38,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 // get user info from token
                 UserDetails userDetails = userDetailsService.loadUserByUsername(email);
                 // make sure user is valid and matches token
-                if (jwtUtil.validateToken(jwt, userDetails)) {
+                if (userDetails != null && jwtUtil.validateToken(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authentication = 
                         new UsernamePasswordAuthenticationToken(
                             userDetails, 

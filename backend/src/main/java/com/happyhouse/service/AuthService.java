@@ -9,10 +9,6 @@ import com.happyhouse.model.User;
 import com.happyhouse.repository.UserRepository;
 import com.happyhouse.util.AnonymousUsernameGenerator;
 import com.happyhouse.util.JwtUtil;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -20,30 +16,18 @@ import java.time.LocalDateTime;
 
 @Service
 public class AuthService {
-    
-    @Autowired
+
     private UserRepository userRepository;
-    
-    @Autowired
+
     private PasswordEncoder passwordEncoder;
-    
-    @Autowired
+
     private JwtUtil jwtUtil;
-    
-    @Autowired
-    private AuthenticationManager authenticationManager;
+
     
     /**
      * Login with email and password
      */
     public AuthResponse login(LoginRequest loginRequest) {
-        // Authenticate user
-        Authentication authentication = authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                loginRequest.getEmail(),
-                loginRequest.getPassword()
-            )
-        );
         
         // Get user from database
         User user = userRepository.findByEmail(loginRequest.getEmail())
@@ -71,7 +55,13 @@ public class AuthService {
      * Register new user
      */
     public AuthResponse signup(SignupRequest signupRequest) {
-        // Check if email already exists
+        // Check if email already exists or is null
+        if (signupRequest == null) {
+            throw new NullPointerException("No email provided");
+        }
+        if (userRepository == null) {
+            throw new NullPointerException("User does not exist");
+        }
         if (userRepository.existsByEmail(signupRequest.getEmail())) {
             throw new BadRequestException("Email already registered");
         }
@@ -87,9 +77,9 @@ public class AuthService {
         user.setCreatedAt(LocalDateTime.now());
         user.setUpdatedAt(LocalDateTime.now());
         user.setActive(true);
-        
+
         // Save user
-        User saved = userRepository.save(user);
+        userRepository.save(user);
         
         // Generate tokens
         String token = jwtUtil.generateToken(user.getEmail(), user.getId());
@@ -199,12 +189,11 @@ public class AuthService {
      * Refresh access token using refresh token
      */
     public AuthResponse refreshToken(String refreshToken) {
-        if (!jwtUtil.validateToken(refreshToken)) {
+        if (refreshToken == null || !jwtUtil.validateToken(refreshToken)) {
             throw new BadRequestException("Invalid refresh token");
         }
         
         String email = jwtUtil.extractEmail(refreshToken);
-        String userId = jwtUtil.extractUserId(refreshToken);
         
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new ResourceNotFoundException("User not found"));

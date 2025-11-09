@@ -1,6 +1,6 @@
 // labels file as part of the controllers folder
 package com.happyhouse.controller;
-// defines structure of reguests to log in API
+// defines structure of requests to log in API
 import com.happyhouse.dto.AuthResponse;
 import com.happyhouse.dto.LoginRequest;
 import com.happyhouse.dto.SignupRequest;
@@ -10,21 +10,20 @@ import com.happyhouse.repository.UserRepository;
 // imports valid email formats
 import jakarta.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 // helps to parse inputted info (emails, etc.)
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 // connects to Google's token info to verify users
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+
+import java.util.logging.Logger;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -36,11 +35,15 @@ import java.util.Map;
 // Deals with all logic relating to user interactions with the specific page, seperate logic for use cases is in the services
 public class AuthController {
     
-    @Autowired // Spring automatically creates an instance of the service
+    // Spring automatically creates an instance of the service
     private AuthService authService;
 
-    @Autowired // and of the database
+    // and of the database
     private UserRepository userRepository;
+
+    private static final String ERR = "error";
+
+    Logger logger = Logger.getLogger(getClass().getName());
     
     /**
      * Login endpoint
@@ -82,11 +85,11 @@ public class AuthController {
      * POST /api/auth/google
      */
     @PostMapping("/google")
-    // deals with logging in with google
+    // deals with logging in with Google
     public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> payload) {
         try {
             // Debug log for incoming payload
-            System.out.println("POST /api/auth/google payload: " + payload);
+            logger.info("POST /api/auth/google payload: " + payload);
 
             String credential = payload.get("credential");
             String googleId = payload.get("googleId");
@@ -103,9 +106,9 @@ public class AuthController {
                 HttpResponse<String> resp = client.send(request, HttpResponse.BodyHandlers.ofString());
 
                 if (resp.statusCode() != 200) {
-                    System.out.println("Google tokeninfo returned status: " + resp.statusCode() + " body: " + resp.body());
+                    logger.info("Google tokeninfo returned status: " + resp.statusCode() + " body: " + resp.body());
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                            .body(Map.of("error", "Invalid ID token"));
+                            .body(Map.of(ERR, "Invalid ID token"));
                 }
 
                 // Parses responses to get google ids and emails
@@ -116,11 +119,11 @@ public class AuthController {
 
                 // verifies aud matches client ids
                 String aud = (String) info.get("aud");
-                System.out.println("Verified token aud=" + aud + " sub=" + googleId + " email=" + email);
+                logger.info("Verified token aud=" + aud + " sub=" + googleId + " email=" + email);
             }
 
             if (googleId == null || email == null) {
-                return ResponseEntity.badRequest().body(Map.of("error", "Missing googleId or email"));
+                return ResponseEntity.badRequest().body(Map.of(ERR, "Missing googleId or email"));
             }
 
             // calls Google service
@@ -129,7 +132,7 @@ public class AuthController {
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Google login failed", "details", e.getMessage()));
+                    .body(Map.of(ERR, "Google login failed", "details", e.getMessage()));
         }
     }
         
@@ -171,7 +174,7 @@ public class AuthController {
             return ResponseEntity.ok(response);
         } catch (Exception e) {
             Map<String, String> error = new HashMap<>();
-            error.put("error", "Database connection failed: " + e.getMessage());
+            error.put(ERR, "Database connection failed: " + e.getMessage());
             return ResponseEntity.status(500).body(error);
         }
     }

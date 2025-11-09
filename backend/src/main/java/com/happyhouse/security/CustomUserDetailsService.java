@@ -2,7 +2,6 @@ package com.happyhouse.security;
 
 import com.happyhouse.model.User;
 import com.happyhouse.repository.UserRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,8 +12,7 @@ import java.util.ArrayList;
 // allows us to do stuff with the database that we need for validating user log ins
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
-    
-    @Autowired
+
     private UserRepository userRepository;
     
     // checks that a user can be accessed in the database with their email

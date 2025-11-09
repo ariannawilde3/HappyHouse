@@ -28,11 +28,13 @@ public class JwtUtil {
     
     @Value("${jwt.refresh.expiration}")
     private Long refreshExpiration;
+
+    private static final String ID = "userId";
     
     // Generate token for user
     public String generateToken(String email, String userId) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", userId);
+        claims.put(ID, userId);
         return createToken(claims, email, expiration);
     }
     
@@ -40,12 +42,12 @@ public class JwtUtil {
     // the normal tokens expire after use, then the refresh tokens are used to see if there are new normal tokens
     public String generateRefreshToken(String email, String userId) {
         Map<String, Object> claims = new HashMap<>();
-        claims.put("userId", userId);
+        claims.put(ID, userId);
         claims.put("type", "refresh");
         return createToken(claims, email, refreshExpiration);
     }
     
-    // Create token with claims (claims are ways to store all of the user info in the token)
+    // Create token with claims (claims are ways to store all the user info in the token)
     private String createToken(Map<String, Object> claims, String subject, Long expirationTime) {
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + expirationTime);
@@ -72,7 +74,7 @@ public class JwtUtil {
     
     // Extract user ID from token
     public String extractUserId(String token) {
-        return extractClaim(token, claims -> claims.get("userId", String.class));
+        return extractClaim(token, claims -> claims.get(ID, String.class));
     }
     
     // Extract expiration date

@@ -4,7 +4,6 @@ package com.happyhouse.config;
 import com.happyhouse.security.CustomUserDetailsService;
 import com.happyhouse.security.JwtAuthenticationFilter;
 // imports for Spring to work
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -29,24 +28,19 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
-import java.util.List;
 //enables all imports and tells spring that this is a security configuration class
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
 public class SecurityConfig {
-    
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
-    
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
+
     // loads the ports for backend and frontend
     @Value("${cors.allowed.origins}")
     private String allowedOrigins;
     // deals with authentification of https allowed when starting application
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        JwtAuthenticationFilter jwtAuthenticationFilter;
         http
             .csrf(csrf -> csrf.disable())
             // connecting with configuration on frontend
@@ -74,6 +68,7 @@ public class SecurityConfig {
     // handles authentification of log in information
     @Bean
     public AuthenticationProvider authenticationProvider() {
+        CustomUserDetailsService userDetailsService;
         // connects to database
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         // gets information about users from database

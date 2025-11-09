@@ -3,6 +3,10 @@ package com.happyhouse.util;
 import java.util.Random;
 
 public class AnonymousUsernameGenerator {
+
+    private AnonymousUsernameGenerator() {
+        throw new IllegalStateException("Utility class");
+    }
     
     private static final String[] ADJECTIVES = {
         "Happy", "Cheerful", "Sunny", "Bright", "Joyful", "Lively", "Pleasant",
