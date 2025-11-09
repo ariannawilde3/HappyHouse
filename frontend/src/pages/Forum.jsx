@@ -68,12 +68,17 @@ export default function ForumPage() {
     };
 
     const goToChat = () => {
+<<<<<<< Updated upstream
         const userType = localStorage.getItem('userType');
         if (userType == 'GUEST') {
             alert('Guests cannot access private chats. Please sign up!');
             return;
         }
         navigate('/house');
+=======
+        navigate('/makeGC');
+        console.log('House icon clicked');
+>>>>>>> Stashed changes
     };
 
     const goToProfile = () => {

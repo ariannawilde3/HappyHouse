@@ -7,11 +7,21 @@ import settings from "../assets/images/settings.png";
 
 export default function PGCSettings() {
   const [housename, setHouseName] = useState("");
+<<<<<<< Updated upstream
   const navigate = useNavigate();
+=======
+  
+  const navigate = useNavigate();
+
+>>>>>>> Stashed changes
 
   const handleHouseName = (value) => {
     setHouseName(value); }
 
+  const handleCreateGCWait = () => {
+    navigate('/createdWaitingRoom');
+    console.log('Create GC clicked and navigating to waiting room');
+  };
 
   const goToForum = () => {
     navigate('/neighborhood');
@@ -41,46 +51,18 @@ export default function PGCSettings() {
           </div>
 
           <div className="form-card">
-            <div className="divider">
-              Choose your House's settings, then we'll do the rest!
-            </div>
-
-            {/* Allow Anonymous Chats Checkbox */}
-          <div className="checkbox-container">
-            <div className="checkbox-wrapper">
-              <input
-                type="checkbox"
-                id="anonymous"
-              />
-            </div>
-            <label htmlFor="anonymous" className="checkbox-label">
-              <div className="checkbox-label-title">Allow Anonymous Chats</div>
-            </label>
+          <div className="divider">
+            How many roommates? (Including you): {svalue}
           </div>
 
-          {/* Regenerate Usernames Checkbox */}
-          <div className="checkbox-container">
-            <div className="checkbox-wrapper">
-              <input
-                type="checkbox"
-                id="regenerate"
-                
-              />
-            </div>
-            <label htmlFor="regenerate" className="checkbox-label">
-              <div className="checkbox-label-title">Regenerate Usernames</div>
-            </label>
-          </div>
-
+  
           {/*roommate selection slider*/}
           <div className="slider-container">
-          <label htmlFor="roommates" className="divider">
-            How many roommates? (Including you): {svalue}
-          </label>
+
                 <input
                   id="roommates"
                   type="range"
-                  min="1"
+                  min="3"
                   max="10"
                   className="slider"
                   svalue={svalue}
@@ -103,7 +85,7 @@ export default function PGCSettings() {
 
 
           {/*create button */}
-            <button className="btn btn-primary">
+            <button onClick={handleCreateGCWait} className="btn btn-primary">
               Create
             </button>
           </div>
