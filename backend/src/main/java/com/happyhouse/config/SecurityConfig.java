@@ -59,7 +59,8 @@ public class SecurityConfig {
                     "/api/auth/**",
                     "/api/health",
                     "/",
-                    "/error"
+                    "/error",
+					"/api/viewpost/**"
                 ).permitAll()
                 // authenticates further url requests from the above links
                 .anyRequest().authenticated()
