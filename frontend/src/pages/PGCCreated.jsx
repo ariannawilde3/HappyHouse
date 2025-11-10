@@ -6,17 +6,21 @@ import neighborhood from "../assets/images/neighborhood.png";
 import settings from "../assets/images/settings.png";
 import { useLocation } from "react-router-dom";
 
-export default function PGCCreated() {
-    const [waitingtojoin] = useState('');
-    const { state } = useLocation();
-    const navigate = useNavigate();
-    const housename = state?.housename ?? "";
-    const roommates = state?.roommates ?? 3; /*lock into this */
 
+export default function PGCCreated() {
+    const [waitingtojoin] = useState(''); //dealing with gc lock
+    const { state } = useLocation(); //allows pass of info
+    const navigate = useNavigate(); // allows for nav
+    const housename = state?.housename ?? "";
+    const roommates = state?.roommates ?? 3; // sets 3 as default
+    const inviteCode = state?.inviteCode ?? ""; // sets "" as default
+
+  //to be implemented
   const handleOff = () => {
     console.log("button pressed but off", { waitingtojoin });
   }; {/*where the gc lock will come into play */}
 
+  //navigation
   const goToForum = () => {
     navigate('/neighborhood');
     console.log('forum clicked');
@@ -27,6 +31,7 @@ export default function PGCCreated() {
     console.log('profile clicked');
   };
 
+  // main method
   return (
     <div className="login-container">
       <div className="phone-frame">
@@ -37,7 +42,7 @@ export default function PGCCreated() {
 
         <div className="content-area">
           <div className="welcome-section">
-          <p classname="welcome-subtitle">Welcome to</p>
+          <p className="welcome-subtitle">Welcome to</p>
             <h1 className="welcome-title">{ housename }</h1>
           </div>
 
@@ -47,7 +52,7 @@ export default function PGCCreated() {
             </div>
 
                 <div className = "form-card-mini"> 
-                    <div className = "invitecode"> 128934 </div>
+                    <div className = "invitecode"> { inviteCode } </div>
                 </div>
 
             <button onClick={handleOff} className="btn btn-off">

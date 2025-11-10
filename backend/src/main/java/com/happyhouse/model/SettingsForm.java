@@ -51,5 +51,12 @@ public class SettingsForm {
         return this.housename;
     }
 
+    @Override
+    public String toString() {
+        return "SettingsForm{" +
+                "houseName='" + housename + '\'' +
+                ", roomieCount=" + roomieCount +
+                '}';
+    }
 
 }

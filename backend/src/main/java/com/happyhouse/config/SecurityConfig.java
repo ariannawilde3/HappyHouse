@@ -60,7 +60,8 @@ public class SecurityConfig {
                     "/api/health",
                     "/",
                     "/error",
-					"/api/viewpost/**"
+					"/api/viewpost/**",
+                    "/api/gcc/**"
                 ).permitAll()
                 // authenticates further url requests from the above links
                 .anyRequest().authenticated()

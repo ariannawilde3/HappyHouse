@@ -6,40 +6,69 @@ import neighborhood from "../assets/images/neighborhood.png";
 import settings from "../assets/images/settings.png";
 import { getCurrentUser } from "../api";
 
+const API_URL = "http://localhost:5000/api";
+
 export default function PGCSettings() {
-  const [housename, setHouseName] = useState("");
+  // allows navigation
   const navigate = useNavigate();
 
-
+  /*sets house name from what user inputs */
   const handleHouseName = (value) => {
-    setHouseName(value); }
+    setHouseName(value);
+  };
 
-  const handleCreateGCWait = () => {
-    /*alerts user if name isnt selected */
+  const [housename, setHouseName] = useState("");
+
+  //defining getSett which allows for post from controller
+  const getSett = async () => {
+      const res = await fetch(`${API_URL}/gcc/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ // get housename and roomie num from user input
+          houseName: housename,
+          roomieCount: Number(svalue),
+        }),
+      })
+
+      const data = await res.json(); //putting data into json
+      //console.log("Server response:", data);
+      return data;
+  };
+
+
+  /*passes name and number of roommates just for ui, then navigates */
+  const handleCreateGCWait = async () => {
+    /*if no house name alert */
     if (!housename.trim()) {
       alert("Please enter a house name.");
       return;
     }
 
-    /*passes name and number of roommates just for ui, then navigates */
+    /* calling to get user input*/
+    const data = await getSett();
+    /*giving info to other page*/
     navigate("/createdWaitingRoom", {
-      state: { housename, roommates: Number(svalue) },
-    });
-    console.log("Create GC clicked and navigating to waiting room");
+      state: {
+        housename,
+        roommates: Number(svalue),
+        inviteCode: data.inviteCode,    
+      },
+    }); 
   };
 
+  // navigation
   const goToForum = () => {
-    navigate('/neighborhood');
-    console.log('forum clicked');
+    navigate("/neighborhood");
+    console.log("forum clicked");
   };
 
   const goToProfile = () => {
-    navigate('/profile');
-    console.log('settings clicked');
+    navigate("/profile");
+    console.log("settings clicked");
   };
 
+  //sets the slider to 7 immediately
   const [svalue, setValue] = useState(7);
-
 
   return (
     <div className="login-container">
@@ -56,27 +85,24 @@ export default function PGCSettings() {
           </div>
 
           <div className="form-card">
-          <div className="divider">
-            How many roommates? (Including you): {svalue}
-          </div>
-
-  
-          {/*roommate selection slider*/}
-          <div className="slider-container">
-
-                <input
-                  id="roommates"
-                  type="range"
-                  min="3"
-                  max="10"
-                  className="slider"
-                  svalue={svalue}
-                  onChange={(e) => setValue(e.target.value)}
-                />
+            <div className="divider">
+              How many roommates? (Including you): {svalue}
             </div>
 
+            {/*roommate selection slider*/}
+            <div className="slider-container">
+              <input
+                id="roommates"
+                type="range"
+                min="3"
+                max="10"
+                className="slider"
+                svalue={svalue}
+                onChange={(e) => setValue(e.target.value)}
+              />
+            </div>
 
-          {/*house name form*/}
+            {/*house name form*/}
             <div className="divider">Choose a House Name</div>
             <div className="input-group">
               <input
@@ -88,14 +114,12 @@ export default function PGCSettings() {
               />
             </div>
 
-
-          {/*create button */}
+            {/*create button */}
             <button onClick={handleCreateGCWait} className="btn btn-primary">
               Create
             </button>
           </div>
         </div>
-
 
         {/* Navigation Bar */}
         <div className="forum-nav-bar">
