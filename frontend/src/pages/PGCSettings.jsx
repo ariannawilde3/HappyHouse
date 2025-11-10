@@ -4,6 +4,7 @@ import "./PGCSettings.css";
 import house from "../assets/images/house.png";
 import neighborhood from "../assets/images/neighborhood.png";
 import settings from "../assets/images/settings.png";
+import { getCurrentUser } from "../api";
 
 export default function PGCSettings() {
   const [housename, setHouseName] = useState("");
@@ -14,8 +15,17 @@ export default function PGCSettings() {
     setHouseName(value); }
 
   const handleCreateGCWait = () => {
-    navigate('/createdWaitingRoom');
-    console.log('Create GC clicked and navigating to waiting room');
+    /*alerts user if name isnt selected */
+    if (!housename.trim()) {
+      alert("Please enter a house name.");
+      return;
+    }
+
+    /*passes name and number of roommates just for ui, then navigates */
+    navigate("/createdWaitingRoom", {
+      state: { housename, roommates: Number(svalue) },
+    });
+    console.log("Create GC clicked and navigating to waiting room");
   };
 
   const goToForum = () => {
@@ -28,7 +38,7 @@ export default function PGCSettings() {
     console.log('settings clicked');
   };
 
-  const [svalue, setValue] = useState(1);
+  const [svalue, setValue] = useState(7);
 
 
   return (

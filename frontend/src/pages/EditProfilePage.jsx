@@ -39,7 +39,7 @@ export default function EditProfilePage() {
   }, [navigate]);
 
   const goToChat = () => {
-    navigate('/house');
+    navigate('/makeGC');
   };
 
   const goToForum = () => {

@@ -99,12 +99,12 @@ export default function ForumPage() {
             return;
         } 
 
-        const groupChatID = localStorage.getItem('groupChatID');
-        if (groupChatID == 0) { /*CHECK AFT PUSHING */
+        /*const groupChatID = localStorage.getItem('groupChatID');
+        if (groupChatID == 0) { CHECK AFT PUSHING 
             navigate('/makeGC');
             return;
-        }
-        navigate('/house');
+        }*/
+        navigate('/makeGC');
     };
 
     const goToProfile = () => {

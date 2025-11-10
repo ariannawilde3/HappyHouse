@@ -1,18 +1,20 @@
 package com.happyhouse.model;
+import java.util.Random;
 // settings for private group chats
 public class SettingsForm {
     private int roomieCount;
-    private boolean anonNamesOn;
-    private boolean regenNamesOn;
-    private int inviteCode;
+    private String housename;
+    private int inviteCode = 0;
 
     // constructor
 
-    public SettingsForm(int roomieCount, boolean anonNamesOn, boolean regenNamesOn, int inviteCode) {
+    public SettingsForm(int roomieCount, String housename) {
         this.roomieCount = roomieCount;
-        this.anonNamesOn = anonNamesOn;
-        this.regenNamesOn = regenNamesOn;
-        this.inviteCode = inviteCode;
+        this.housename = housename;
+        this.inviteCode = createInviteCode();
+        if (inviteCode == -1) {
+            throw new IllegalArgumentException("createInviteCode alreadyCreated boolean not reset");
+        }
     }
 
     //get and sets
@@ -25,27 +27,29 @@ public class SettingsForm {
         this.roomieCount = roomieCount;
     }
 
-    public boolean isAnonNamesOn() {
-        return anonNamesOn;
-    }
-
-    public void setAnonNames(boolean anonNamesOn) {
-        this.anonNamesOn = anonNamesOn;
-    }
-
-    public boolean isRegenNamesOn() {
-        return regenNamesOn;
-    }
-
-    public void setRegenNames(boolean regenNamesOn) {
-        this.regenNamesOn = regenNamesOn;
-    }
-
     public int getInviteCode() {
         return inviteCode;
     }
 
-    public void setInviteCode(int inviteCode) {
-        this.inviteCode = inviteCode;
+    public int createInviteCode() { /*random number gen for gc code */
+        boolean alreadyCreated = false;
+        int code = -1;
+        while (!alreadyCreated) {
+            Random random = new Random();
+            code = 100000 + random.nextInt(900000);
+            /*TODO: check database to see if in there */
+            alreadyCreated = true;
+        }
+        return code;
     }
+
+    public void setHouseName(String housename) {
+        this.housename = housename;
+    }
+
+    public String getHouseName() {
+        return this.housename;
+    }
+
+
 }

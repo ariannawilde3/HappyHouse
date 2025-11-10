@@ -4,10 +4,14 @@ import "./PGCCreated.css";
 import house from "../assets/images/house.png";
 import neighborhood from "../assets/images/neighborhood.png";
 import settings from "../assets/images/settings.png";
+import { useLocation } from "react-router-dom";
 
 export default function PGCCreated() {
     const [waitingtojoin] = useState('');
+    const { state } = useLocation();
     const navigate = useNavigate();
+    const housename = state?.housename ?? "";
+    const roommates = state?.roommates ?? 3; /*lock into this */
 
   const handleOff = () => {
     console.log("button pressed but off", { waitingtojoin });
@@ -33,8 +37,8 @@ export default function PGCCreated() {
 
         <div className="content-area">
           <div className="welcome-section">
-            <p className="welcome-subtitle">Your</p>
-            <h1 className="welcome-title">House</h1>
+          <p classname="welcome-subtitle">Welcome to</p>
+            <h1 className="welcome-title">{ housename }</h1>
           </div>
 
           <div className="form-card">
@@ -47,7 +51,7 @@ export default function PGCCreated() {
                 </div>
 
             <button onClick={handleOff} className="btn btn-off">
-              1/4 Roommates Joined
+            1/{ roommates } Roommates Joined
             </button>
           </div>
         </div>

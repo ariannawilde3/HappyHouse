@@ -41,7 +41,7 @@ export default function ProfilePage() {
   };
 
   const goToChat = () => {
-    navigate('/house');
+    navigate('/makeGC');
   };
 
   const goToForum = () => {

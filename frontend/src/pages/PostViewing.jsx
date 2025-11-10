@@ -122,7 +122,7 @@ export default function ForumPage() {
             alert('Guests cannot access private chats. Please sign up!');
             return;
         }
-        navigate('/house');
+        navigate('/makeGC');
     };
 
     const goToProfile = () => {
