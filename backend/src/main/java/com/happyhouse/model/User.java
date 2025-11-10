@@ -36,11 +36,12 @@ public class User {
     
     private LocalDateTime updatedAt;
     
-    private List<String> groupChatIds = new ArrayList<>();
+    private int groupChatID = 0;
     
     private List<String> postIds = new ArrayList<>();
     
     private boolean isActive = true;
+
     
     // Constructors
     public User() {
@@ -146,13 +147,6 @@ public class User {
         this.updatedAt = updatedAt;
     }
     
-    public List<String> getGroupChatIds() {
-        return groupChatIds;
-    }
-    
-    public void setGroupChatIds(List<String> groupChatIds) {
-        this.groupChatIds = groupChatIds;
-    }
     
     public List<String> getPostIds() {
         return postIds;
@@ -168,6 +162,14 @@ public class User {
     
     public void setActive(boolean active) {
         isActive = active;
+    }
+
+    public void setGroupChatCode(int a) {
+        groupChatID = a;
+    }
+
+    public int getGroupChatCode() {
+        return groupChatID;
     }
     
     // Enums
