@@ -43,6 +43,10 @@ jobs:
 
       - name: SonarCloud Scan 
         working-directory: ./backend
-        run: mvn -B sonar:sonar -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+        run: mvn -B sonar:sonar
+          -Dsonar.projectKey=ariannawilde3_HappyHouse
+          -Dsonar.organization=happyhouse
+          -Dsonar.host.url=https://sonarcloud.io
+          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
         env: 
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
