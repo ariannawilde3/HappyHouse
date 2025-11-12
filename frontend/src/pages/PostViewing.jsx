@@ -70,7 +70,7 @@ export default function ForumPage() {
 	
 	useEffect(() => {loadContent();}, []);
 
-
+    const [isCommentReadOnly, setIsCommentReadOnly] = useState(false);
 
     /*comments*/
      const [comments, setComments] = useState([
@@ -109,6 +109,22 @@ export default function ForumPage() {
                 } : comment
             ));
         }
+    };
+
+    const handleCommentInput = () => {
+        const userType = localStorage.getItem('userType');
+        if (userType == 'GUEST') {
+            alert('Guests cannot add comments. Please sign up!');
+            setIsCommentReadOnly(true);
+            return false;
+        }
+        setIsCommentReadOnly(false);
+    };
+
+    const handleCommentSubmit = (e) => {
+        e.preventDefault();
+        console.log("comment submitted");
+        // add connection with backend here probs
     };
 
     const addPost = () => {
@@ -190,6 +206,15 @@ export default function ForumPage() {
                         }}>
                             {post.content}
                         </p>
+
+                        {/* Comment Input Field */}
+                        <form onSubmit={handleCommentSubmit}>
+                            <input type="text" 
+                            placeholder='Enter a comment' 
+                            className='comment-input' 
+                            onClick={handleCommentInput}
+                            readOnly = {isCommentReadOnly}/>
+                        </form>
 
                         {/* Tags and Voting */}
                         <div style={{

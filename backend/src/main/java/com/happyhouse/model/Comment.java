@@ -5,6 +5,7 @@ package com.happyhouse.model;
 public class Comment {
 	public int id;
 	public int votes;
+	public String username;
 	public String content;
 	
 	
@@ -12,6 +13,7 @@ public class Comment {
 	public Comment () {
 		this.id = 0;
 		this.votes = 3;
+		this.username = "testuser";
 		this.content = "test comment";
 	}
 	
