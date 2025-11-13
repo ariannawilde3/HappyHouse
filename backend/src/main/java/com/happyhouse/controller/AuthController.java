@@ -13,7 +13,6 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.beans.factory.annotation.Autowired; 
 // helps to parse inputted info (emails, etc.)
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -38,16 +37,20 @@ import java.util.Map;
 public class AuthController {
     
     // Spring automatically creates an instance of the service
-    @Autowired
-    private AuthService authService;
+    private final AuthService authService;
 
     // and of the database
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     private static final String ERR = "error";
 
-    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);    
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+
+    public AuthController(AuthService authService, UserRepository userRepository) {
+        this.userRepository = userRepository;
+        this.authService = authService;
+    }
+
     /**
      * Login endpoint
      * POST /api/auth/login

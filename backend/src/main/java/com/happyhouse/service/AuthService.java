@@ -240,7 +240,7 @@ public class AuthService {
         if (!user.getEmail().equals(request.getEmail())) {
             // second check to see if the email is already being used
             if (userRepository.findByEmail(request.getEmail()).isPresent()) {
-                throw new RuntimeException("Email already in use");
+                throw new IllegalArgumentException("Email already in use");
             }
             // set the email
             user.setEmail(request.getEmail());
@@ -251,12 +251,12 @@ public class AuthService {
 
             //if current password not inputted correctly through error
             if (!passwordEncoder.matches(request.getCurrentPassword(), user.getPassword())) {
-                throw new RuntimeException("Current password is incorrect");
+                throw new IllegalArgumentException("Current password is incorrect");
             }
             
             // check password length requirments 
             if (request.getNewPassword() == null || request.getNewPassword().length() < 6) {
-                throw new RuntimeException("New password must be at least 6 characters");
+                throw new IllegalArgumentException("New password must be at least 6 characters");
             }
             
             // set password 

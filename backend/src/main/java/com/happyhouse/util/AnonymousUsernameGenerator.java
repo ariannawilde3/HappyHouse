@@ -1,6 +1,6 @@
 package com.happyhouse.util;
 
-import java.util.Random;
+import java.security.SecureRandom;
 
 public class AnonymousUsernameGenerator {
 
@@ -28,7 +28,7 @@ public class AnonymousUsernameGenerator {
         "Maple", "Oak", "Pine", "Willow", "Cherry", "Plum", "Apple", "Peach"
     };
     
-    private static final Random random = new Random();
+    private static final SecureRandom random = new SecureRandom();
     
     /**
      * Generates a random anonymous username in the format "AdjectiveNoun123"
