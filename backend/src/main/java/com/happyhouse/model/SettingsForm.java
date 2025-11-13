@@ -1,10 +1,12 @@
 package com.happyhouse.model;
-import java.util.Random;
+import java.security.SecureRandom;
 // settings for private group chats
 public class SettingsForm {
     private int roomieCount;
     private String housename;
     private int inviteCode = 0;
+
+    private SecureRandom random = new SecureRandom();
 
     // constructor
 
@@ -35,7 +37,6 @@ public class SettingsForm {
         boolean alreadyCreated = false;
         int code = -1;
         while (!alreadyCreated) {
-            Random random = new Random();
             code = 100000 + random.nextInt(900000);
             /*TODO: check database to see if in there */
             alreadyCreated = true;

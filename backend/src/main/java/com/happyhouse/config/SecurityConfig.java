@@ -35,17 +35,13 @@ import java.util.Arrays;
 @EnableMethodSecurity
 public class SecurityConfig {
 
-    @Autowired
-    private CustomUserDetailsService userDetailsService;
-
-    @Autowired
-    private JwtAuthenticationFilter jwtAuthenticationFilter;
     // loads the ports for backend and frontend
     @Value("${cors.allowed.origins}")
     private String allowedOrigins;
+
     // deals with authentification of https allowed when starting application
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain(HttpSecurity http, JwtAuthenticationFilter jwtAuthenticationFilter, CustomUserDetailsService userDetailsService) throws Exception {
         http
             .csrf(csrf -> csrf.disable())
             // connecting with configuration on frontend
@@ -66,7 +62,7 @@ public class SecurityConfig {
                 // authenticates further url requests from the above links
                 .anyRequest().authenticated()
             )
-            .authenticationProvider(authenticationProvider())
+            .authenticationProvider(authenticationProvider(userDetailsService))
             .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         
         return http.build();
@@ -74,7 +70,7 @@ public class SecurityConfig {
     
     // handles authentification of log in information
     @Bean
-    public AuthenticationProvider authenticationProvider() {
+    public AuthenticationProvider authenticationProvider(CustomUserDetailsService userDetailsService) {
         // connects to database
         DaoAuthenticationProvider authProvider = new DaoAuthenticationProvider();
         // gets information about users from database

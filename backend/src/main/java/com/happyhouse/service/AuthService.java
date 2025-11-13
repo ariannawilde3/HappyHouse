@@ -20,19 +20,24 @@ import java.time.LocalDateTime;
 @Service
 public class AuthService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    private final PasswordEncoder passwordEncoder;
+
+    private final JwtUtil jwtUtil;
+
+    private static final String USER_NOT_FOUND = "User not found";
 
     @Autowired
-    private PasswordEncoder passwordEncoder;
-
-    @Autowired
-    private JwtUtil jwtUtil;
-
+    public AuthService(UserRepository userRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+        this.userRepository = userRepository;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
+    }
 
     public User findByEmail(String email) {
         return userRepository.findByEmail(email)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));
     }
     
     /**
@@ -42,7 +47,7 @@ public class AuthService {
         
         // Get user from database
         User user = userRepository.findByEmail(loginRequest.getEmail())
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         
         // Check if anonymous username needs regeneration (daily at midnight)
         checkAndRegenerateAnonymousUsername(user);
@@ -207,7 +212,7 @@ public class AuthService {
         String email = jwtUtil.extractEmail(refreshToken);
         
         User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+                .orElseThrow(() -> new ResourceNotFoundException(USER_NOT_FOUND));
         
         // Generate new access token
         String newToken = jwtUtil.generateToken(user.getEmail(), user.getId());
@@ -226,7 +231,7 @@ public class AuthService {
 
         // find the user in the database 
         User user = userRepository.findById(userId)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> new RuntimeException(USER_NOT_FOUND));
     
         // update the username in the database 
         user.setName(request.getName());

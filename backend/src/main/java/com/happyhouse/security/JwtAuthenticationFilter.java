@@ -22,11 +22,16 @@ import java.io.IOException;
 // or when we use the database, it allows the request to proceed to the controllers once done
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final JwtUtil jwtUtil;
     // this is provided by spring and allows us to load user details from mongo
+    private final CustomUserDetailsService userDetailsService;
+
     @Autowired
-    private CustomUserDetailsService userDetailsService;
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, CustomUserDetailsService userDetailsService) {
+        this.jwtUtil = jwtUtil;
+        this.userDetailsService = userDetailsService;
+    }
+
     // this is called for every HTTP request 
     @Override
     protected void doFilterInternal(HttpServletRequest request, 
