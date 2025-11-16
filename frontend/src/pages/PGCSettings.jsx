@@ -44,6 +44,11 @@ export default function PGCSettings() {
       return;
     }
 
+    if (housename.length > 15) {
+      alert("House name too long. Please shorten.");
+      return;
+    }
+
     /* calling to get user input*/
     const data = await getSett();
     /*giving info to other page*/
