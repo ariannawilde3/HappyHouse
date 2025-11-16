@@ -20,20 +20,24 @@ export default function PGCSettings() {
   const [housename, setHouseName] = useState("");
 
   //defining getSett which allows for post from controller
-  const getSett = async () => {
-      const res = await fetch(`${API_URL}/gcc/`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ // get housename and roomie num from user input
-          houseName: housename,
-          roomieCount: Number(svalue),
-        }),
-      })
 
-      const data = await res.json(); //putting data into json
-      //console.log("Server response:", data);
-      return data;
-  };
+      const getSett = async () => {
+        const token = localStorage.token;
+
+        const res = await fetch(`${API_URL}/gcc/`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,  
+          },
+          body: JSON.stringify({
+            houseName: housename,
+            expectedRoomieCount: Number(svalue),
+          }),
+      })
+    const n = await res.json();
+    return n;
+    };
 
 
   /*passes name and number of roommates just for ui, then navigates */
@@ -56,7 +60,7 @@ export default function PGCSettings() {
       state: {
         housename,
         roommates: Number(svalue),
-        inviteCode: data.inviteCode,    
+        inviteCode: data,    
       },
     }); 
   };

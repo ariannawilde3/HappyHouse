@@ -200,6 +200,14 @@ public class AuthService {
             userRepository.save(user);
         }
     }
+
+
+    //updates user group chat code
+    public User updateGroupChatCodeByEmail(String email, int code) {
+        User user = findByEmail(email);        
+        user.setGroupChatCode(code); // given
+        return userRepository.save(user);      //utilizing connection to repo
+    }
     
     /**
      * Refresh access token using refresh token
