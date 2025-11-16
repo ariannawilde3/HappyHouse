@@ -200,6 +200,11 @@
   background-color: #6a8b6e;
 }
 
+.tag-selected {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  background-color: #6a8b6e;
+}
+
 /* Nav Bar */
 .post-nav-bar {
   position: absolute;
@@ -230,4 +235,9 @@
 .nav-btn:hover {
   background-color: rgba(255, 255, 255, 0.1);
   cursor: pointer;
+}
+
+.tag-active {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  background-color: #6a8b6e;
 }

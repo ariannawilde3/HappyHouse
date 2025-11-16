@@ -223,7 +223,7 @@ export default function ForumPage() {
 					{/* Ex. Post */}
 					{postList.posts.map((post, index) => (
 					<React.Fragment>
-						<div onClick={() => viewPost(post.id)} className="post-container">
+						<div onClick={() => viewPost(post.objID)} className="post-container">
 							<h3 className="post-title"> {post.title} </h3>
 							<p className="post-content"> {post.content} </p>
 						
@@ -249,23 +249,6 @@ export default function ForumPage() {
 					</React.Fragment>
 					))}
 
-                    {/* Logout Button (temporary - you can move this to settings page later) */}
-                    <button 
-                        onClick={handleLogout}
-                        style={{
-                            backgroundColor: '#ef4444',
-                            color: 'white',
-                            border: 'none',
-                            padding: '0.75rem 1.5rem',
-                            borderRadius: '8px',
-                            cursor: 'pointer',
-                            fontSize: '0.9rem',
-                            fontWeight: '500',
-                            marginTop: '1rem'
-                        }}
-                    >
-                        Logout
-                    </button>
                 </div>
 
                 {/* Post Button */}

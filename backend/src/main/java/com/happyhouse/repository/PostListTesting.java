@@ -39,10 +39,10 @@ public class PostListTesting {
     // Retrieve posts by id
     public Post getById(int id) {
         for (int i = 0; i < 3; i++) {
-			if (posts.get(i).id == id) {
+			if (posts.get(i).ermid == id) {
 				return posts.get(i);
 			}
 		}
-		return new Post(0, "not found", "not found", new ArrayList<>(0));
+		return new Post("not found", "not found", new ArrayList<String>(0));
     }
 }

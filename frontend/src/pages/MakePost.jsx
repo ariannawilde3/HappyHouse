@@ -1,19 +1,50 @@
+import React, { useState, useEffect, useReducer } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MakePost.css';
 import house from '../assets/images/house.png';
 import neighborhood from'../assets/images/neighborhood.png';
 import settings from '../assets/images/settings.png';
 
+const API_URL = 'http://localhost:5000/api';
+
+
 export default function MakePostPage() {
+	const [titleBox, setTitle] = useState("");
+	const [contentBox, setContent] = useState("");
+	const [tags, setTags] = useState([
+		{text: "Legal", selected: false},
+		{text: "Finding a Roommate", selected: false},
+		{text: "Safety", selected: false},
+		{text: "Landlord", selected: false}
+        ]);
+	const [, forceUpdate] = useReducer(x => x + 1, 0);
+
+		
+	const [selectedTags, setSelectedTags] = useState(new Set());
+	
     const navigate = useNavigate();
 
     const updateTags = () => {
         console.log('Added/removed tag');
     };
+	
+	const addPost = async () => {
+		console.log("ADDING A POST HOPEFULLY!");
+		var data = await fetch(`${API_URL}/addpost/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+			title: titleBox,
+			content: contentBox,
+			tags: Array.from(selectedTags)
+			}),
+		}).then(response => response.json());
+        console.log("Server response:", data);
+		navigate('/viewPost', {state: data.id});
+	}
 
     const handlePostSubmit = () => {
-        navigate('/neighborhood');
-        console.log('Post submitted');
+		addPost();
     };
 
     const cancelPost = () => {
@@ -56,28 +87,34 @@ export default function MakePostPage() {
                                 type="text"
                                 placeholder='Enter a title'
                                 className="title-input"
+								onChange = {(e) => setTitle(e.target.value)}
                             />
                             <textarea
                                 placeholder='Enter your post description'
                                 rows="6"
                                 className="desc-input"
+								onChange = {(e) => setContent(e.target.value)}
                             />
                         </form>
                     </div>
 
-                    {/* Tags */}
-                    <div className="tags-container">
-                            <p className="tags-label">Tags:</p>
-                            <button type="button" onClick={updateTags} className="tag">
-                                Most Popular
-                            </button>
-                            <button type="button" onClick={updateTags} className="tag">
-                                Finding a Roommate
-                            </button>
-                            <button type="button" onClick={updateTags} className="tag">
-                                Safety
-                            </button>
-                    </div>
+                    {/* Tags */}				
+					<div className="tags-container">
+                        <p className="tags-label">Tags:</p>
+						{tags.map((tag, index) => (
+							<button type="button"
+							onClick={() => {
+								(tag.selected ? selectedTags.delete(tag.text) : setSelectedTags(selectedTags.add(tag.text)));
+								tag.selected = !tag.selected;
+								forceUpdate();
+							}}
+							className={tag.selected ? "tag tag-selected" : "tag"}>
+								{tag.text}
+							</button>
+						))}
+
+					</div>
+
 
                     {/* Submit and cancel buttons */}
                     <button type="submit" onClick={handlePostSubmit} className="submit-post-btn">

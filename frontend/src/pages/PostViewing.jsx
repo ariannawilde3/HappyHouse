@@ -38,6 +38,11 @@ export default function ForumPage() {
 	const location = useLocation();
 	console.log(location.state);
 	
+	const goToForum = () => {
+        navigate('/neighborhood');
+        console.log('forum clicked');
+    };
+	
 	const loadContent = async () => {
 		// add setError later
 		var data = await fetch(`${API_URL}/viewpost/${location.state}`)
@@ -410,7 +415,7 @@ export default function ForumPage() {
                         <img src={house} alt="House Chat" style={{ width: '50px', height: '50px'}}/>
                     </button>
                 
-                    <button className="nav-btn active-btn">
+                    <button onClick={goToForum} className="nav-btn active-btn">
                         <img src={neighborhood} alt="Forum" style={{ width: '115px', height: '50px' }}/>
                     </button>
                 
