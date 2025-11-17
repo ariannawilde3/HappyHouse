@@ -1,18 +1,64 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./PGCJoined.css";
 import house from "../assets/images/house.png";
 import neighborhood from "../assets/images/neighborhood.png";
 import settings from "../assets/images/settings.png";
 
+const API_URL = "http://localhost:5000/api";
+
+
 export default function PGCJoined() {
-    const [waitingtojoin] = useState('');
-    const navigate = useNavigate();
+  //const [waitingtojoin] = useState('');
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { invitecode } = location.state ?? {};
 
-  const handleOff = () => {
-    console.log("button pressed but off", { waitingtojoin });
-  }; {/*where the gc lock will come into play */}
+  const [houseName, setHouseName] = useState("");
+  const [expectedRoommates, setExpected] = useState(0);
+  const [currentRoommates, setCurrent] = useState(0);
 
+  useEffect(() => {
+  const token = localStorage.getItem("token");
+  const run = async () => {
+    try {
+      // Prefer invitecode if you have it
+      if (invitecode) {
+        const r = await fetch(`${API_URL}/gcc/by-code/${invitecode}`, { headers: { Accept: "application/json" }});
+        const t = await r.text();
+        if (!r.ok) throw new Error(`${r.status}: ${t.slice(0,200)}`);
+        const gc = JSON.parse(t);
+        setHouseName(gc.houseName ?? "");
+        setExpected(gc.expectedRoomieCount ?? 0);
+        setCurrent(gc.currentRoomieCount ?? 0);
+        return;
+      }
+
+      // Fallback: /me (requires JWT)
+      if (!token) throw new Error("Missing auth token");
+      const r = await fetch(`${API_URL}/gcc/me`, {
+        headers: { Accept: "application/json", Authorization: `Bearer ${token}` },
+      });
+      const t = await r.text();
+      if (!r.ok) throw new Error(`${r.status}: ${t.slice(0,200)}`);
+      const gc = JSON.parse(t);
+      setHouseName(gc.houseName ?? "");
+      setExpected(gc.expectedRoomieCount ?? 0);
+      setCurrent(gc.currentRoomieCount ?? 0);
+    } catch (e) {
+      console.error("Failed to load house info:", e);
+      setHouseName("(Unavailable)"); // at least render something
+    }
+  };
+  run();
+}, [invitecode]);
+
+  const goToChat = () => {
+    navigate('/house');
+    console.log('home clicked');
+  };
+
+ 
   const goToForum = () => {
     navigate('/neighborhood');
     console.log('forum clicked');
@@ -33,8 +79,8 @@ export default function PGCJoined() {
 
         <div className="content-area">
           <div className="welcome-section">
-            <p className="welcome-subtitle">Your</p>
-            <h1 className="welcome-title">House</h1>
+            <p className="welcome-subtitle">Welcome to</p>
+            <h1 className="welcome-title">{houseName}</h1>
           </div>
 
           <div className="form-card">
@@ -43,18 +89,18 @@ export default function PGCJoined() {
             </div>
 
                 <div className = "form-card-mini"> 
-                    <div className = "invitecode"> 128934 </div>
+                    <div className = "invitecode"> { invitecode } </div>
                 </div>
 
-            <button onClick={handleOff} className="btn btn-off">
-              1/4 Roommates Joined
+            <button className="btn btn-off">
+              {currentRoommates}/{expectedRoommates} Roommates Joined
             </button>
           </div>
         </div>
 
         {/* Navigation Bar */}
         <div className="forum-nav-bar">
-          <button className="nav-btn active-btn">
+          <button onClick={goToChat} className="nav-btn active-btn">
             <img
               src={house}
               alt="House Chat"

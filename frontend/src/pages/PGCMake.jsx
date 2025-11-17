@@ -1,26 +1,57 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import "./PGCMake.css";
 import house from '../assets/images/house.png';
 import neighborhood from'../assets/images/neighborhood.png';
 import settings from '../assets/images/settings.png';
 
+
+const API_URL = "http://localhost:5000/api";
+
 export default function PGCMake() {
   const navigate = useNavigate();
 
-        const [invitecode, setInviteCode] = useState('');
+  const [invitecode, setInviteCode] = useState();
       
-        const handleInviteJoin = (e) => {
-          e.preventDefault();
-          {/* hard coded CHANGE THIS ONCE DATABASE GETS ADDED */}
-          if (invitecode == 128934) {
-            navigate('/gcJoinedWaiting');
-            console.log('Invite Entered and Valid: ', { invitecode });
-          } else {
-            console.log('Invite Entered and Not Valid: ', { invitecode });
-          }
-        };
+  const checkInviteCode = async (code) => {
+    const res = await fetch(`${API_URL}/gcc/exists/${Number(code)}`);
+    const exists = await res.json(); // backend returns boolean
+    return exists;
+  };
+const handleInviteJoin = async (e) => {
+  e.preventDefault();
+  const code = Number(invitecode);
 
+  const isValid = await checkInviteCode(code);
+  if (!isValid) {
+    alert("Wrong Invite Code. Try again!");
+    return;
+  }
+
+  const token = localStorage.getItem("token");
+
+  // 🟢 Fetch the join response and parse it
+  const res = await fetch(`${API_URL}/gcc/join/${code}`, {
+    method: "POST",
+    headers: { Authorization: `Bearer ${token}` },
+  });
+
+  if (!res.ok) {
+    console.error("Join failed", res.status);
+    return;
+  }
+
+  const gc = await res.json(); // <-- define gc here
+
+  // 🟢 Now you can safely check unlocked
+  if (gc.unlocked) {
+    navigate("/house"); // last person joined → open house chat
+  } else {
+    navigate("/gcJoinedWaiting", { state: { invitecode: code } });
+  }
+
+  console.log("Invite Entered and Valid:", invitecode);
+};
         const handleCreateGC = () => {
           navigate('/gcSettings');
           console.log('CreateGC Clicked');
@@ -63,7 +94,7 @@ export default function PGCMake() {
                   <div className="divider">Join a House</div>
                   <div className="input-group">
                     <input
-                      type="invitecode"
+                      type="text"
                       value={invitecode}
                       onChange={(e) => setInviteCode(e.target.value)}
                       placeholder="Enter your code"
@@ -93,7 +124,7 @@ export default function PGCMake() {
                         <img src={settings} alt="Settings" style={{ width: '50px', height: '50px' }}/>
                     </button>
 
-                </div>
+      </div>
             </div>
           </div>
         );
