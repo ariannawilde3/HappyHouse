@@ -77,7 +77,7 @@ export default function PGCJoined() {
 
         {/* Navigation Bar */}
         <div className="forum-nav-bar">
-          <button onClick={goToChat} className="nav-btn active-btn">
+          <button className="nav-btn active-btn">
             <img
               src={house}
               alt="House Chat"
