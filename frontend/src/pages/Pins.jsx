@@ -1,21 +1,10 @@
 import { useNavigate } from 'react-router-dom';
 import './Pins.css';
-import house from '../assets/images/house.png';
-import neighborhood from'../assets/images/neighborhood.png';
-import settings from '../assets/images/settings.png';
+import NavBar from './NavBar.jsx';
+
 
 export default function Pins() {
     const navigate = useNavigate();
-
-    const goToForum = () => {
-        navigate('/neighborhood');
-        console.log('House icon clicked');
-    };
-
-    const goToProfile = () => {
-        navigate('/profile');
-        console.log('Settings icon clicked');
-    };
 
     const goToChat = () => {
         navigate('/house');
@@ -79,19 +68,7 @@ export default function Pins() {
 
         
                 {/* Navigation Bar */}
-                <div className="pins-nav-bar">
-                    <button className="nav-btn active-btn">
-                        <img src={house} alt="House Chat" style={{ width: '50px', height: '50px'}}/>
-                    </button>
-
-                    <button onClick={goToForum} className="nav-btn inactive-btn">
-                        <img src={neighborhood} alt="Forum" style={{ width: '115px', height: '50px' }}/>
-                    </button>
-
-                    <button onClick={goToProfile} className="nav-btn inactive-btn">
-                        <img src={settings} alt="Settings" style={{ width: '50px', height: '50px' }}/>
-                    </button>
-                </div>
+                <NavBar tab="chat" />
             </div>
         </div>
     );

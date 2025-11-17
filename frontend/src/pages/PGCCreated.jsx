@@ -1,9 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./PGCCreated.css";
-import house from "../assets/images/house.png";
-import neighborhood from "../assets/images/neighborhood.png";
-import settings from "../assets/images/settings.png";
+import NavBar from './NavBar.jsx';
 import { useLocation } from "react-router-dom";
 
 
@@ -31,18 +29,6 @@ export default function PGCCreated() {
     const interval = setInterval(load, 2000); // poll every 2s
     return () => clearInterval(interval);
   }, [inviteCode]);
-
-
-  //navigation
-  const goToForum = () => {
-    navigate('/neighborhood');
-    console.log('forum clicked');
-  };
-
-  const goToProfile = () => {
-    navigate('/profile');
-    console.log('profile clicked');
-  };
 
   // main method
   return (
@@ -75,30 +61,7 @@ export default function PGCCreated() {
         </div>
 
         {/* Navigation Bar */}
-        <div className="forum-nav-bar">
-          <button className="nav-btn active-btn">
-            <img
-              src={house}
-              alt="House Chat"
-              style={{ width: "50px", height: "50px" }}
-            />
-          </button>
-          <button onClick={goToForum} className="nav-btn inactive-btn">
-            <img
-              src={neighborhood}
-              alt="Forum"
-              style={{ width: "115px", height: "50px" }}
-            />
-          </button>
-          <button onClick={goToProfile} className="nav-btn inactive-btn">
-            <img
-              src={settings}
-              alt="Settings"
-              style={{ width: "50px", height: "50px" }}
-            />
-          </button>
-                    
-        </div>
+        <NavBar tab="chat" />
       </div>
     </div>
   );
