@@ -92,38 +92,54 @@ export default function ForumPage() {
         console.log('Post added to forum');
     };
 
-    const goToChat = () => {
+    const goToChat = async () => {
+        // guests can’t join/open house
         const userType = localStorage.getItem('userType');
-        if (userType == 'GUEST') {
+        if (userType === 'GUEST') {
             alert('Guests cannot access private chats. Please sign up!');
             return;
-        } 
+        }
 
-        /*const groupChatID = localStorage.getItem('groupChatID');
-        if (groupChatID == 0) { CHECK AFT PUSHING 
-            navigate('/makeGC');
+        const token = localStorage.getItem('token');
+        const res = await fetch(`${API_URL}/gcc/me`, {
+            headers: {
+                Accept: 'application/json',
+                Authorization: `Bearer ${token}`,
+            },
+        });
+
+        // 404 = user has no GC yet
+        if (res.status === 404) {
+            navigate('/makeGC');           
             return;
-        }*/
-        navigate('/makeGC');
+        }
+
+        // user has a GC
+        const gc = await res.json();     
+        if (gc.unlocked) {
+            navigate('/house');            
+        } else {
+            navigate('/gcJoinedWaiting', { state: { invitecode: gc.inviteCode } });
+        }
     };
 
-    const goToProfile = () => {
-        navigate('/profile');
-        console.log('Settings icon clicked');
-    };
+        const goToProfile = () => {
+            navigate('/profile');
+            console.log('Settings icon clicked');
+        };
 
-    const handleLogout = () => {
-        // Clear all authentication data
-        localStorage.removeItem('token');
-        localStorage.removeItem('refreshToken');
-        localStorage.removeItem('userId');
-        localStorage.removeItem('anonymousUsername');
-        localStorage.removeItem('userType');
-        
-        console.log('👋 User logged out');
-        
-        // Redirect to login
-        navigate('/');
+        const handleLogout = () => {
+            // Clear all authentication data
+            localStorage.removeItem('token');
+            localStorage.removeItem('refreshToken');
+            localStorage.removeItem('userId');
+            localStorage.removeItem('anonymousUsername');
+            localStorage.removeItem('userType');
+            
+            console.log('👋 User logged out');
+            
+            // Redirect to login
+            navigate('/');
     };
 
     return (

@@ -15,10 +15,23 @@ export default function PGCCreated() {
     const roommates = state?.roommates ?? 3; // sets 3 as default
     const inviteCode = state?.inviteCode ?? ""; // sets "" as default
 
-  //to be implemented
-  const handleOff = () => {
-    console.log("button pressed but off", { waitingtojoin });
-  }; {/*where the gc lock will come into play */}
+   useEffect(() => {
+    if (!inviteCode) return;
+
+    const load = async () => {
+      const r = await fetch(`${API_URL}/gcc/by-code/${inviteCode}`, {
+        headers: { Accept: "application/json" },
+      });
+      if (!r.ok) return;
+      const gc = await r.json();
+      setCurrentRoommates(gc.currentRoomieCount ?? 1);
+    };
+
+    load(); // initial load
+    const interval = setInterval(load, 2000); // poll every 2s
+    return () => clearInterval(interval);
+  }, [inviteCode]);
+
 
   //navigation
   const goToForum = () => {
@@ -55,7 +68,7 @@ export default function PGCCreated() {
                     <div className = "invitecode"> { inviteCode } </div>
                 </div>
 
-            <button onClick={handleOff} className="btn btn-off">
+            <button className="btn btn-off">
             1/{ roommates } Roommates Joined
             </button>
           </div>

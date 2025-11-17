@@ -18,6 +18,7 @@ export default function PGCMake() {
     const exists = await res.json(); // backend returns boolean
     return exists;
   };
+
 const handleInviteJoin = async (e) => {
   e.preventDefault();
   const code = Number(invitecode);
@@ -29,19 +30,12 @@ const handleInviteJoin = async (e) => {
   }
 
   const token = localStorage.getItem("token");
-
-  // 🟢 Fetch the join response and parse it
   const res = await fetch(`${API_URL}/gcc/join/${code}`, {
     method: "POST",
     headers: { Authorization: `Bearer ${token}` },
   });
 
-  if (!res.ok) {
-    console.error("Join failed", res.status);
-    return;
-  }
-
-  const gc = await res.json(); // <-- define gc here
+  const gc = await res.json(); 
 
   // 🟢 Now you can safely check unlocked
   if (gc.unlocked) {
@@ -50,8 +44,9 @@ const handleInviteJoin = async (e) => {
     navigate("/gcJoinedWaiting", { state: { invitecode: code } });
   }
 
-  console.log("Invite Entered and Valid:", invitecode);
+  //console.log("Invite Entered and Valid:", invitecode);
 };
+
         const handleCreateGC = () => {
           navigate('/gcSettings');
           console.log('CreateGC Clicked');

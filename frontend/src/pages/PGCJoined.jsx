@@ -19,44 +19,21 @@ export default function PGCJoined() {
   const [currentRoommates, setCurrent] = useState(0);
 
   useEffect(() => {
-  const token = localStorage.getItem("token");
-  const run = async () => {
-    try {
-      // Prefer invitecode if you have it
-      if (invitecode) {
-        const r = await fetch(`${API_URL}/gcc/by-code/${invitecode}`, { headers: { Accept: "application/json" }});
-        const t = await r.text();
-        if (!r.ok) throw new Error(`${r.status}: ${t.slice(0,200)}`);
-        const gc = JSON.parse(t);
-        setHouseName(gc.houseName ?? "");
-        setExpected(gc.expectedRoomieCount ?? 0);
-        setCurrent(gc.currentRoomieCount ?? 0);
-        return;
-      }
+    const token = localStorage.getItem("token");
+    const run = async () => {
+        if (invitecode) {
+          const r = await fetch(`${API_URL}/gcc/by-code/${invitecode}`, { headers: { Accept: "application/json" }});
+          const t = await r.text();
+          const gc = JSON.parse(t);
+          setHouseName(gc.houseName ?? "");
+          setExpected(gc.expectedRoomieCount ?? 0);
+          setCurrent(gc.currentRoomieCount ?? 0);
+          return;
+        }
+    };
+    run();
+  }, [invitecode]);
 
-      // Fallback: /me (requires JWT)
-      if (!token) throw new Error("Missing auth token");
-      const r = await fetch(`${API_URL}/gcc/me`, {
-        headers: { Accept: "application/json", Authorization: `Bearer ${token}` },
-      });
-      const t = await r.text();
-      if (!r.ok) throw new Error(`${r.status}: ${t.slice(0,200)}`);
-      const gc = JSON.parse(t);
-      setHouseName(gc.houseName ?? "");
-      setExpected(gc.expectedRoomieCount ?? 0);
-      setCurrent(gc.currentRoomieCount ?? 0);
-    } catch (e) {
-      console.error("Failed to load house info:", e);
-      setHouseName("(Unavailable)"); // at least render something
-    }
-  };
-  run();
-}, [invitecode]);
-
-  const goToChat = () => {
-    navigate('/house');
-    console.log('home clicked');
-  };
 
  
   const goToForum = () => {

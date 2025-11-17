@@ -9,8 +9,8 @@ export default function GuestSettingsPage() {
   const navigate = useNavigate();
 
   const goToChat = () => {
-    navigate('/makeGC');
-    console.log('House icon clicked');
+    alert("Guests cannot access or create private group chats. Make an account or log-in!");
+    return;
 };
 
   const goToForum = () => {

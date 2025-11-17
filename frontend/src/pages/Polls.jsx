@@ -18,7 +18,7 @@ export default function Polls() {
     };
 
     const goToChat = () => {
-        navigate('/makeGC');
+        navigate('/house');
         console.log('chat icon clicked');
     };
 
