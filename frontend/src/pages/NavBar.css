@@ -1,0 +1,31 @@
+/* Nav Bar */
+.nav-bar {
+  position: absolute;
+  width: 100%;
+  height: 65px;
+  bottom: 0;
+  background: #7FA58A;
+  display: flex;
+}
+
+/* Buttons */
+.nav-btn {
+  flex: 1;
+  height: 65px;
+  padding-top: 4px;
+  border: none;
+  background: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.2s;
+}
+
+.active-btn {
+  filter: brightness(1000%);
+}
+
+.nav-btn:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+  cursor: pointer;
+}

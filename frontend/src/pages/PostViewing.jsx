@@ -9,14 +9,12 @@ TODO: add anonymous usernames to comment
 TODO: add adding comments
 TODO: store uservote in user
 */
+import NavBar from './NavBar.jsx'
 import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from "react-router-dom";
 import './PostViewing.css';
-import house from '../assets/images/house.png';
-import neighborhood from'../assets/images/neighborhood.png';
-import settings from '../assets/images/settings.png';
 import ThumbsUp from '../assets/images/ThumbsUp.png';
 import ThumbsDown from '../assets/images/ThumbsDown.png';
 
@@ -37,11 +35,6 @@ export default function ForumPage() {
 	
 	const location = useLocation();
 	console.log(location.state);
-	
-	const goToForum = () => {
-        navigate('/neighborhood');
-        console.log('forum clicked');
-    };
 	
 	const loadContent = async () => {
 		// add setError later
@@ -135,20 +128,6 @@ export default function ForumPage() {
     const addPost = () => {
         navigate('/makePost');
         console.log('Post added to forum');
-    };
-
-    const goToChat = () => {
-        const userType = localStorage.getItem('userType');
-        if (userType == 'GUEST') {
-            alert('Guests cannot access private chats. Please sign up!');
-            return;
-        }
-        navigate('/makeGC');
-    };
-
-    const goToProfile = () => {
-        navigate('/profile');
-        console.log('Settings icon clicked');
     };
 
     return (
@@ -410,19 +389,8 @@ export default function ForumPage() {
                 </button>
         
                 {/* Navigation Bar */}
-                <div className="view-post-nav-bar">
-                    <button onClick={goToChat} className="nav-btn inactive-btn">
-                        <img src={house} alt="House Chat" style={{ width: '50px', height: '50px'}}/>
-                    </button>
                 
-                    <button onClick={goToForum} className="nav-btn active-btn">
-                        <img src={neighborhood} alt="Forum" style={{ width: '115px', height: '50px' }}/>
-                    </button>
-                
-                    <button onClick={goToProfile} className="nav-btn inactive-btn">
-                        <img src={settings} alt="Settings" style={{ width: '50px', height: '50px' }}/>
-                    </button>
-                </div>
+				<NavBar tab="forum" />
             </div>
         </div>
     );

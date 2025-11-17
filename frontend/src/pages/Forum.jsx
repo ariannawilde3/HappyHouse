@@ -1,11 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Forum.css';
+import NavBar from './NavBar.jsx'
 import filter from '../assets/images/filter.png';
-import house from '../assets/images/house.png';
-import neighborhood from'../assets/images/neighborhood.png';
 import search from '../assets/images/search.png';
-import settings from '../assets/images/settings.png';
 import ThumbsUp from '../assets/images/ThumbsUp.png';
 import ThumbsDown from '../assets/images/ThumbsDown.png';
 
@@ -90,56 +88,6 @@ export default function ForumPage() {
     const addPost = () => {
         navigate('/makePost');
         console.log('Post added to forum');
-    };
-
-    const goToChat = async () => {
-        // guests can’t join/open house
-        const userType = localStorage.getItem('userType');
-        if (userType === 'GUEST') {
-            alert('Guests cannot access private chats. Please sign up!');
-            return;
-        }
-
-        const token = localStorage.getItem('token');
-        const res = await fetch(`${API_URL}/gcc/me`, {
-            headers: {
-                Accept: 'application/json',
-                Authorization: `Bearer ${token}`,
-            },
-        });
-
-        // 404 = user has no GC yet
-        if (res.status === 404) {
-            navigate('/makeGC');           
-            return;
-        }
-
-        // user has a GC
-        const gc = await res.json();     
-        if (gc.unlocked) {
-            navigate('/house');            
-        } else {
-            navigate('/gcJoinedWaiting', { state: { invitecode: gc.inviteCode } });
-        }
-    };
-
-        const goToProfile = () => {
-            navigate('/profile');
-            console.log('Settings icon clicked');
-        };
-
-        const handleLogout = () => {
-            // Clear all authentication data
-            localStorage.removeItem('token');
-            localStorage.removeItem('refreshToken');
-            localStorage.removeItem('userId');
-            localStorage.removeItem('anonymousUsername');
-            localStorage.removeItem('userType');
-            
-            console.log('👋 User logged out');
-            
-            // Redirect to login
-            navigate('/');
     };
 
     return (
@@ -273,17 +221,7 @@ export default function ForumPage() {
                 </button>
             
                 {/* Navigation Bar */}
-                <div className="forum-nav-bar">
-                    <button onClick={goToChat} className="nav-btn inactive-btn">
-                        <img src={house} alt="House Chat" style={{ width: '50px', height: '50px'}}/>
-                    </button>
-                    <button className="nav-btn active-btn">
-                        <img src={neighborhood} alt="Forum" style={{ width: '115px', height: '50px' }}/>
-                    </button>
-                    <button onClick={goToProfile} className="nav-btn inactive-btn">
-                        <img src={settings} alt="Settings" style={{ width: '50px', height: '50px' }}/>
-                    </button>
-                </div>
+                <NavBar tab="forum"/>
             </div>
         </div>
     );
