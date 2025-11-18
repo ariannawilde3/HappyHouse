@@ -1,6 +1,5 @@
 package com.happyhouse.model;
 
-import com.happyhouse.model.Comment;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +38,7 @@ public class Post {
 		this.title = title;
 		this.votes = 0;
 		this.tags = tagList;
-		this.comments = new ArrayList<Comment>(4);
+		this.comments = new ArrayList<>(4);
 	}
 	
 	public Post() {

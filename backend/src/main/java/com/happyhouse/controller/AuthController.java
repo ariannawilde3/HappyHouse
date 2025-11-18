@@ -7,6 +7,8 @@ import com.happyhouse.dto.SignupRequest;
 
 import com.happyhouse.service.AuthService;
 import com.happyhouse.repository.UserRepository;
+
+import java.io.IOException;
 // imports valid email formats
 import jakarta.validation.Valid;
 
@@ -92,10 +94,8 @@ public class AuthController {
      */
     @PostMapping("/google")
     // deals with logging in with Google
-    public ResponseEntity<?> googleLogin(@RequestBody Map<String, String> payload) {
+    public ResponseEntity<Object> googleLogin(@RequestBody Map<String, String> payload) {
         try {
-            // Debug log for incoming payload
-            logger.info("POST /api/auth/google payload: {}", payload);
 
             String credential = payload.get("credential");
             String googleId = payload.get("googleId");
@@ -111,15 +111,18 @@ public class AuthController {
                         .build();
                 HttpResponse<String> resp = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-                if (resp.statusCode() != 200) {
-                    logger.info("Google tokeninfo returned status: {} body: {}", resp.statusCode(), resp.body());
+                String responseBody = resp.body();
+                int statusCode = resp.statusCode();
+
+                if (statusCode != 200) {
+                    logger.info("Google tokeninfo returned status: {} body: {}", statusCode, responseBody);
                     return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                             .body(Map.of(ERR, "Invalid ID token"));
                 }
 
                 // Parses responses to get google ids and emails
                 ObjectMapper mapper = new ObjectMapper();
-                Map<String, Object> info = mapper.readValue(resp.body(), Map.class);
+                Map<String, Object> info = mapper.readValue(responseBody, Map.class);
                 googleId = (String) info.get("sub");
                 email = (String) info.get("email");
 
@@ -135,12 +138,21 @@ public class AuthController {
             // calls Google service
             AuthResponse response = authService.googleLogin(googleId, email);
             return ResponseEntity.ok(response);
-        } catch (Exception e) {
-            logger.error("Googel login failed: {}", e.getMessage(), e);
+        }  catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            logger.error("Google login interrupted: {}", e.getMessage(), e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of(ERR, "Google login failed", "details", e.getMessage()));
+                    .body(Map.of(ERR, "Google login interrupted"));
+        } catch (IOException e) {
+            logger.error("Google login network error: {}", e.getMessage(), e);
+            return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
+                    .body(Map.of(ERR, "Failed to verify Google token", "details", e.getMessage()));
+        } catch (Exception e) {
+                logger.error("Googel login failed: {}", e.getMessage(), e);
+                return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                        .body(Map.of(ERR, "Google login failed", "details", e.getMessage()));
+            }
         }
-    }
         
     /**
      * Refresh token endpoint
@@ -171,7 +183,7 @@ public class AuthController {
     }
 
     @GetMapping("/test")
-    public ResponseEntity<?> testConnection() {
+    public ResponseEntity<Map<String, Object>> testConnection() {
         try {
             long userCount = userRepository.count();
             Map<String, Object> response = new HashMap<>();
@@ -179,7 +191,7 @@ public class AuthController {
             response.put("userCount", userCount);
             return ResponseEntity.ok(response);
         } catch (Exception e) {
-            Map<String, String> error = new HashMap<>();
+            Map<String, Object> error = new HashMap<>();
             error.put(ERR, "Database connection failed: " + e.getMessage());
             return ResponseEntity.status(500).body(error);
         }

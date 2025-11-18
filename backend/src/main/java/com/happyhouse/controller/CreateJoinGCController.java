@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.happyhouse.repository.AllGroupChats;
-import com.happyhouse.repository.UserRepository;
 import com.happyhouse.service.AuthService;
 import com.happyhouse.util.JwtUtil;
 import com.happyhouse.model.GCInfo;
@@ -41,7 +40,7 @@ public class CreateJoinGCController {
         int code; 
         do { //checks to see if code exists
             code = form.createInviteCode();
-        } while (repo.existsByInviteCode(code));
+        } while (repo != null && repo.existsByInviteCode(code));
         form.addToCurrentRoomieCount(); //initiates as 1
         repo.save(form); //adds to repo
 

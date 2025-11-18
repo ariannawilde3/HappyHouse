@@ -1,7 +1,5 @@
 package com.happyhouse.model;
 
-
-// TODO: add username
 public class Comment {
 	public int id;
 	public int votes;

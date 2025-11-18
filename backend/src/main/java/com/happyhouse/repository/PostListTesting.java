@@ -43,6 +43,6 @@ public class PostListTesting {
 				return posts.get(i);
 			}
 		}
-		return new Post("not found", "not found", new ArrayList<String>(0));
+		return new Post("not found", "not found", new ArrayList<>(0));
     }
 }
