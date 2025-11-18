@@ -1,9 +1,11 @@
 import { useNavigate } from 'react-router-dom';
 import './Chat.css';
 import NavBar from './NavBar.jsx'
+import { usePinnedMessages } from '../sharedStoragePinnedMessages';
 
 export default function Chat() {
     const navigate = useNavigate();
+    const { pinMessage } = usePinnedMessages(); 
 
     const goToPins = () => {
         navigate('/pins');
@@ -13,6 +15,42 @@ export default function Chat() {
     const goToPolls = () => {
         navigate('/polls');
         console.log('polls icon clicked');
+    };
+
+    // Sample messages
+    const messages = [
+        {
+            id: 1,
+            username: 'archnemesis.pink',
+            content: 'so sorry, but you guys need to refill the brita when you drink it... im dying of thirst',
+            timestamp: 'Tuesday 5:16pm',
+            isYours: false
+        },
+        {
+            id: 2,
+            username: 'purple.lion.palace',
+            content: 'So sorry I had to run out this morning',
+            timestamp: 'Tuesday 5:16pm',
+            isYours: true
+        },
+        {
+            id: 3,
+            username: 'mama.mia',
+            content: 'that is my bad too',
+            timestamp: 'Tuesday 5:16pm',
+            isYours: false
+        },
+        {
+            id: 4,
+            username: 'mama.mia',
+            content: 'wait im making a poll right now',
+            timestamp: 'Tuesday 5:16pm',
+            isYours: false
+        }
+    ];
+
+    const handlePinMessage = (message) => {
+        pinMessage(message);
     };
 
     return (
@@ -40,44 +78,30 @@ export default function Chat() {
 					
                     <p className="message-date">Tuesday 5:16pm</p>
 					
-					{/* message 1 */}
-					<div className="message">
-                        <b>archnemesis.pink</b>
-						<div className="message-content">
-							so sorry, but you guys need to refill the brita when you drink it... im dying of thirst
-						</div>
-					</div>
-					
-					{/* Message 2 made by*/}
-					<div className="your-message">
-                        <b>purple.lion.palace</b>
-						<div className="message-content">
-                            So sorry I had to run out this morning
-                            
-						</div>
-					</div>
-
-                    {/* Message 3 */}
-					<div className="message">
-                        <b>mama.mia</b>
-						<div className="message-content">
-							that is my bad too
-						</div>
-					</div>
-
-                    {/* Message 4 */}
-					<div className="message">
-                        <b>mama.mia</b>
-						<div className="message-content">
-							wait im making a poll right now
-						</div>
-					</div>
+					{messages.map(function(message) {
+                        return (
+                            <div 
+                                key={message.id} 
+                                className={message.isYours ? "your-message" : "message"}
+                            >
+                                <div className="message-header">
+                                    <b>{message.username}</b>
+                                    <button 
+                                        className="pin-button" 
+                                        onClick={() => handlePinMessage(message)}
+                                        title="Pin this message"
+                                    >
+                                        📌
+                                    </button>
+                                </div>
+                                <div className="message-content">
+                                    {message.content}
+                                </div>
+                            </div>
+                        );
+                    })}
 
                 </div>
-
-
-
-        
                 {/* Navigation Bar */}
                 <NavBar tab="chat"/>
             </div>

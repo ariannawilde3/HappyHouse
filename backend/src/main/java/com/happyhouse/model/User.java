@@ -18,7 +18,9 @@ public class User {
     @Indexed(unique = true)
     private String email;
     
-    private String name; 
+    private String name;
+
+    private String houseId;
 
     private String password;
     
@@ -51,10 +53,11 @@ public class User {
         this.authProvider = AuthProvider.LOCAL;
     }
     
-    public User(String email, String password) {
+    public User(String email, String password, String houseId) {
         this();
         this.email = email;
         this.password = password;
+        this.houseId = houseId;
     }
     
     // Getters and Setters
@@ -171,7 +174,9 @@ public class User {
     public int getGroupChatCode() {
         return groupChatID;
     }
-    
+
+    public String getHouseId() { return houseId;
+    }
     // Enums
     public enum UserType {
         GUEST,

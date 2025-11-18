@@ -1,0 +1,113 @@
+// @ts-nocheck
+import { createContext, useContext, useState, useEffect, createElement } from 'react';
+
+const PinnedMessagesContext = createContext(null);
+
+export function PinnedMessagesProvider(props) {
+  const children = props.children;
+  const [pinnedMessages, setPinnedMessages] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchPinnedMessages();
+  }, []);
+
+  const fetchPinnedMessages = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        setLoading(false);
+        return;
+      }
+
+      const response = await fetch('http://localhost:5000/api/messages/pinned', {
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      });
+
+      if (response.ok) {
+        const data = await response.json();
+        setPinnedMessages(data);
+      }
+    } catch (error) {
+      console.error('Error fetching pinned messages:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const pinMessage = async (message) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:5000/api/messages/pin', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + token
+        },
+        body: JSON.stringify({
+          messageId: message.id,
+          username: message.username,
+          content: message.content,
+          timestamp: message.timestamp
+        })
+      });
+
+      if (response.ok) {
+        const pinnedMessage = await response.json();
+        const newPinnedMessages = [pinnedMessage].concat(pinnedMessages);
+        setPinnedMessages(newPinnedMessages);
+        alert('Message pinned!');
+      } else {
+        alert('Failed to pin message');
+      }
+    } catch (error) {
+      console.error('Error pinning message:', error);
+      alert('Error pinning message');
+    }
+  };
+
+  const unpinMessage = async (pinnedMessageId) => {
+    try {
+      const token = localStorage.getItem('token');
+      const response = await fetch('http://localhost:5000/api/messages/unpin/' + pinnedMessageId, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        }
+      });
+
+      if (response.ok) {
+        const filtered = pinnedMessages.filter(function(msg) {
+          return msg.id !== pinnedMessageId;
+        });
+        setPinnedMessages(filtered);
+      } else {
+        alert('Failed to unpin message');
+      }
+    } catch (error) {
+      console.error('Error unpinning message:', error);
+      alert('Error unpinning message');
+    }
+  };
+
+  const contextValue = {
+    pinnedMessages: pinnedMessages,
+    pinMessage: pinMessage,
+    unpinMessage: unpinMessage,
+    loading: loading,
+    fetchPinnedMessages: fetchPinnedMessages
+  };
+
+  return createElement(
+    PinnedMessagesContext.Provider,
+    { value: contextValue },
+    children
+  );
+
+  }
+
+export const usePinnedMessages = function() {
+  return useContext(PinnedMessagesContext);
+};

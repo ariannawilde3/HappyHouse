@@ -17,9 +17,11 @@
     <version>1.0.0</version>
     <name>HappyHouse Backend</name>
     <description>Anonymous roommate communication application backend</description>
-    
+
     <properties>
         <java.version>17</java.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <sonar.projectKey>ariannawilde3_HappyHouse</sonar.projectKey>
         <sonar.organization>happyhouse</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>

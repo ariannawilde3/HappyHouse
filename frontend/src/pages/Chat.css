@@ -139,3 +139,30 @@
   background-color: #efefef;
   outline: 2px solid #595959;
 }
+
+/* Pin button styling */
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 5px;
+}
+
+.pin-button {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  cursor: pointer;
+  opacity: 0.5;
+  transition: opacity 0.2s, transform 0.2s;
+  padding: 2px 5px;
+}
+
+.pin-button:hover {
+  opacity: 1;
+  transform: scale(1.2);
+}
+
+.pin-button:active {
+  transform: scale(0.95);
+}

@@ -1,10 +1,12 @@
 import { useNavigate } from 'react-router-dom';
 import './Pins.css';
 import NavBar from './NavBar.jsx';
-
+import { usePinnedMessages } from '../sharedStoragePinnedMessages';
 
 export default function Pins() {
     const navigate = useNavigate();
+
+    const { pinnedMessages, unpinMessage, loading } = usePinnedMessages();
 
     const goToChat = () => {
         navigate('/house');
@@ -15,6 +17,12 @@ export default function Pins() {
         navigate('/polls');
         console.log('polls icon clicked');
     };
+
+    const handleUnpin = (messageId) => {
+    if (window.confirm('Unpin this message?')) {
+        unpinMessage(messageId);
+    }
+};
 
     return (
         <div className="pins-outer-container">
@@ -39,34 +47,38 @@ export default function Pins() {
 						<button onClick={goToPolls} className="chat-bar-btn">Polls</button>
 					</div>
 					
+					{loading ? (
+                        <p style={{ textAlign: 'center', color: '#6b7280', marginTop: '2rem' }}>
+                            Loading pinned messages...
+                        </p>
+                    ) : pinnedMessages.length === 0 ? (
+                        <p style={{ textAlign: 'center', color: '#6b7280', marginTop: '2rem' }}>
+                            No pinned messages yet. Pin messages from the chat!
+                        </p>
+                    ) : (
+                        pinnedMessages.map(function(message) {
+                            return (
+                                <div key={message.id} className="pin">
+                                    <div className="pin-header">
+                                        <p className="pin-date">{message.timestamp}</p>
+                                        <button 
+                                            className="unpin-button"
+                                            onClick={() => handleUnpin(message.id)}
+                                            title="Unpin message"
+                                        >
+                                            ❌
+                                        </button>
+                                    </div>
+                                    <div className="pin-content">
+                                        <b>{message.username}:</b> {message.content}
+                                    </div>
+                                </div>
+                            );
+                        })
+                    )}
 					
-					{/* Pin 1 */}
-					<div className="pin">
-						<p className="pin-date">Tuesday 5:16pm</p>
-						<div className="pin-content">
-							New roommate chore chart!
-							<ul>
-								<li>Drew: Kitchen cleaning</li>
-								<li>Leili: Sweep all floors</li>
-								<li>Keira: Dust</li>
-								<li>Arianna: Resident handyman</li>
-								<li>Holly: Grocery list keeper</li>
-							</ul>
-						</div>
-					</div>
-					
-					{/* Pin 2 */}
-					<div className="pin">
-						<p className="pin-date">Today 11:12am</p>
-						<div className="pin-content">
-							REMINDER!! My brother and his girlfriend will be
-							staying at our place NEXT week from Saturday to Thursday.
-						</div>
-					</div>
                 </div>
 
-
-        
                 {/* Navigation Bar */}
                 <NavBar tab="chat" />
             </div>

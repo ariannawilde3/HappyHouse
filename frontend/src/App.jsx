@@ -15,34 +15,36 @@ import PGCJoined from './pages/PGCJoined.jsx';
 import ProfilePage from './pages/ProfilePage.jsx';
 import EditProfilePage from './pages/EditProfilePage.jsx';
 import GuestSettingsPage from './pages/GuestSettingsPage.jsx';
+import { PinnedMessagesProvider } from './sharedStoragePinnedMessages';
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path='/' element={<Login />} />
-        <Route path='/signup' element={<Signup />} />
-        <Route path='/neighborhood' element={<Forum />} />
-        <Route path='/viewPost' element={<PostViewing />} />
-        <Route path='/makePost' element={<MakePost />} />
-        <Route path='/house' element={<Chat />} />
-        <Route path='/pins' element={<Pins />} />
-        <Route path='/polls' element={<Polls />} />
-        <Route path='/makePoll' element={<CreatePoll />} />
-        <Route path='/makeHouse' element={<PGCMake />} />
-        <Route path='/houseSettings' element={<PGCSettings />} />
-        <Route path='/houseCreated' element={<PGCCreated />} />
-        <Route path='/houseJoined' element={<PGCJoined />} />
-        <Route path='/profile' element={<ProfilePage />} />
-        <Route path='/editProfile' element={<EditProfilePage />} />
-        <Route path='/guestProfile' element={<GuestSettingsPage />} />
-        <Route path='/makeGC' element={<PGCMake />} />
-        <Route path='/gcSettings' element={<PGCSettings />} />
-        <Route path='/createdWaitingRoom' element={<PGCCreated />} />
-        <Route path='/gcJoinedWaiting' element={<PGCJoined />} />
-
-      </Routes>
-    </BrowserRouter>
+    <PinnedMessagesProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route path='/' element={<Login />} />
+          <Route path='/signup' element={<Signup />} />
+          <Route path='/neighborhood' element={<Forum />} />
+          <Route path='/viewPost' element={<PostViewing />} />
+          <Route path='/makePost' element={<MakePost />} />
+          <Route path='/house' element={<Chat />} />
+          <Route path='/pins' element={<Pins />} />
+          <Route path='/polls' element={<Polls />} />
+          <Route path='/makePoll' element={<CreatePoll />} />
+          <Route path='/makeHouse' element={<PGCMake />} />
+          <Route path='/houseSettings' element={<PGCSettings />} />
+          <Route path='/houseCreated' element={<PGCCreated />} />
+          <Route path='/houseJoined' element={<PGCJoined />} />
+          <Route path='/profile' element={<ProfilePage />} />
+          <Route path='/editProfile' element={<EditProfilePage />} />
+          <Route path='/guestProfile' element={<GuestSettingsPage />} />
+          <Route path='/makeGC' element={<PGCMake />} />
+          <Route path='/gcSettings' element={<PGCSettings />} />
+          <Route path='/createdWaitingRoom' element={<PGCCreated />} />
+          <Route path='/gcJoinedWaiting' element={<PGCJoined />} />
+        </Routes>
+      </BrowserRouter>
+    </PinnedMessagesProvider>
   );
 }
 
