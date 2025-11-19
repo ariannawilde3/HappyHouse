@@ -74,7 +74,7 @@ public class PinnedMessageController {
     public ResponseEntity<Void> unpinMessage(
             @PathVariable String pinnedMessageId,
             @RequestHeader("Authorization") String token) {
-        // actually unpin the message 
+        // actually unpin the message
         pinnedMessageService.unpinMessage(pinnedMessageId);
         return ResponseEntity.ok().build();
     }
