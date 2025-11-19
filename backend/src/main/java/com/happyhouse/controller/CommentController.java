@@ -4,7 +4,7 @@ import com.happyhouse.dto.CommentRequest;
 import com.happyhouse.dto.CommentResponse;
 import com.happyhouse.model.Comment;
 import com.happyhouse.service.CommentService;
-import com.happyhouse.util.JwtUtil;
+import com.happyhouse.model.User;
 
 import jakarta.validation.Valid;
 
@@ -18,20 +18,22 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/posts/{postId}/comments")
 @CrossOrigin(origins = "*")
 public class CommentController {
 
-    @Autowired
-    private CommentService commentService;
-
-    @Autowired
-    private JwtUtil jwtUtil;
+    private final CommentService commentService;
 
     public static final String ERR = "error";
+
+    public static final String USER404 = "User not found";
+
+    @Autowired
+    public CommentController(CommentService commentService) {
+        this.commentService = commentService;
+    }
 
     /**
      * GET /api/posts/{postId}/comments
@@ -44,7 +46,7 @@ public class CommentController {
             
             List<CommentResponse> response = comments.stream()
                     .map(this::convertToResponse)
-                    .collect(Collectors.toList());
+                    .toList();
             
             return ResponseEntity.ok(response);
         } catch (RuntimeException e) {
@@ -85,7 +87,7 @@ public class CommentController {
             
             if (userId == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of(ERR, "User not found"));
+                        .body(Map.of(ERR, USER404));
             }
             
             Comment comment = commentService.addComment(postId, userId, request.getContent());
@@ -123,7 +125,7 @@ public class CommentController {
             
             if (userId == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of(ERR, "User not found"));
+                        .body(Map.of(ERR, USER404));
             }
             
             Comment comment = commentService.upvoteComment(postId, commentId, userId);
@@ -158,7 +160,7 @@ public class CommentController {
             
             if (userId == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of(ERR, "User not found"));
+                        .body(Map.of(ERR, USER404));
             }
             
             Comment comment = commentService.downvoteComment(postId, commentId, userId);
@@ -179,7 +181,7 @@ public class CommentController {
     private String getUserIdFromEmail(String email) {
         try {
             return userRepository.findByEmail(email)
-                    .map(user -> user.getId())
+                    .map(User::getId)
                     .orElse(null);
         } catch (Exception e) {
             return null;
@@ -202,7 +204,7 @@ public class CommentController {
         response.setVotes(comment.getVotes());
         response.setCreatedAt(comment.getCreatedAt());
         
-        // ✅ Set user's vote status
+        // Set user's vote status
         if (userId != null) {
             response.setUserVote(comment.getUserVote(userId));
         }
