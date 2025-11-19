@@ -57,7 +57,9 @@ public class SecurityConfig {
                     "/error",
 					"/api/viewpost/**",
 					"/api/addpost/",
-                    "/api/gcc/**"
+                    "/api/gcc/**",
+                    "/api/posts/*/comments",
+                    "/api/posts/*/comments/**"
                 ).permitAll()
                 // authenticates further url requests from the above links
                 .anyRequest().authenticated()

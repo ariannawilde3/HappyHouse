@@ -17,6 +17,7 @@ import { useLocation } from "react-router-dom";
 import './PostViewing.css';
 import ThumbsUp from '../assets/images/ThumbsUp.png';
 import ThumbsDown from '../assets/images/ThumbsDown.png';
+import { fetchComments, addComment, upvoteComment, downvoteComment } from '../api';
 
 const API_URL = 'http://localhost:5000/api';
 
@@ -24,7 +25,7 @@ export default function ForumPage() {
 	
 	/*for the main post part*/
     const [post, setPost] = useState({
-        id: -1,
+        id: null,
         title: "404 Error",
         content: "Post not found",
         votes: 0,
@@ -34,7 +35,11 @@ export default function ForumPage() {
     });
 	
 	const location = useLocation();
-	console.log(location.state);
+	const [comments, setComments] = useState([]);
+    const [newCommentContent, setNewCommentContent] = useState('');
+    const [isCommentReadOnly, setIsCommentReadOnly] = useState(false);
+    const [isSubmitting, setIsSubmitting] = useState(false);
+    const [loadingComments, setLoadingComments] = useState(false);
 	
 	const loadContent = async () => {
 		// add setError later
@@ -43,18 +48,8 @@ export default function ForumPage() {
 		console.log(data);
 		console.log(data.title);
 		
-		/*for the main post part*/
-		/*const [post, setPost] = useState({
-			id: 1,
-			title: "My roommate is allergic to peanuts. Why?",
-			content: "My roommate is allergic to peanuts and it really weirds me out. She won't ever tell me how it happened or where it started so I just give up. I'm looking for new roommates to take her place, she has two beds in her room, for some odd reason so I can definitely house more people. BLAH BLAH BALAH BALHABLHAJHDFHDOSFHDFUIWEFPBEFBEF",
-			votes: 927,
-			userVote: null,
-			tags: ["Most Popular", "Finding a Roommate"]
-		});*/
-		
 		setPost({
-			id: 1,
+			id: data.objID || data._id || data.id || location.state,
 			title: data.title,
 			content: data.content,
 			votes: data.votes,
@@ -63,67 +58,138 @@ export default function ForumPage() {
 			comments: data.comments
 		});
 		
-		setComments(data.comments);
+		await loadComments(data.objID || data._id || data.id || location.state);
 	};
 	
-	useEffect(() => {loadContent();}, []);
+    const loadComments = async (postId) => {
+        setLoadingComments(true);
+        try {
+            const commentsData = await fetchComments(postId);
+            // Backend now returns userVote field for each comment
+            setComments(commentsData);
+        } catch (error) {
+            console.error('Error loading comments:', error);
+            setComments(post.comments || []);
+        } finally {
+            setLoadingComments(false);
+        }
+    };
 
-    const [isCommentReadOnly, setIsCommentReadOnly] = useState(false);
-
-    /*comments*/
-     const [comments, setComments] = useState([
-        ]);
+    useEffect(() => {
+        const userType = localStorage.getItem('userType');
+        if (userType === 'GUEST') {
+            setIsCommentReadOnly(true);
+        }
+        loadContent();
+    }, []);
 
     const navigate = useNavigate();
-
-    /* Vote handling function*/
-    // const handleVote = (type) => {
-    //     setPost(prev => ({
-    //         ...prev,
-    //         votes: prev.userVote === type ? prev.votes - (type === 'up' ? 1 : -1) : 
-    //                prev.userVote ? prev.votes + (type === 'up' ? 2 : -2) :
-    //                prev.votes + (type === 'up' ? 1 : -1),
-    //         userVote: prev.userVote === type ? null : type
-    //     }));
-    // };
 
     const handleVote = (type, itemId, isPost = false) => {
         if (isPost) {
             setPost(prev => ({
                 ...prev,
                 votes: prev.userVote === type ? prev.votes - (type === 'up' ? 1 : -1) : 
-                       prev.userVote ? prev.votes + (type === 'up' ? 2 : -2) :
-                       prev.votes + (type === 'up' ? 1 : -1),
+                    prev.userVote ? prev.votes + (type === 'up' ? 2 : -2) :
+                    prev.votes + (type === 'up' ? 1 : -1),
                 userVote: prev.userVote === type ? null : type
             }));
-        } else {
-            setComments(prev => prev.map(comment => 
-                comment.id === itemId ? {
-                    ...comment,
-                    votes: comment.userVote === type ? comment.votes - (type === 'up' ? 1 : -1) :
-                           comment.userVote ? comment.votes + (type === 'up' ? 2 : -2) :
-                           comment.votes + (type === 'up' ? 1 : -1),
-                    userVote: comment.userVote === type ? null : type
-                } : comment
-            ));
         }
     };
 
     const handleCommentInput = () => {
         const userType = localStorage.getItem('userType');
-        if (userType == 'GUEST') {
+        if (userType === 'GUEST') {
             alert('Guests cannot add comments. Please sign up!');
-            setIsCommentReadOnly(true);
-            return false;
         }
-        setIsCommentReadOnly(false);
     };
 
-    const handleCommentSubmit = (e) => {
+    const handleCommentSubmit = async (e) => {
         e.preventDefault();
-        console.log("comment submitted");
-        // add connection with backend here probs
+        
+        const userType = localStorage.getItem('userType');
+        if (userType === 'GUEST') {
+            return;
+        }
+
+        if (!newCommentContent.trim()) {
+            alert('Comment cannot be empty!');
+            return;
+        }
+
+        if (newCommentContent.length > 1000) {
+            alert('Comment cannot exceed 1000 characters!');
+            return;
+        }
+
+        setIsSubmitting(true);
+        try {
+            const newComment = await addComment(post.id, newCommentContent.trim());
+            
+            // Add new comment to the beginning of the list
+            setComments(prev => [newComment, ...prev]);
+            
+            // Clear input
+            setNewCommentContent('');
+        } catch (error) {
+            console.error('Error adding comment:', error);
+            if (error.message.includes('Authentication required')) {
+                alert('Please log in to add comments!');
+            } else {
+                alert('Failed to add comment. Please try again.');
+            }
+        } finally {
+            setIsSubmitting(false);
+        }
     };
+
+    const handleCommentVote = async (type, commentId) => {
+        const userType = localStorage.getItem('userType');
+        if (userType === 'GUEST') {
+            alert('Please sign up to vote on comments!');
+            return;
+        }
+
+        // Check if user already voted this way
+        const comment = comments.find(c => c.id === commentId);
+        if (comment.userVote === type) {
+            alert(`You have already ${type === 'up' ? 'upvoted' : 'downvoted'} this comment`);
+            return;
+        }
+
+        try {
+            let updatedComment;
+            if (type === 'up') {
+                updatedComment = await upvoteComment(post.id, commentId);
+            } else {
+                updatedComment = await downvoteComment(post.id, commentId);
+            }
+            
+            // Update comment in state with backend response (includes new userVote)
+            setComments(prev => prev.map(c =>
+                c.id === commentId ? updatedComment : c
+            ));
+        } catch (error) {
+            console.error('Error voting on comment:', error);
+            // Show the error message from backend
+            alert(error.message || 'Failed to vote on comment');
+        }
+    };
+
+    const formatTimestamp = (timestamp) => {
+    const date = new Date(timestamp);
+    const now = new Date();
+    const diffMs = now - date;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return 'just now';
+    if (diffMins < 60) return `${diffMins} minute${diffMins > 1 ? 's' : ''} ago`;
+    if (diffHours < 24) return `${diffHours} hour${diffHours > 1 ? 's' : ''} ago`;
+    if (diffDays < 7) return `${diffDays} day${diffDays > 1 ? 's' : ''} ago`;
+    return date.toLocaleDateString();
+};
 
     const addPost = () => {
         navigate('/makePost');
@@ -191,13 +257,64 @@ export default function ForumPage() {
                             {post.content}
                         </p>
 
-                        {/* Comment Input Field */}
-                        <form onSubmit={handleCommentSubmit}>
-                            <input type="text" 
-                            placeholder='Enter a comment' 
-                            className='comment-input' 
-                            onClick={handleCommentInput}
-                            readOnly = {isCommentReadOnly}/>
+                        {/* Comment Input Form */}
+                        <form onSubmit={handleCommentSubmit} style={{ marginTop: '1rem' }}>
+                            <div style={{
+                                border: '2px solid #e5e7eb',
+                                borderRadius: '8px',
+                                overflow: 'hidden'
+                            }}>
+                                <textarea
+                                    placeholder={isCommentReadOnly ? 'Sign up to comment' : 'Write a comment...'}
+                                    className='comment-input'
+                                    value={newCommentContent}
+                                    onChange={(e) => setNewCommentContent(e.target.value)}
+                                    onFocus={handleCommentInput}
+                                    readOnly={isCommentReadOnly}
+                                    disabled={isSubmitting}
+                                    maxLength={1000}
+                                    rows={3}
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.75rem',
+                                        border: 'none',
+                                        outline: 'none',
+                                        fontFamily: 'inherit',
+                                        fontSize: '0.95rem',
+                                        resize: 'vertical',
+                                        cursor: isCommentReadOnly ? 'not-allowed' : 'text',
+                                        opacity: isCommentReadOnly ? 0.6 : 1
+                                    }}
+                                />
+                                <div style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    padding: '0.5rem 0.75rem',
+                                    backgroundColor: '#f9fafb',
+                                    borderTop: '1px solid #e5e7eb'
+                                }}>
+                                    <span style={{ fontSize: '0.875rem', color: '#6b7280' }}>
+                                        {newCommentContent.length}/1000
+                                    </span>
+                                    <button
+                                        type="submit"
+                                        disabled={isSubmitting || isCommentReadOnly || !newCommentContent.trim()}
+                                        style={{
+                                            backgroundColor: isSubmitting || isCommentReadOnly || !newCommentContent.trim() ? '#9ca3af' : '#7a9b7e',
+                                            color: 'white',
+                                            border: 'none',
+                                            borderRadius: '6px',
+                                            padding: '0.5rem 1.5rem',
+                                            fontSize: '0.95rem',
+                                            cursor: isSubmitting || isCommentReadOnly || !newCommentContent.trim() ? 'not-allowed' : 'pointer',
+                                            fontWeight: '500'
+                                        }}
+                                    >
+                                        {isSubmitting ? 'Posting...' : 'Post Comment'}
+                                    </button>
+                                </div>
+                            </div>
                         </form>
 
                         {/* Tags and Voting */}
@@ -269,39 +386,87 @@ export default function ForumPage() {
                     </div>
                     {/* END OF MAIN POST SECTION */}
 
-                    {/* ADD COMMENTS SECTION HERE */}
-                    {/* Vertical connecting line 
-                    <div style={{
-                        width: '3px',
-                        height: '30px',
-                        backgroundColor: '#7a9b7e',
-                        alignSelf: 'flex-start',
-                        marginLeft: '1.5rem',
-                        marginBottom: '0.5rem'
-                    }}></div>*/}
+                    {/* Comments Section Title */}
+                    {comments.length > 0 && (
+                        <h3 style={{
+                            fontSize: '1.1rem',
+                            fontWeight: '600',
+                            color: '#1f2937',
+                            marginBottom: '1rem',
+                            marginTop: '1.5rem'
+                        }}>
+                            Comments ({comments.length})
+                        </h3>
+                    )}
 
-                    {/* Comments */}
-                    {comments.map((comment, index) => (
+                    {/* Loading State */}
+                    {loadingComments && (
+                        <div style={{
+                            textAlign: 'center',
+                            padding: '2rem',
+                            color: '#6b7280',
+                            fontStyle: 'italic'
+                        }}>
+                            Loading comments...
+                        </div>
+                    )}
+
+                    {/* No Comments Message */}
+                    {!loadingComments && comments.length === 0 && (
+                        <div style={{
+                            textAlign: 'center',
+                            padding: '2rem',
+                            background: '#f9fafb',
+                            border: '2px dashed #d1d5db',
+                            borderRadius: '8px',
+                            color: '#6b7280'
+                        }}>
+                            <p>No comments yet. Be the first to comment!</p>
+                        </div>
+                    )}
+
+                    {/* Comments List */}
+                    {!loadingComments && comments.map((comment, index) => (
                         <React.Fragment key={comment.id}>
                             {/* Comment Card */}
                             <div style={{
                                 backgroundColor: 'white',
                                 borderRadius: '12px',
                                 padding: '1rem 1.5rem',
-                                marginBottom: '0.5rem',
+                                marginBottom: '0.75rem',
+                                width: '100%',
                                 boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'space-between',
-                                gap: '1rem',
-                                width: '100%'
+                                boxSizing: 'border-box'
                             }}>
+                                {/* Comment Header - USERNAME AND TIMESTAMP */}
+                                <div style={{
+                                    display: 'flex',
+                                    justifyContent: 'space-between',
+                                    alignItems: 'center',
+                                    marginBottom: '0.5rem'
+                                }}>
+                                    <span style={{
+                                        fontWeight: '600',
+                                        color: '#1f2937',
+                                        fontSize: '0.9rem'
+                                    }}>
+                                        {comment.username || comment.anonymousUsername || 'Anonymous'}
+                                    </span>
+                                    <span style={{
+                                        fontSize: '0.75rem',
+                                        color: '#6b7280'
+                                    }}>
+                                        {comment.createdAt ? formatTimestamp(comment.createdAt) : 'just now'}
+                                    </span>
+                                </div>
+
                                 {/* Comment text */}
                                 <p style={{
                                     color: '#4b5563',
                                     fontSize: '0.95rem',
-                                    margin: 0,
-                                    flex: 1
+                                    lineHeight: '1.5',
+                                    margin: '0 0 0.75rem 0',
+                                    wordWrap: 'break-word'
                                 }}>
                                     {comment.content}
                                 </p>
@@ -310,20 +475,11 @@ export default function ForumPage() {
                                 <div style={{ 
                                     display: 'flex', 
                                     alignItems: 'center', 
-                                    gap: '0.75rem', 
-                                    flexShrink: 0 
+                                    gap: '0.75rem'
                                 }}>
-                                    <span style={{ 
-                                        color: '#6b7280', 
-                                        fontSize: '0.85rem', 
-                                        whiteSpace: 'nowrap' 
-                                    }}>
-                                        {comment.votes} Votes
-                                    </span>
-                                    
                                     {/* Thumbs up */}
                                     <button 
-                                        onClick={() => handleVote('up', comment.id, false)} 
+                                        onClick={() => handleCommentVote('up', comment.id)} 
                                         style={{
                                             background: 'none',
                                             border: 'none',
@@ -341,10 +497,20 @@ export default function ForumPage() {
                                             }}
                                         />
                                     </button>
+
+                                    <span style={{ 
+                                        color: '#6b7280',
+                                        fontSize: '0.85rem',
+                                        fontWeight: '600',
+                                        minWidth: '2rem',
+                                        textAlign: 'center'
+                                    }}>
+                                        {comment.votes || 0}
+                                    </span>
                                     
                                     {/* Thumbs down */}
                                     <button 
-                                        onClick={() => handleVote('down', comment.id, false)} 
+                                        onClick={() => handleCommentVote('down', comment.id)} 
                                         style={{
                                             background: 'none',
                                             border: 'none',
@@ -364,18 +530,6 @@ export default function ForumPage() {
                                     </button>
                                 </div>
                             </div>
-                            
-                            {/* Vertical line between comments */}
-                            {index < comments.length - 1 && (
-                                <div style={{
-                                    width: '3px',
-                                    height: '20px',
-                                    backgroundColor: '#7a9b7e',
-                                    alignSelf: 'flex-start',
-                                    marginLeft: '0',
-                                    marginBottom: '0.5rem'
-                                }}></div>
-                            )}
                         </React.Fragment>
                     ))}
 

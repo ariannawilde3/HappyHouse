@@ -16,12 +16,17 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.beans.factory.annotation.Autowired; 
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import java.io.IOException;
 
 // filter which is used every time a request is sent related to tokens and authenticating user info
 // or when we use the database, it allows the request to proceed to the controllers once done
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
+    
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+    
     private final JwtUtil jwtUtil;
     // this is provided by spring and allows us to load user details from mongo
     private final CustomUserDetailsService userDetailsService;

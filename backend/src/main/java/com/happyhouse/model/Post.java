@@ -1,6 +1,5 @@
 package com.happyhouse.model;
 
-import com.happyhouse.model.Comment;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,7 +19,7 @@ public class Post {
 	public String title;
 	public int votes;
 	public List<String> tags;
-	public List<Comment> comments;
+	public List<Comment> comments = new ArrayList<>();
 		
 	
 	// only for testing
@@ -39,7 +38,7 @@ public class Post {
 		this.title = title;
 		this.votes = 0;
 		this.tags = tagList;
-		this.comments = new ArrayList<Comment>(4);
+		this.comments = new ArrayList<>(4);
 	}
 	
 	public Post() {
@@ -51,6 +50,23 @@ public class Post {
 		this.comments = null;
 	}
 	
+	public void addComment(Comment comment) {
+        if (comments == null) {
+            comments = new ArrayList<>();
+        }
+        comments.add(comment);
+    }
+    
+    public void removeComment(Comment comment) {
+        if (comments != null) {
+            comments.remove(comment);
+        }
+    }
+    
+    public List<Comment> getComments() {
+        return comments;
+    }
+
 	@Override
 	public String toString() {
 		return "post " + this.title + this.content;
