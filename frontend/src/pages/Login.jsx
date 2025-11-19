@@ -77,25 +77,21 @@ export default function LoginPage() {
       console.log('POST /api/auth/google status=', res.status, 'body=', data);
 
       if (res.ok) {
-        // support both backends that return accessToken or token
-        const accessToken = data.accessToken || data.token || data.access_token;
-        const refreshToken = data.refreshToken || data.refresh_token || null;
-        const user = data.user || data; // adjust if backend returns flattened fields
+        // Backend returns flat structure: { token, refreshToken, userId, anonymousUsername, userType }
+        const accessToken = data.token;
+        const refreshToken = data.refreshToken;
 
         if (!accessToken) {
-          // Backend responded 200 but didn't return tokens
           console.warn('No access token returned by backend', data);
           setError('Google sign-in failed (no token returned).');
         } else {
+          // Store all authentication data - backend returns flat structure
           localStorage.setItem('token', accessToken);
           if (refreshToken) localStorage.setItem('refreshToken', refreshToken);
-          if (user && (user.id || user.userId)) {
-            localStorage.setItem('userId', user.id || user.userId);
-          }
-          if (user && user.anonymousUsername) localStorage.setItem('anonymousUsername', user.anonymousUsername);
-          if (user && user.userType) localStorage.setItem('userType', user.userType);
+          if (data.userId) localStorage.setItem('userId', data.userId);
+          if (data.anonymousUsername) localStorage.setItem('anonymousUsername', data.anonymousUsername);
+          if (data.userType) localStorage.setItem('userType', data.userType);
 
-          console.log('✅ Google login successful, navigating', { user, accessToken });
           navigate('/neighborhood');
         }
       } else {

@@ -25,7 +25,7 @@ export default function ForumPage() {
 	
 	/*for the main post part*/
     const [post, setPost] = useState({
-        id: -1,
+        id: null,
         title: "404 Error",
         content: "Post not found",
         votes: 0,
@@ -49,7 +49,7 @@ export default function ForumPage() {
 		console.log(data.title);
 		
 		setPost({
-			id: 1,
+			id: data.objID || data._id || data.id || location.state,
 			title: data.title,
 			content: data.content,
 			votes: data.votes,
@@ -58,7 +58,7 @@ export default function ForumPage() {
 			comments: data.comments
 		});
 		
-		await loadComments(location.state);
+		await loadComments(data.objID || data._id || data.id || location.state);
 	};
 	
     const loadComments = async (postId) => {
@@ -432,7 +432,9 @@ export default function ForumPage() {
                                 borderRadius: '12px',
                                 padding: '1rem 1.5rem',
                                 marginBottom: '0.75rem',
-                                boxShadow: '0 1px 3px rgba(0,0,0,0.1)'
+                                width: '100%',
+                                boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
+                                boxSizing: 'border-box'
                             }}>
                                 {/* Comment Header - USERNAME AND TIMESTAMP */}
                                 <div style={{

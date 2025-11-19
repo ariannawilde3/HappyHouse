@@ -5,6 +5,7 @@ import com.happyhouse.dto.CommentResponse;
 import com.happyhouse.model.Comment;
 import com.happyhouse.service.CommentService;
 import com.happyhouse.util.JwtUtil;
+import com.happyhouse.repository.UserRepository;
 
 import jakarta.validation.Valid;
 
@@ -12,6 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
 
 import java.util.List;
 import java.util.Map;
@@ -60,11 +64,29 @@ public class CommentController {
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
         
         try {
-            Integer userId = extractUserIdFromToken(authHeader);
+            // Get authenticated user from Spring Security context
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            
+            if (authentication == null || !authentication.isAuthenticated() || 
+                authentication instanceof AnonymousAuthenticationToken) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of(ERR, "Authentication required to add comments"));
+            }
+            
+            // Get email from authentication (set by JWT filter)
+            String userEmail = authentication.getName();
+            
+            if (userEmail == null || userEmail.isEmpty()) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of(ERR, "Invalid authentication token"));
+            }
+            
+            // Get userId from email
+            String userId = getUserIdFromEmail(userEmail);
             
             if (userId == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of(ERR, "Authentication required to add comments"));
+                        .body(Map.of(ERR, "User not found"));
             }
             
             Comment comment = commentService.addComment(postId, userId, request.getContent());
@@ -89,11 +111,20 @@ public class CommentController {
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
         
         try {
-            Integer userId = extractUserIdFromToken(authHeader);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            
+            if (authentication == null || !authentication.isAuthenticated() || 
+                authentication instanceof AnonymousAuthenticationToken) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of(ERR, "Authentication required to vote"));
+            }
+            
+            String userEmail = authentication.getName();
+            String userId = getUserIdFromEmail(userEmail);
             
             if (userId == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of(ERR, "Authentication required to vote"));
+                        .body(Map.of(ERR, "User not found"));
             }
             
             Comment comment = commentService.upvoteComment(postId, commentId);
@@ -107,7 +138,6 @@ public class CommentController {
 
     /**
      * POST /api/posts/{postId}/comments/{commentId}/downvote
-     * Downvote a comment
      */
     @PostMapping("/{commentId}/downvote")
     public ResponseEntity<Object> downvoteComment(
@@ -116,11 +146,20 @@ public class CommentController {
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
         
         try {
-            Integer userId = extractUserIdFromToken(authHeader);
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            
+            if (authentication == null || !authentication.isAuthenticated() || 
+                authentication instanceof AnonymousAuthenticationToken) {
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(Map.of(ERR, "Authentication required to vote"));
+            }
+            
+            String userEmail = authentication.getName();
+            String userId = getUserIdFromEmail(userEmail);
             
             if (userId == null) {
                 return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of(ERR, "Authentication required to vote"));
+                        .body(Map.of(ERR, "User not found"));
             }
             
             Comment comment = commentService.downvoteComment(postId, commentId);
@@ -129,6 +168,22 @@ public class CommentController {
         } catch (RuntimeException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                     .body(Map.of(ERR, e.getMessage()));
+        }
+    }
+
+    /**
+     * Helper method to get userId from email using UserRepository
+     */
+    @Autowired
+    private com.happyhouse.repository.UserRepository userRepository;
+
+    private String getUserIdFromEmail(String email) {
+        try {
+            return userRepository.findByEmail(email)
+                    .map(user -> user.getId())
+                    .orElse(null);
+        } catch (Exception e) {
+            return null;
         }
     }
 
@@ -143,22 +198,5 @@ public class CommentController {
         response.setVotes(comment.getVotes());
         response.setCreatedAt(comment.getCreatedAt());
         return response;
-    }
-
-    /**
-     * Helper method to extract userId from JWT token
-     */
-    private Integer extractUserIdFromToken(String authHeader) {
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return null;
-        }
-    
-        try {
-            String token = authHeader.substring(7);
-            String userIdString = jwtUtil.extractUserId(token);
-            return Integer.parseInt(userIdString);
-        } catch (Exception e) {
-            return null;
-        }
     }
 }

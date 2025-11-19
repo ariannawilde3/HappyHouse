@@ -25,9 +25,9 @@ public class CommentService {
     /**
      * Add a comment to a post
      */
-    public Comment addComment(String postId, Integer userId, String content) {
+    public Comment addComment(String postId, String userId, String content) {
         // Find the post
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findByObjID(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found with id: " + postId));
 
         // Find the user
@@ -38,7 +38,7 @@ public class CommentService {
         Comment comment = new Comment();
         comment.setId(UUID.randomUUID().toString()); // Generate unique ID
         comment.setContent(content);
-        comment.setUserId(userId.toString());
+        comment.setUserId(userId);
         comment.setAnonymousUsername(user.getAnonymousUsername());
         comment.setVotes(0);
         comment.setCreatedAt(LocalDateTime.now());
@@ -56,7 +56,7 @@ public class CommentService {
      * Get all comments for a post
      */
     public List<Comment> getCommentsByPostId(String postId) {
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findByObjID(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found with id: " + postId));
 
         return post.getComments();
@@ -66,7 +66,7 @@ public class CommentService {
      * Upvote a comment
      */
     public Comment upvoteComment(String postId, String commentId) {
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findByObjID(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
         Comment comment = findCommentInPost(post, commentId);
@@ -81,7 +81,7 @@ public class CommentService {
      * Downvote a comment
      */
     public Comment downvoteComment(String postId, String commentId) {
-        Post post = postRepository.findById(postId)
+        Post post = postRepository.findByObjID(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
         Comment comment = findCommentInPost(post, commentId);
