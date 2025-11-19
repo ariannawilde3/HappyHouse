@@ -19,7 +19,7 @@ public class Post {
 	public String title;
 	public int votes;
 	public List<String> tags;
-	public List<Comment> comments;
+	public List<Comment> comments = new ArrayList<>();
 		
 	
 	// only for testing
@@ -50,6 +50,23 @@ public class Post {
 		this.comments = null;
 	}
 	
+	public void addComment(Comment comment) {
+        if (comments == null) {
+            comments = new ArrayList<>();
+        }
+        comments.add(comment);
+    }
+    
+    public void removeComment(Comment comment) {
+        if (comments != null) {
+            comments.remove(comment);
+        }
+    }
+    
+    public List<Comment> getComments() {
+        return comments;
+    }
+
 	@Override
 	public String toString() {
 		return "post " + this.title + this.content;
