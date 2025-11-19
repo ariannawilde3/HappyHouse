@@ -9,6 +9,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import com.happyhouse.model.Post;
 import com.happyhouse.repository.PostListTesting;
 import com.happyhouse.repository.PostRepository;
+import org.springframework.data.domain.*;
 import com.happyhouse.dto.AddPostRequest;
 import java.util.List;
 import java.util.ArrayList;
@@ -27,10 +28,12 @@ public class PostGetController {
 	@Autowired
 	private PostRepository postrepo;
 
-	@GetMapping("/")
-	public List<Post> getPostList() {
+	@GetMapping("/all/{page}")
+	public List<Post> getPostList(@PathVariable int page) {
 		//return postlist.getAllPosts();
-		return postrepo.findAll();
+		//return postrepo.findAll();
+		Pageable pageable = PageRequest.of(page, 3, Sort.by("_id").descending());
+		return postrepo.findAll(pageable).getContent();
 	}
 
     @GetMapping("/{id}")

@@ -11,13 +11,16 @@ const API_URL = 'http://localhost:5000/api';
 
 export default function ForumPage() {
 	
-	const [postList, setPostList] = useState({loaded: false, posts: []});
+	const [postList, setPostList] = useState([]);
+	const [page, setPage] = useState(1);
+	const [loading, setLoading] = useState(true);
+	const [reachedEnd, setReachedEnd] = useState(false);
 		
 	const loadContent = async () => {
 		// add setError later
-		var data = await fetch(`${API_URL}/viewpost/`)
+		var data = await fetch(`${API_URL}/viewpost/all/0`)
 		.then(response => response.json());
-		console.log(data);
+		// console.log(data);
 		
 		/*for the main post part*/
 		/*const [post, setPost] = useState({
@@ -29,11 +32,30 @@ export default function ForumPage() {
 			tags: ["Most Popular", "Finding a Roommate"]
 		});*/
 		
-		setPostList({
-			loaded: true,
-			posts: data
-		});
-		
+		setPostList(data);
+		setLoading(false);
+	};
+	
+	const [backgroundColor, setBackgroundColor] = useState("white");
+
+	const loadMorePosts = async () => {
+		var data = await fetch(`${API_URL}/viewpost/all/${page}`)
+		.then(response => response.json());
+		setPage(page+1);
+		if (data.length == 0) {
+			console.log("Reached end");
+			setReachedEnd(true);
+		}
+		setPostList(postList.concat(data));
+		setLoading(false);
+	}
+	const handleScroll = (event) => {
+		const { scrollTop, scrollHeight, clientHeight } = event.target;
+		if (!loading && !reachedEnd && scrollTop + clientHeight > scrollHeight - 20) {
+			setLoading(true);
+			console.log("Loading more!");
+			loadMorePosts();
+		}
 	};
 	
 	useEffect(() => {loadContent();}, []);
@@ -100,7 +122,7 @@ export default function ForumPage() {
                 </div>
 
                 {/* Content */}
-                <div className="forum-content-area">
+                <div className="forum-content-area" onScroll={handleScroll}>
 
                     {/* Welcome text with anonymous username */}
                     <div className="forum-welcome-section">
@@ -185,15 +207,15 @@ export default function ForumPage() {
 					</div>*/}
 					
 					{/* Ex. Post */}
-					{postList.posts.map((post, index) => (
-					<React.Fragment>
+					{postList.map((post, index) => (
+					<React.Fragment key={post.objID}>
 						<div onClick={() => viewPost(post.objID)} className="post-container">
 							<h3 className="post-title"> {post.title} </h3>
 							<p className="post-content"> {post.content} </p>
 						
 						<div className="post-stats-container">
-						{post.tags.map((tag, index) => (
-							<div className="post-tag">
+						{post.tags.map((tag, tagIndex) => (
+							<div key={post.objID+tagIndex} className="post-tag">
                                 <p>{tag}</p>
                             </div>
 						))}
@@ -212,7 +234,9 @@ export default function ForumPage() {
 						</div>
 					</React.Fragment>
 					))}
-
+					
+					{loading ? <p>Loading posts...</p> : <div></div>}
+					{reachedEnd ? <p>You've reached the forum's end!</p> : <div></div>}
                 </div>
 
                 {/* Post Button */}
