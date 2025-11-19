@@ -6,6 +6,7 @@ import { usePinnedMessages } from '../sharedStoragePinnedMessages';
 export default function Pins() {
     const navigate = useNavigate();
 
+    // get pinnned messages array, unpin fun, and loading state 
     const { pinnedMessages, unpinMessage, loading } = usePinnedMessages();
 
     const goToChat = () => {
@@ -17,12 +18,6 @@ export default function Pins() {
         navigate('/polls');
         console.log('polls icon clicked');
     };
-
-    const handleUnpin = (messageId) => {
-    if (window.confirm('Unpin this message?')) {
-        unpinMessage(messageId);
-    }
-};
 
     return (
         <div className="pins-outer-container">
@@ -48,22 +43,26 @@ export default function Pins() {
 					</div>
 					
 					{loading ? (
+                        // this is here if there is a delay from backend and it just says loading pinned messages
                         <p style={{ textAlign: 'center', color: '#6b7280', marginTop: '2rem' }}>
                             Loading pinned messages...
                         </p>
+                    // if no pinned messages, display this message
                     ) : pinnedMessages.length === 0 ? (
                         <p style={{ textAlign: 'center', color: '#6b7280', marginTop: '2rem' }}>
                             No pinned messages yet. Pin messages from the chat!
                         </p>
                     ) : (
+                        // if pinned messages exits then do this and go through each pinned message
                         pinnedMessages.map(function(message) {
                             return (
+                                // details for displaying pin message 
                                 <div key={message.id} className="pin">
                                     <div className="pin-header">
                                         <p className="pin-date">{message.timestamp}</p>
                                         <button 
                                             className="unpin-button"
-                                            onClick={() => handleUnpin(message.id)}
+                                            onClick={() => unpinMessage(message.id)}
                                             title="Unpin message"
                                         >
                                             ❌

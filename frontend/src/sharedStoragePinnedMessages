@@ -1,35 +1,52 @@
 // @ts-nocheck
+// above comment is to skip typescript warnings that doesnt matter 
+
+//import react tools we need and use like the element 
 import { createContext, useContext, useState, useEffect, createElement } from 'react';
 
+// the object to story yhe pinned message data 
 const PinnedMessagesContext = createContext(null);
 
 export function PinnedMessagesProvider(props) {
+
+  //child components that have access to parent context component 
   const children = props.children;
+
+  // array of empty pinned mesages 
   const [pinnedMessages, setPinnedMessages] = useState([]);
+  // testing if we are currently loading data from backend
   const [loading, setLoading] = useState(true);
 
+  // basically when program is rendered it will get the already pinned messages 
   useEffect(() => {
     fetchPinnedMessages();
   }, []);
 
+  // getting all pinned messages from the backend 
   const fetchPinnedMessages = async () => {
     try {
+      // same as other functions get tokens from browser 
       const token = localStorage.getItem('token');
+      // if user not logged in no token exists 
       if (!token) {
         setLoading(false);
         return;
       }
 
+      // a get from backend to get fetched messages 
       const response = await fetch('http://localhost:5000/api/messages/pinned', {
         headers: {
           'Authorization': 'Bearer ' + token
         }
       });
 
+      // if successful 
       if (response.ok) {
         const data = await response.json();
         setPinnedMessages(data);
       }
+
+    //error occurs during fetch
     } catch (error) {
       console.error('Error fetching pinned messages:', error);
     } finally {
@@ -37,15 +54,23 @@ export function PinnedMessagesProvider(props) {
     }
   };
 
+  // function to pin a new message 
   const pinMessage = async (message) => {
     try {
+
+      // get auth token
       const token = localStorage.getItem('token');
       const response = await fetch('http://localhost:5000/api/messages/pin', {
+        //post is used to send data aka send the piunned message
         method: 'POST',
         headers: {
+
+          // say we are sending json data and token
           'Content-Type': 'application/json',
           'Authorization': 'Bearer ' + token
         },
+
+        //convert to json string and send all details to backend
         body: JSON.stringify({
           messageId: message.id,
           username: message.username,
@@ -54,60 +79,73 @@ export function PinnedMessagesProvider(props) {
         })
       });
 
+      // if successful 
       if (response.ok) {
+        // get new pinned message
         const pinnedMessage = await response.json();
+        // add it to the beginning of array of pinned messages 
         const newPinnedMessages = [pinnedMessage].concat(pinnedMessages);
+        // update array
         setPinnedMessages(newPinnedMessages);
-        alert('Message pinned!');
-      } else {
-        alert('Failed to pin message');
-      }
+      } 
     } catch (error) {
-      console.error('Error pinning message:', error);
-      alert('Error pinning message');
+      console.error('Error pinning message:', error);;
     }
   };
 
+  // remove a pinned message 
   const unpinMessage = async (pinnedMessageId) => {
     try {
+      //get token, same as above 
       const token = localStorage.getItem('token');
+      // make a delete request to backend
       const response = await fetch('http://localhost:5000/api/messages/unpin/' + pinnedMessageId, {
+        // delete data
         method: 'DELETE',
         headers: {
           'Authorization': 'Bearer ' + token
         }
       });
 
+      // if successful 
       if (response.ok) {
+        // keep all messages except the one we are unpinning
         const filtered = pinnedMessages.filter(function(msg) {
           return msg.id !== pinnedMessageId;
         });
         setPinnedMessages(filtered);
-      } else {
-        alert('Failed to unpin message');
       }
     } catch (error) {
       console.error('Error unpinning message:', error);
-      alert('Error unpinning message');
     }
   };
 
+  // object with all the data and function
   const contextValue = {
+    // array of pinned messages
     pinnedMessages: pinnedMessages,
+    // fun to pin message
     pinMessage: pinMessage,
+    // fun to unpin message
     unpinMessage: unpinMessage,
+    // loading the state
     loading: loading,
+    //refresh pinned messages
     fetchPinnedMessages: fetchPinnedMessages
   };
 
+  // element that shared the data 
   return createElement(
     PinnedMessagesContext.Provider,
+    // pass it to the cobject we created earlier 
     { value: contextValue },
+    // also notify all child compentents inside main parent object 
     children
   );
 
   }
 
+// how components use pinned messages 
 export const usePinnedMessages = function() {
   return useContext(PinnedMessagesContext);
 };

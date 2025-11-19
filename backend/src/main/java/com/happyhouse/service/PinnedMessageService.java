@@ -10,23 +10,25 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PinnedMessageService {
 
+    // repo for the database operations like saving and unsaving pinned message
     private final PinnedMessageRepo pinnedMessageRepository;
 
-    // Get all pinned messages for a specific house
+    // get all pinned messages for a specific house
     public List<PinnedMessage> getPinnedMessagesByHouse(String houseId) {
+        // method created in model file to find all of the pinned messages
         return pinnedMessageRepository.findByHouseIdOrderByPinnedAtDesc(houseId);
     }
 
-    // Pin a new message
+    // how to pinn a new message
     public PinnedMessage pinMessage(String messageId, String houseId, String username,
                                     String content, String timestamp) {
-        // Check if message is already pinned
+        // this will check if message is already pinned, using the same method as above so we dont have dupe pinned messages
         var existing = pinnedMessageRepository.findByMessageIdAndHouseId(messageId, houseId);
         if (existing.isPresent()) {
             return existing.get();
         }
 
-        // Create new pinned message
+        // creates the new pinned message
         PinnedMessage pinnedMessage = new PinnedMessage();
         pinnedMessage.setMessageId(messageId);
         pinnedMessage.setHouseId(houseId);
@@ -37,7 +39,7 @@ public class PinnedMessageService {
         return pinnedMessageRepository.save(pinnedMessage);
     }
 
-    // Unpin a message
+    // method to unpin a message
     public void unpinMessage(String pinnedMessageId) {
         pinnedMessageRepository.deleteById(pinnedMessageId);
     }

@@ -17,7 +17,7 @@ export default function Chat() {
         console.log('polls icon clicked');
     };
 
-    // Sample messages
+    // hard coded messages for testing currently, will delete obviously 
     const messages = [
         {
             id: 1,
@@ -49,6 +49,7 @@ export default function Chat() {
         }
     ];
 
+    // function for pinning a message called when user clicks on pin button
     const handlePinMessage = (message) => {
         pinMessage(message);
     };
@@ -78,6 +79,7 @@ export default function Chat() {
 					
                     <p className="message-date">Tuesday 5:16pm</p>
 					
+                    {/* go through each message in the array that is hard coded */}
 					{messages.map(function(message) {
                         return (
                             <div 
@@ -86,8 +88,8 @@ export default function Chat() {
                             >
                                 <div className="message-header">
                                     <b>{message.username}</b>
-                                    <button 
-                                        className="pin-button" 
+                                    <button
+                                        className="pin-button"
                                         onClick={() => handlePinMessage(message)}
                                         title="Pin this message"
                                     >
