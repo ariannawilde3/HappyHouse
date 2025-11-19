@@ -5,7 +5,6 @@ import com.happyhouse.dto.CommentResponse;
 import com.happyhouse.model.Comment;
 import com.happyhouse.service.CommentService;
 import com.happyhouse.util.JwtUtil;
-import com.happyhouse.repository.UserRepository;
 
 import jakarta.validation.Valid;
 
