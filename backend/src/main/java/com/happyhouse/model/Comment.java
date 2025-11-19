@@ -1,6 +1,8 @@
 package com.happyhouse.model;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Comment {
     
@@ -11,6 +13,9 @@ public class Comment {
     
     private String userId;
     private String anonymousUsername;
+
+    private List<String> upvotedBy = new ArrayList<>();
+    private List<String> downvotedBy = new ArrayList<>();
 
     public Comment() {
         this.votes = 0;
@@ -73,14 +78,54 @@ public class Comment {
     public void setAnonymousUsername(String anonymousUsername) {
         this.anonymousUsername = anonymousUsername;
     }
-    
-    public void upvote() {
-        if (this.votes == null) this.votes = 0;
-        this.votes++;
+
+       public List<String> getUpvotedBy() {
+        return upvotedBy;
     }
     
-    public void downvote() {
-        if (this.votes == null) this.votes = 0;
-        this.votes--;
+    public void setUpvotedBy(List<String> upvotedBy) {
+        this.upvotedBy = upvotedBy;
+    }
+    
+    public List<String> getDownvotedBy() {
+        return downvotedBy;
+    }
+    
+    public void setDownvotedBy(List<String> downvotedBy) {
+        this.downvotedBy = downvotedBy;
+    }
+    
+    public void upvote(String userId) {
+        // Remove from downvoted if previously downvoted
+        if (downvotedBy.contains(userId)) {
+            downvotedBy.remove(userId);
+            votes++;
+        }
+        
+        // Add upvote if not already upvoted
+        if (!upvotedBy.contains(userId)) {
+            upvotedBy.add(userId);
+            votes++;
+        }
+    }
+    
+    public void downvote(String userId) {
+        // Remove from upvoted if previously upvoted
+        if (upvotedBy.contains(userId)) {
+            upvotedBy.remove(userId);
+            votes--;
+        }
+        
+        // Add downvote if not already downvoted
+        if (!downvotedBy.contains(userId)) {
+            downvotedBy.add(userId);
+            votes--;
+        }
+    }
+
+    public String getUserVote(String userId) {
+        if (upvotedBy.contains(userId)) return "up";
+        if (downvotedBy.contains(userId)) return "down";
+        return null;
     }
 }

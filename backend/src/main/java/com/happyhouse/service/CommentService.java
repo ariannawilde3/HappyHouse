@@ -65,13 +65,19 @@ public class CommentService {
     /**
      * Upvote a comment
      */
-    public Comment upvoteComment(String postId, String commentId) {
+    public Comment upvoteComment(String postId, String commentId, String userId) {
         Post post = postRepository.findByObjID(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
         Comment comment = findCommentInPost(post, commentId);
-                
-        comment.upvote();
+        
+        // Check if user already voted
+        if (comment.getUpvotedBy().contains(userId)) {
+            throw new RuntimeException("You have already upvoted this comment");
+        }
+        
+        // Pass userId to upvote method
+        comment.upvote(userId);
         postRepository.save(post);
 
         return comment;
@@ -80,13 +86,19 @@ public class CommentService {
     /**
      * Downvote a comment
      */
-    public Comment downvoteComment(String postId, String commentId) {
+    public Comment downvoteComment(String postId, String commentId, String userId) {
         Post post = postRepository.findByObjID(postId)
                 .orElseThrow(() -> new RuntimeException("Post not found"));
 
         Comment comment = findCommentInPost(post, commentId);
         
-        comment.downvote();
+        // Check if user already voted
+        if (comment.getDownvotedBy().contains(userId)) {
+            throw new RuntimeException("You have already downvoted this comment");
+        }
+        
+        // Pass userId to downvote method
+        comment.downvote(userId);
         postRepository.save(post);
 
         return comment;

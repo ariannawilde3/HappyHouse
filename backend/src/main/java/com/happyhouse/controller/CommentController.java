@@ -127,7 +127,7 @@ public class CommentController {
                         .body(Map.of(ERR, "User not found"));
             }
             
-            Comment comment = commentService.upvoteComment(postId, commentId);
+            Comment comment = commentService.upvoteComment(postId, commentId, userId);
             
             return ResponseEntity.ok(convertToResponse(comment));
         } catch (RuntimeException e) {
@@ -162,7 +162,7 @@ public class CommentController {
                         .body(Map.of(ERR, "User not found"));
             }
             
-            Comment comment = commentService.downvoteComment(postId, commentId);
+            Comment comment = commentService.downvoteComment(postId, commentId, userId);
             
             return ResponseEntity.ok(convertToResponse(comment));
         } catch (RuntimeException e) {
@@ -191,12 +191,23 @@ public class CommentController {
      * Helper method to convert Comment to CommentResponse
      */
     private CommentResponse convertToResponse(Comment comment) {
+        // Get current user to check their vote
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String userEmail = authentication != null ? authentication.getName() : null;
+        String userId = userEmail != null ? getUserIdFromEmail(userEmail) : null;
+        
         CommentResponse response = new CommentResponse();
         response.setId(comment.getId());
         response.setContent(comment.getContent());
         response.setUsername(comment.getAnonymousUsername());
         response.setVotes(comment.getVotes());
         response.setCreatedAt(comment.getCreatedAt());
+        
+        // ✅ Set user's vote status
+        if (userId != null) {
+            response.setUserVote(comment.getUserVote(userId));
+        }
+        
         return response;
     }
 }

@@ -9,6 +9,7 @@ public class CommentResponse {
     private String username; // Anonymous username
     private Integer votes;
     private LocalDateTime createdAt;
+    private String userVote;
     
     public CommentResponse() {}
     
@@ -51,6 +52,14 @@ public class CommentResponse {
     
     public void setVotes(Integer votes) {
         this.votes = votes;
+    }
+
+    public String getUserVote() {
+        return userVote;
+    }
+    
+    public void setUserVote(String userVote) {
+        this.userVote = userVote;
     }
     
     public LocalDateTime getCreatedAt() {

@@ -65,10 +65,10 @@ export default function ForumPage() {
         setLoadingComments(true);
         try {
             const commentsData = await fetchComments(postId);
+            // Backend now returns userVote field for each comment
             setComments(commentsData);
         } catch (error) {
             console.error('Error loading comments:', error);
-            // Fallback to comments from post data if backend fails
             setComments(post.comments || []);
         } finally {
             setLoadingComments(false);
@@ -144,35 +144,37 @@ export default function ForumPage() {
     };
 
     const handleCommentVote = async (type, commentId) => {
-    const userType = localStorage.getItem('userType');
-    if (userType === 'GUEST') {
-        alert('Please sign up to vote on comments!');
-        return;
-    }
+        const userType = localStorage.getItem('userType');
+        if (userType === 'GUEST') {
+            alert('Please sign up to vote on comments!');
+            return;
+        }
 
-    try {
-        let updatedComment;
-        if (type === 'up') {
-            updatedComment = await upvoteComment(post.id, commentId);
-        } else {
-            updatedComment = await downvoteComment(post.id, commentId);
+        // Check if user already voted this way
+        const comment = comments.find(c => c.id === commentId);
+        if (comment.userVote === type) {
+            alert(`You have already ${type === 'up' ? 'upvoted' : 'downvoted'} this comment`);
+            return;
         }
-        
-        // Update comment in state with backend response
-        setComments(prev => prev.map(comment =>
-            comment.id === commentId ? updatedComment : comment
-        ));
-    } catch (error) {
-        console.error('Error voting on comment:', error);
-        if (error.message.includes('already')) {
-            alert(error.message);
-        } else if (error.message.includes('Authentication required')) {
-            alert('Please log in to vote!');
-        } else {
-            alert('Failed to vote on comment. Please try again.');
+
+        try {
+            let updatedComment;
+            if (type === 'up') {
+                updatedComment = await upvoteComment(post.id, commentId);
+            } else {
+                updatedComment = await downvoteComment(post.id, commentId);
+            }
+            
+            // Update comment in state with backend response (includes new userVote)
+            setComments(prev => prev.map(c =>
+                c.id === commentId ? updatedComment : c
+            ));
+        } catch (error) {
+            console.error('Error voting on comment:', error);
+            // Show the error message from backend
+            alert(error.message || 'Failed to vote on comment');
         }
-    }
-};
+    };
 
     const formatTimestamp = (timestamp) => {
     const date = new Date(timestamp);
@@ -497,7 +499,7 @@ export default function ForumPage() {
                                     </button>
 
                                     <span style={{ 
-                                        color: comment.votes > 0 ? '#10b981' : comment.votes < 0 ? '#ef4444' : '#6b7280',
+                                        color: '#6b7280',
                                         fontSize: '0.85rem',
                                         fontWeight: '600',
                                         minWidth: '2rem',
