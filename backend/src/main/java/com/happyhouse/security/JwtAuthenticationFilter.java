@@ -25,7 +25,7 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     
-    private static final Logger logger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
+    private static final Logger errLogger = LoggerFactory.getLogger(JwtAuthenticationFilter.class);
     
     private final JwtUtil jwtUtil;
     // this is provided by spring and allows us to load user details from mongo
@@ -65,7 +65,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception e) {
-            logger.error("Cannot set user authentication: {}", e.getMessage(), e);
+            errLogger.error("Cannot set user authentication: {}", e.getMessage(), e);
         }
         // passes request to the next filter or controller
         filterChain.doFilter(request, response);

@@ -19,20 +19,25 @@ import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import java.util.List;
 import java.util.Map;
 
+import com.happyhouse.repository.UserRepository;
+
 @RestController
 @RequestMapping("/api/posts/{postId}/comments")
 @CrossOrigin(origins = "*")
 public class CommentController {
 
     private final CommentService commentService;
+    
+    private final com.happyhouse.repository.UserRepository userRepository;
 
     public static final String ERR = "error";
 
     public static final String USER404 = "User not found";
 
     @Autowired
-    public CommentController(CommentService commentService) {
+    public CommentController(CommentService commentService, UserRepository userRepository) {
         this.commentService = commentService;
+        this.userRepository = userRepository;
     }
 
     /**
@@ -175,9 +180,6 @@ public class CommentController {
     /**
      * Helper method to get userId from email using UserRepository
      */
-    @Autowired
-    private com.happyhouse.repository.UserRepository userRepository;
-
     private String getUserIdFromEmail(String email) {
         try {
             return userRepository.findByEmail(email)
