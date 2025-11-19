@@ -19,6 +19,7 @@ import { PinnedMessagesProvider } from './sharedStoragePinnedMessages';
 
 function App() {
   return (
+    // added this wrapping so everthing can access pinned messages 
     <PinnedMessagesProvider>
       <BrowserRouter>
         <Routes>

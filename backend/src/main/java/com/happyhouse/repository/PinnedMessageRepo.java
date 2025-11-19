@@ -7,14 +7,13 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
+
+// extends the database MongoBB to get the CRUD operations, works with PinnedMessage objects and ID is string
 public interface PinnedMessageRepo extends MongoRepository<PinnedMessage, String> {
 
-    // Get all pinned messages for a house, newest first
+    // gets all pinned messages for the house while making sure the newest is presented first
     List<PinnedMessage> findByHouseIdOrderByPinnedAtDesc(String houseId);
 
-    // Check if a message is already pinned
+    // checks if a message is already pinned if it is in our map
     Optional<PinnedMessage> findByMessageIdAndHouseId(String messageId, String houseId);
-
-    // Delete a specific pinned message
-    void deleteByMessageIdAndHouseId(String messageId, String houseId);
 }
