@@ -10,17 +10,20 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
 public class CommentService {
 
-    @Autowired
-    private PostRepository postRepository;
+    private final PostRepository postRepository;
+
+    private final UserRepository userRepository;
 
     @Autowired
-    private UserRepository userRepository;
+    public CommentService(PostRepository postRepository, UserRepository userRepository) {
+        this.postRepository = postRepository;
+        this.userRepository = userRepository;
+    }
 
     /**
      * Add a comment to a post
@@ -73,7 +76,7 @@ public class CommentService {
         
         // Check if user already voted
         if (comment.getUpvotedBy().contains(userId)) {
-            throw new RuntimeException("You have already upvoted this comment");
+            throw new IllegalArgumentException("You have already upvoted this comment");
         }
         
         // Pass userId to upvote method
@@ -94,7 +97,7 @@ public class CommentService {
         
         // Check if user already voted
         if (comment.getDownvotedBy().contains(userId)) {
-            throw new RuntimeException("You have already downvoted this comment");
+            throw new IllegalArgumentException("You have already downvoted this comment");
         }
         
         // Pass userId to downvote method
