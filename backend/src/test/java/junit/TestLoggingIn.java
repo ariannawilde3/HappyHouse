@@ -1,17 +1,16 @@
-package org.junit.
+package junit;
 
 import org.junit.Test;
-import static org.junit.Assert.*;
 
-public class testLogIn {
+public class TestLoggingIn {
 
     @Test
-    public void test1() {
+    public void testLoggingInWithDatabase() {
 
     }
 
     @Test
-    public void test2() {
+    public void testLoggingInWithGoogle() {
 
     }
 }

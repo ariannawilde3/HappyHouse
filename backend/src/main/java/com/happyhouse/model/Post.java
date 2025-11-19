@@ -19,7 +19,7 @@ public class Post {
 	public String title;
 	public int votes;
 	public List<String> tags;
-	public List<Comment> comments = new ArrayList<>();
+	private List<Comment> comments = new ArrayList<>();
 		
 	
 	// only for testing

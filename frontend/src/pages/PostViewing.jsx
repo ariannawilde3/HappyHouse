@@ -100,7 +100,7 @@ export default function ForumPage() {
     const handleCommentInput = () => {
         const userType = localStorage.getItem('userType');
         if (userType === 'GUEST') {
-            alert('Guests cannot add comments. Please sign up!');
+            return;
         }
     };
 

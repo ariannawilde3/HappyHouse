@@ -1,15 +1,16 @@
-import org.junit.Test;
-import static org.junit.Assert.*;
+package junit;
 
-public class testComment {
+import org.junit.Test;
+
+public class TestCommenting {
 
     @Test
-    public void test1() {
+    public void testCommentingAsGuest() {
 
     }
 
     @Test
-    public void test2() {
+    public void testCommentingAsUser() {
 
     }
 }
