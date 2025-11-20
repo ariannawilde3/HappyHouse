@@ -5,7 +5,6 @@ package com.happyhouse.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import com.happyhouse.model.Post;
-import com.happyhouse.repository.PostListTesting;
 import com.happyhouse.repository.PostRepository;
 import org.springframework.data.domain.*;
 import java.util.List;
@@ -15,12 +14,12 @@ import java.util.Arrays;
 @RestController
 @RequestMapping("/api/viewpost")
 public class PostGetController {
-
-    @Autowired
-    private PostListTesting postlist;
 	
+	private final PostRepository postrepo;
 	@Autowired
-	private PostRepository postrepo;
+	public PostGetController(PostRepository postrepo) {
+		this.postrepo = postrepo;
+	}
 
 	@GetMapping("/all/{page}")
 	public List<Post> getPostList(@PathVariable int page) {
@@ -39,7 +38,7 @@ public class PostGetController {
 		Post newPost = new Post(
 		"test content",
 		"test title",
-		new ArrayList<String>(Arrays.asList("test tag", "two tag")));
+		new ArrayList<>(Arrays.asList("test tag", "two tag")));
 		
 		postrepo.save(newPost);
 		return newPost;

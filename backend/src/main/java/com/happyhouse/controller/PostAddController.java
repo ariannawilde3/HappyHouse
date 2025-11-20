@@ -1,7 +1,7 @@
 package com.happyhouse.controller;
 
 //TODO: addpost returns response entity
-//import org.springframework.http.ResponseEntity;
+//rk.http.ResponseEntity
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -12,8 +12,11 @@ import com.happyhouse.dto.AddPostRequest;
 @RequestMapping("/api/addpost")
 public class PostAddController {
 	
+	private final PostRepository postrepo;
 	@Autowired
-	private PostRepository postrepo;
+	public PostAddController(PostRepository postrepo) {
+		this.postrepo = postrepo;
+	}
 	
 	@PostMapping("/")
 	public String addPost(@RequestBody AddPostRequest post) {
