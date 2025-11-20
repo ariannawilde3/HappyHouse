@@ -49,4 +49,15 @@ public class UserController {
         User updatedUser = authService.updateProfile(currentUser.getId(), request);
         return ResponseEntity.ok(updatedUser);
     }
+
+    @GetMapping(value = "/anonymous-name", params = "email")
+    public ResponseEntity<String> getAnonymousName(
+            @RequestHeader("Authorization") String token,
+            @RequestParam("email") String email) {
+            User u = authService.findByEmail(email);
+            String name = (u != null && u.getAnonymousUsername() != null)
+                    ? u.getAnonymousUsername()
+                    : "Anonymous";
+            return ResponseEntity.ok(name); 
+    }
 }

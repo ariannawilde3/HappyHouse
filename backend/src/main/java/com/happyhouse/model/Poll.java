@@ -1,24 +1,35 @@
 package com.happyhouse.model;
+import java.util.HashSet;
+import java.util.Set;
 
+
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document (collection = "polls")
 public class Poll {
-    private int pollID;
+    @Id
+    private String id;  
+
     private String title;
-    private String[] voteOptions;
+    private String voteOpt1;
+    private String voteOpt2;
     private int timeUntilTimeout;
     private int totalVotes;
     private int votesFor1;
     private int votesFor2;
-    private User whoCreated;
+    private String emailOfCreator; 
+    private int groupChatId; 
 
     private static int totalPolls; //change when database added
 
     //constructor
-    public Poll(String title, String voteOpt1, String voteOpt2, String[] voteOptions, int lengthRequested, User whoCreated) {
-        this.voteOptions = voteOptions;
-        this.pollID = gettotalPolls() + 1;
+    public Poll(String title, String voteOpt1, String voteOpt2, String emailOfCreator, int groupChatId) {
+        this.voteOpt1 = voteOpt1;
+        this.voteOpt2 = voteOpt2;
         this.title = title;
-        this.timeUntilTimeout = lengthRequested;
-        this.whoCreated = whoCreated;
+        this.emailOfCreator = emailOfCreator;
+        this.groupChatId = groupChatId;
     }
 
     //get and sets
@@ -27,8 +38,8 @@ public class Poll {
         return totalPolls;
     }
 
-    public int getPollID() {
-        return pollID;
+    public String getPollID() {
+        return id;
     }
 
     public String getTitle() {
@@ -40,20 +51,26 @@ public class Poll {
     }
 
     public String getVoteOption1(){
-        return voteOptions[0];
+        return this.voteOpt1;
     }
     public String getVoteOption2(){
-        return voteOptions[1];
+        return this.voteOpt2;
     }
 
-    public void setVoteOptions(String voteOption1, String voteOption2) {
-        this.voteOptions[0] = voteOption1;
-        this.voteOptions[1] = voteOption2;
+    public void setVoteOption1(String voteOpt1){
+        this.voteOpt1 = voteOpt1;
+    }
+
+    public void setVoteOption2(String voteOpt2){
+        this.voteOpt2 = voteOpt2;
     }
 
     public int getTimeUntilTimeout(){
         return timeUntilTimeout;
     }
+    private Set<String> voters = new HashSet<>();
+public Set<String> getVoters() { return voters; }
+public void setVoters(Set<String> voters) { this.voters = voters; }
 
     public void setTimeUntilTimeout(int timeUntilTimeout) {
         this.timeUntilTimeout = timeUntilTimeout;
@@ -82,11 +99,20 @@ public class Poll {
         this.votesFor2 += 1;
     }
 
-    public User getWhoCreated(){
-        return whoCreated;
+    public String getEmailOfCreator(){
+        return this.emailOfCreator;
     }
 
-    public void setWhoCreated(User whoCreated) {
-        this.whoCreated = whoCreated;
+    public void setEmailOfCreator(String whoCreated) {
+        this.emailOfCreator = whoCreated;
     }
+
+    public int getGCId(){
+        return this.groupChatId;
+    }
+
+    public void setGCId(int id) {
+        this.groupChatId=id;
+    }
+    
 }
