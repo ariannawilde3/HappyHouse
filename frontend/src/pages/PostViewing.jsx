@@ -14,6 +14,7 @@ import React, { useState } from 'react';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useLocation } from "react-router-dom";
+import { upvotePost, downvotePost } from '../api';
 import './PostViewing.css';
 import ThumbsUp from '../assets/images/ThumbsUp.png';
 import ThumbsDown from '../assets/images/ThumbsDown.png';
@@ -85,15 +86,36 @@ export default function ForumPage() {
 
     const navigate = useNavigate();
 
-    const handleVote = (type, itemId, isPost = false) => {
-        if (isPost) {
+    const handleVote = async (type) => {
+        const userType = localStorage.getItem('userType');
+        if (userType === 'GUEST') {
+            alert('Please sign up to vote on posts!');
+            return;
+        }
+
+        // Check if user already voted
+        if (post.userVote === type) {
+            alert(`You have already ${type === 'up' ? 'upvoted' : 'downvoted'} this post`);
+            return;
+        }
+
+        try {
+            let updatedPost;
+            if (type === 'up') {
+                updatedPost = await upvotePost(post.id);
+            } else {
+                updatedPost = await downvotePost(post.id);
+            }
+            
+            // Update post state with new vote count
             setPost(prev => ({
                 ...prev,
-                votes: prev.userVote === type ? prev.votes - (type === 'up' ? 1 : -1) : 
-                    prev.userVote ? prev.votes + (type === 'up' ? 2 : -2) :
-                    prev.votes + (type === 'up' ? 1 : -1),
-                userVote: prev.userVote === type ? null : type
+                votes: updatedPost.votes,
+                userVote: updatedPost.userVote || (type === 'up' ? 'up' : 'down')
             }));
+        } catch (error) {
+            console.error('Error voting on post:', error);
+            alert(error.message || 'Failed to vote on post');
         }
     };
 
@@ -346,7 +368,7 @@ export default function ForumPage() {
                                     {post.votes} Votes
                                 </span>
                                 
-                                <button onClick={() => handleVote('up', post.id, true)} style={{
+                                <button onClick={() => handleVote('up')} style={{
                                     background: 'none',
                                     border: 'none',
                                     cursor: 'pointer',
@@ -364,7 +386,7 @@ export default function ForumPage() {
                                     />
                                 </button>
                                 
-                                <button onClick={() => handleVote('down', post.id, true)} style={{
+                                <button onClick={() => handleVote('down')} style={{
                                     background: 'none',
                                     border: 'none',
                                     cursor: 'pointer',

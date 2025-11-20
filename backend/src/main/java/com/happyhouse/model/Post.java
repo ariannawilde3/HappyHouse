@@ -15,6 +15,10 @@ public class Post {
 	@Indexed
 	public String title;
 	public int votes;
+	private List<String> upvotedBy = new ArrayList<>();
+    private List<String> downvotedBy = new ArrayList<>();
+
+
 	public List<String> tags;
 	private List<Comment> comments = new ArrayList<>();
 		
@@ -59,6 +63,64 @@ public class Post {
     
     public List<Comment> getComments() {
         return comments;
+    }
+
+	public Integer getVotes() {
+        return votes;
+    }
+
+    public void setVotes(Integer votes) {
+        this.votes = votes;
+    }
+
+	public List<String> getUpvotedBy() {
+        return upvotedBy;
+    }
+    
+    public void setUpvotedBy(List<String> upvotedBy) {
+        this.upvotedBy = upvotedBy;
+    }
+    
+    public List<String> getDownvotedBy() {
+        return downvotedBy;
+    }
+    
+    public void setDownvotedBy(List<String> downvotedBy) {
+        this.downvotedBy = downvotedBy;
+    }
+    
+    public void upvote(String userId) {
+        // Remove from downvoted if previously downvoted
+        if (downvotedBy.contains(userId)) {
+            downvotedBy.remove(userId);
+            votes++;
+        }
+        
+        // Add upvote if not already upvoted
+        if (!upvotedBy.contains(userId)) {
+            upvotedBy.add(userId);
+            votes++;
+        }
+    }
+    
+    public void downvote(String userId) {
+        // Remove from upvoted if previously upvoted
+        if (upvotedBy.contains(userId)) {
+            upvotedBy.remove(userId);
+            votes--;
+        }
+        
+        // Add downvote if not already downvoted
+        if (!downvotedBy.contains(userId)) {
+            downvotedBy.add(userId);
+            votes--;
+        }
+    }
+
+    public String getUserVote(String userId) {
+        if (upvotedBy.contains(userId)) return "up";
+        if (downvotedBy.contains(userId)) return "down";
+        return null;
     }
 
 	@Override

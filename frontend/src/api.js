@@ -114,3 +114,55 @@ export const downvoteComment = async (postId, commentId) => {
   
   return response.json();
 };
+
+/**
+ * Upvote a post
+ */
+export const upvotePost = async (postId) => {
+  const token = getAuthToken();
+  
+  if (!token) {
+    throw new Error('Authentication required - no token found');
+  }
+  
+  const response = await fetch(`${API_URL}/viewpost/${postId}/upvote`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+  
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to upvote post');
+  }
+  
+  return await response.json();
+};
+
+/**
+ * Downvote a post
+ */
+export const downvotePost = async (postId) => {
+  const token = getAuthToken();
+  
+  if (!token) {
+    throw new Error('Authentication required - no token found');
+  }
+  
+  const response = await fetch(`${API_URL}/viewpost/${postId}/downvote`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`,
+    },
+  });
+  
+  if (!response.ok) {
+    const error = await response.json();
+    throw new Error(error.error || 'Failed to downvote post');
+  }
+  
+  return await response.json();
+};

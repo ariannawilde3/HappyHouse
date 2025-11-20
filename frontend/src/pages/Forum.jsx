@@ -4,8 +4,6 @@ import './Forum.css';
 import NavBar from './NavBar.jsx'
 import filter from '../assets/images/filter.png';
 import search from '../assets/images/search.png';
-import ThumbsUp from '../assets/images/ThumbsUp.png';
-import ThumbsDown from '../assets/images/ThumbsDown.png';
 
 const API_URL = 'http://localhost:5000/api';
 
@@ -101,10 +99,6 @@ export default function ForumPage() {
     const viewPost = (id) => {
         navigate('/viewPost', {state: id});
         console.log('post clicked');
-    };
-
-    const updateVotes = () => {
-        console.log('voted');
     };
 
     const addPost = () => {
@@ -223,12 +217,6 @@ export default function ForumPage() {
 
                             <div className="votes-container">
                                 <p className="votes-label"> {post.votes} Votes</p>
-                                <button onClick={updateVotes} className="up-votes">
-                                    <img src={ThumbsUp} alt="Like" style={{width: '24px', height: '24px'}}/>
-                                </button>
-                                <button onClick={updateVotes} className="down-votes">
-                                    <img src={ThumbsDown} alt="Dislike" style={{width: '24px', height: '24px'}}/>
-                                </button>
                             </div>
                         </div>
 						</div>
