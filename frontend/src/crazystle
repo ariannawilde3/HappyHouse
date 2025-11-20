@@ -1,0 +1,37 @@
+{/* Option 1 */}
+<div
+  className={
+    `poll-option-btn` +
+    (resolved && opt1Wins ? " poll-option-winner" : "") +
+    (resolved && isTie    ? " poll-option-tie"     : "")
+  }
+>
+  <input
+    className="poll-radio"
+    type="radio"
+    name={`poll-${pid}`}
+    checked={selected[pid] === 1}
+    disabled={locked || resolved}     // optional: lock when resolved
+    onChange={() => onChoose(pid, 1)}
+  />
+  {p.voteOpt1 ?? p.voteOption1}
+</div>
+
+{/* Option 2 */}
+<div
+  className={
+    `poll-option-btn` +
+    (resolved && opt2Wins ? " poll-option-winner" : "") +
+    (resolved && isTie    ? " poll-option-tie"     : "")
+  }
+>
+  <input
+    className="poll-radio"
+    type="radio"
+    name={`poll-${pid}`}
+    checked={selected[pid] === 2}
+    disabled={locked || resolved}     // optional: lock when resolved
+    onChange={() => onChoose(pid, 2)}
+  />
+  {p.voteOpt2 ?? p.voteOption2}
+</div>
