@@ -166,3 +166,13 @@
 .pin-button:active {
   transform: scale(0.95);
 }
+
+.pin-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.3;
+}
+
+.pin-button:disabled:hover {
+  opacity: 0.3;
+  transform: none;
+}

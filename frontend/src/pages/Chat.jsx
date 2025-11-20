@@ -5,7 +5,7 @@ import { usePinnedMessages } from '../sharedStoragePinnedMessages';
 
 export default function Chat() {
     const navigate = useNavigate();
-    const { pinMessage } = usePinnedMessages(); 
+    const { pinMessage, pinnedMessages } = usePinnedMessages();
 
     const goToPins = () => {
         navigate('/pins');
@@ -54,6 +54,12 @@ export default function Chat() {
         pinMessage(message);
     };
 
+    const isAlreadyPinned = (messageId) => {
+        return pinnedMessages.some(function(pinnedMsg) {
+            return String(pinnedMsg.messageId) === String(messageId);
+        });
+    };
+
     return (
         <div className="chat-outer-container">
             <div className="chat-phone-frame">
@@ -81,6 +87,8 @@ export default function Chat() {
 					
                     {/* go through each message in the array that is hard coded */}
 					{messages.map(function(message) {
+                        const isPinned = isAlreadyPinned(message.id);
+    
                         return (
                             <div 
                                 key={message.id} 
@@ -91,7 +99,8 @@ export default function Chat() {
                                     <button
                                         className="pin-button"
                                         onClick={() => handlePinMessage(message)}
-                                        title="Pin this message"
+                                        title={isPinned ? "Already pinned" : "Pin this message"}
+                                        disabled={isPinned}
                                     >
                                         📌
                                     </button>
