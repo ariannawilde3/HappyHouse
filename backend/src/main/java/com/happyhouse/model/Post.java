@@ -6,14 +6,11 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.FieldType;
 
 @Document(collection = "posts")
 public class Post {
 	@Id
 	public String objID;
-	//public int ermid;
 	public String content;
 	@Indexed
 	public String title;
@@ -23,8 +20,7 @@ public class Post {
 		
 	
 	// only for testing
-	public Post(int id, String title, String content, int votes, List<String> tagList, List<Comment> comments) {
-		//this.ermid = id;
+	public Post(String title, String content, int votes, List<String> tagList, List<Comment> comments) {
 		this.content = content;
 		this.title = title;
 		this.votes = votes;
@@ -33,7 +29,6 @@ public class Post {
 	}
 	
 	public Post(String title, String content, List<String> tagList) {
-		//this.ermid = -1;
 		this.content = content;
 		this.title = title;
 		this.votes = 0;
@@ -42,7 +37,6 @@ public class Post {
 	}
 	
 	public Post() {
-		//this.ermid = 0;
 		this.content = "HELP!";
 		this.title = "i really can't";
 		this.votes = 0;
