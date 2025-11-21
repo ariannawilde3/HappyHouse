@@ -20,7 +20,9 @@ public class GCInfo {
     private int currentRoomieCount;
 
 
-    public GCInfo() {} ;
+    public GCInfo() {
+        housename = null;
+    } ;
    
     public GCInfo (int expRoomieCount, String housename) {
         this.expectedRoomieCount = expRoomieCount;
