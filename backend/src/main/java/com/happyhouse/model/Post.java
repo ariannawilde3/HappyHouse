@@ -47,6 +47,10 @@ public class Post {
 		this.tags = null;
 		this.comments = null;
 	}
+	
+	public String getObjID() {
+		return this.objID;
+	}
 
     public String getContent() {
         return content;
