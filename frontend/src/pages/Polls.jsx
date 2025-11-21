@@ -31,6 +31,11 @@ export default function Polls() {
 
     
     const onChoose = async (pollId, option) => {
+        const poll = polls.find(p => p.id === pollId); 
+        if (poll?.hasVoted || selected[pollId]) { 
+            window.alert("You've already voted on this poll!"); 
+            return; 
+        }
         setSelected(prev => ({ ...prev, [pollId]: option }));
 
         const token = localStorage.getItem("token");
@@ -48,7 +53,7 @@ export default function Polls() {
         // update counts in local state
         setPolls(prev =>
             prev.map(p =>
-            (p.pid === updated.id)
+            (p.id === updated.id)
                 ? {
                     ...p,
                     totalVotes: updated.totalVotes,
@@ -144,7 +149,8 @@ export default function Polls() {
   className={
     `poll-option-btn` +
     (resolved && opt1Wins ? " poll-option-winner" : "") +
-    (resolved && isTie    ? " poll-option-tie"     : "") 
+    (resolved && isTie    ? " poll-option-tie"     : "") +
+    (resolved && opt2Wins ? " poll-option-loser"   : "")
   }
 >
   <input
@@ -152,8 +158,9 @@ export default function Polls() {
     type="radio"
     name={`poll-${pid}`}
     checked={selected[pid] === 1}
-    disabled={locked || resolved}     // optional: lock when resolved
+    disabled={resolved}     // optional: lock when resolved
     onChange={() => onChoose(pid, 1)}
+    readOnly
   />
   {p.voteOpt1 ?? p.voteOption1}
 </div>
@@ -163,7 +170,8 @@ export default function Polls() {
   className={
     `poll-option-btn` +
     (resolved && opt2Wins ? " poll-option-winner" : "") +
-    (resolved && isTie    ? " poll-option-tie"     : "")
+    (resolved && isTie    ? " poll-option-tie"     : "") +
+    (resolved && opt1Wins ? " poll-option-loser"   : "")
   }
 >
   <input
@@ -171,15 +179,16 @@ export default function Polls() {
     type="radio"
     name={`poll-${pid}`}
     checked={selected[pid] === 2}
-    disabled={locked || resolved}  
+    disabled={resolved}  
     onChange={() => onChoose(pid, 2)}
+    readOnly
   />
   {p.voteOpt2 ?? p.voteOption2}
 </div>
 
 
-                            <span key = {pid}className="poll-votes">
-                                {(p.totalVotes)} votes.
+                            <span key = {pid} className="poll-votes">
+                                {(p.totalVotes)}/{roommateCount} votes.
                             </span>
                         </div>);
             }).reverse()}

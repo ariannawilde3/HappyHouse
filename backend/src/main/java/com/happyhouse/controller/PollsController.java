@@ -75,7 +75,21 @@ public class PollsController {
         poll.getVoters().add(voterEmail);
 
         repo.save(poll);
-        return ResponseEntity.ok(poll);
+        
+        // Return PollView instead of Poll
+        PollView view = new PollView(
+            poll.getPollID(),
+            poll.getTitle(),
+            poll.getVoteOption1(),
+            poll.getVoteOption2(),
+            poll.getTimeUntilTimeout(),
+            poll.getTotalVotes(),
+            poll.getVotesFor1(),
+            poll.getVotesFor2(),
+            poll.getEmailOfCreator(),
+            true
+        );
+        return ResponseEntity.ok(view);
     }
 
     record PollView(
