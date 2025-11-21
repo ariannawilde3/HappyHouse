@@ -28,6 +28,8 @@ public class PostGetController {
     public static final String ERR = "error";
 
     public static final String USER404 = "User not found";
+
+    public static final String POST404 = "Post not found";
 	
 	private final PostRepository postrepo;
 	@Autowired
@@ -45,7 +47,7 @@ public class PostGetController {
     @GetMapping("/{id}")
     public Post getPost(@PathVariable String id) {
         return postrepo.findById(id)
-		.orElseThrow(() -> new RuntimeException("Post not found"));
+		.orElseThrow(() -> new RuntimeException(POST404));
     }
 	
 	@GetMapping("/add")
@@ -84,12 +86,12 @@ public class PostGetController {
             
             // Find post
             Post post = postrepo.findByObjID(id)
-                    .orElseThrow(() -> new RuntimeException("Post not found"));
+                    .orElseThrow(() -> new RuntimeException(POST404));
 
             // Check if already downvoted
             if (post.getUpvotedBy().contains(userId)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(Map.of("error", "You have already upvoted this post"));
+                        .body(Map.of(ERR, "You have already upvoted this post"));
             }
 
             // Apply downvote
@@ -127,12 +129,12 @@ public class PostGetController {
             
             // Find post
             Post post = postrepo.findByObjID(id)
-                    .orElseThrow(() -> new RuntimeException("Post not found"));
+                    .orElseThrow(() -> new RuntimeException(POST404));
 
             // Check if already downvoted
             if (post.getDownvotedBy().contains(userId)) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(Map.of("error", "You have already downvoted this post"));
+                        .body(Map.of(ERR, "You have already downvoted this post"));
             }
 
             // Apply downvote

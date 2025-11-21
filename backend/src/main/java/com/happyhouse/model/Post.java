@@ -11,10 +11,10 @@ import org.springframework.data.mongodb.core.index.Indexed;
 public class Post {
 	@Id
 	public String objID;
-	public String content;
+	private String content;
 	@Indexed
 	public String title;
-	public int votes;
+	private int votes;
 	private List<String> upvotedBy = new ArrayList<>();
     private List<String> downvotedBy = new ArrayList<>();
 
@@ -47,6 +47,14 @@ public class Post {
 		this.tags = null;
 		this.comments = null;
 	}
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
 	
 	public void addComment(Comment comment) {
         if (comments == null) {
