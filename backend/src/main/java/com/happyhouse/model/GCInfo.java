@@ -10,20 +10,21 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document (collection = "GCInformation")
 public class GCInfo {
 
-    @Id
+    @Id //lets database give id to obj
     private String id; 
 
+    //private variables
     private String housename;
-    @Indexed (unique = true) private int inviteCode = 0;
+    @Indexed (unique = true) private int inviteCode = 0; //indexed and unique for databse ease
     private boolean unlocked;
     private int expectedRoomieCount;
     private int currentRoomieCount;
 
 
-    public GCInfo() {
-        housename = null;
-    } ;
+    public GCInfo() { //empty constructor for calling 
+    }
    
+    //constructor
     public GCInfo (int expRoomieCount, String housename) {
         this.expectedRoomieCount = expRoomieCount;
         this.housename = housename;
@@ -38,7 +39,7 @@ public class GCInfo {
         return inviteCode;
     }
 
-    public int createInviteCode() { /*random number gen for gc code */
+    public int createInviteCode() { //random code gen for codes
         int code = -1;
         code = 100000 + ThreadLocalRandom.current().nextInt(900000);
         this.inviteCode = code;
@@ -58,7 +59,7 @@ public class GCInfo {
     }
 
     @Override
-    public String toString() {
+    public String toString() { //debugging
         return "SettingsForm{" +
                 "houseName='" + housename + '\'' +
                 ", roomieCount=" + expectedRoomieCount +

@@ -10,7 +10,6 @@ export default function Polls() {
     const [polls, setPolls] = useState([]);
     const navigate = useNavigate();
     const [houseName, setHouseName] = useState("");
-    const [nameByEmail, setNameByEmail] = useState({});
     const [selected, setSelected] = useState({});
     const [roommateCount, setRoommateCount] = useState(0);
 
@@ -29,16 +28,16 @@ export default function Polls() {
         console.log('pins icon clicked');
     };
 
-    
+    //when user votes
     const onChoose = async (pollId, option) => {
         const poll = polls.find(p => p.id === pollId); 
-        if (poll?.hasVoted || selected[pollId]) { 
-            window.alert("You've already voted on this poll!"); 
+        if (poll?.hasVoted || selected[pollId]) {  //if alr voted or closed
+            alert("You've already voted on this poll!"); 
             return; 
         }
         setSelected(prev => ({ ...prev, [pollId]: option }));
 
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token"); //gives backend choice
         const res = await fetch(`${API_URL}/pollMV/${pollId}/vote`, {
             method: "POST",
             headers: {
@@ -63,9 +62,10 @@ export default function Polls() {
                 : p
             )
         );
-        console.log(`Voted option ${option} on poll ${pollId}`);
+        console.log(`Voted option ${option} on poll ${pollId}`); //debugging
     };
 
+    //displays all polls when user clicks on poll tab
     useEffect(() => {
         const fetchPolls = async () => {
         const token = localStorage.getItem("token");
@@ -77,10 +77,10 @@ export default function Polls() {
 
         const houseRes = await fetch(`${API_URL}/gcc/me`, { headers });
         const houseData = await houseRes.json();
-        const roomieCount = houseData.expectedRoomieCount;
-        const housename = houseData.houseName;
+        const roomieCount = houseData.expectedRoomieCount; //for totals
+        const housename = houseData.houseName; //just to display
 
-        const pollsWithNames = await Promise.all(
+        const pollsWithNames = await Promise.all( // gets user names to see whos voted
             data.map(async (poll) => {
                 const url = `${API_URL}/users/anonymous-name?email=${encodeURIComponent(poll.emailOfCreator)}`;
                 const userRes = await fetch(url, { headers });

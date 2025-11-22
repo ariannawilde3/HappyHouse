@@ -27,6 +27,8 @@ export default function CreatePoll() {
         console.log('pins icon clicked');
     };
 
+
+    //gives user input to backend and adds to database
     const addPoll = async () => {
         const token = localStorage.getItem('token');
         await fetch(`${API_URL}/pollMV/`, {
@@ -47,7 +49,7 @@ export default function CreatePoll() {
 
 
 
-    const sendPoll = () => {
+    const sendPoll = () => { // allerts if they didnt fill everytghing in
         if (!pollQuestion.trim()) {
         alert("Please enter a question.");
         return;
@@ -64,7 +66,7 @@ export default function CreatePoll() {
         addPoll();
     };
 
-    const cancelPoll = () => {
+    const cancelPoll = () => { //throw away everything
         navigate('/polls');
         console.log('polls icon clicked');
     };

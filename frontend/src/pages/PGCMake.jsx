@@ -11,45 +11,48 @@ export default function PGCMake() {
   const navigate = useNavigate();
 
   const [invitecode, setInviteCode] = useState();
-      
+
+  //checks to see if invite code exists in backend    
   const checkInviteCode = async (code) => {
     const res = await fetch(`${API_URL}/gcc/exists/${Number(code)}`);
     const exists = await res.json(); // backend returns boolean
     return exists;
   };
 
-const handleInviteJoin = async (e) => {
-  e.preventDefault();
-  const code = Number(invitecode);
+  // if user is joining a house
+  const handleInviteJoin = async (e) => {
+    e.preventDefault();
+    const code = Number(invitecode);
 
-  const isValid = await checkInviteCode(code);
-  if (!isValid) {
-    alert("Wrong Invite Code. Try again!");
-    return;
-  }
+    const isValid = await checkInviteCode(code);
+    if (!isValid) {
+      alert("Wrong Invite Code. Try again!");
+      return;
+    }
 
-  const token = localStorage.getItem("token");
-  const res = await fetch(`${API_URL}/gcc/join/${code}`, {
-    method: "POST",
-    headers: { Authorization: `Bearer ${token}` },
-  });
+    const token = localStorage.getItem("token");
+    const res = await fetch(`${API_URL}/gcc/join/${code}`, {
+      method: "POST",
+      headers: { Authorization: `Bearer ${token}` },
+    });
 
-  const gc = await res.json(); 
+    const gc = await res.json(); 
 
-  // 🟢 Now you can safely check unlocked
-  if (gc.unlocked) {
-    navigate("/house"); // last person joined → open house chat
-  } else {
-    navigate("/gcJoinedWaiting", { state: { invitecode: code } });
-  }
+    // check if house is unlocked or not
+    if (gc.unlocked) {
+      navigate("/house"); // on last person join, open gc
+    } else {
+      navigate("/gcJoinedWaiting", { state: { invitecode: code } }); //if not last person, join waiting
+    }
 
-  //console.log("Invite Entered and Valid:", invitecode);
-};
+    //console.log("Invite Entered and Valid:", invitecode);
+  };
 
-        const handleCreateGC = () => {
-          navigate('/gcSettings');
-          console.log('CreateGC Clicked');
-        };
+  //just nav
+  const handleCreateGC = () => {
+    navigate('/gcSettings');
+    console.log('CreateGC Clicked');
+  };
 
         return (
           <div className="login-container">
