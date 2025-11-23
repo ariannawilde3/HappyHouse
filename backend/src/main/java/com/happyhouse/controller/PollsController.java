@@ -60,6 +60,9 @@ public class PollsController {
         String voterEmail = jwtUtil.extractEmail(jwt);
 
         Poll poll = repo.findById(pollId).orElse(null); //get poll
+        if (poll == null) {
+            return ResponseEntity.notFound().build();
+        }
 
         if (poll.getVoters().contains(voterEmail)) { //if alr voted
             return ResponseEntity.badRequest().body("You already voted on this poll.");
