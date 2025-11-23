@@ -10,10 +10,10 @@ import org.springframework.data.mongodb.core.index.Indexed;
 @Document(collection = "posts")
 public class Post {
 	@Id
-	public String objID;
+	private String objID;
 	private String content;
 	@Indexed
-	public String title;
+	private String title;
 	private int votes;
 	private List<String> upvotedBy = new ArrayList<>();
     private List<String> downvotedBy = new ArrayList<>();
@@ -55,10 +55,14 @@ public class Post {
     public String getContent() {
         return content;
     }
-
-    public void setContent(String content) {
+	
+	public void setContent(String content) {
         this.content = content;
     }
+	
+	public String getTitle() {
+		return title;
+	}
 	
 	public void addComment(Comment comment) {
         if (comments == null) {
