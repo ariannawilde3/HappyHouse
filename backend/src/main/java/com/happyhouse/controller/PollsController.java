@@ -52,7 +52,7 @@ public class PollsController {
 
 
     @PostMapping("/{id}/vote")
-    public ResponseEntity<?> vote(
+    public ResponseEntity<PollView> vote(
             @RequestHeader("Authorization") String token,
             @PathVariable("id") String pollId,
             @RequestBody VoteRequest req) {
@@ -65,7 +65,7 @@ public class PollsController {
         }
 
         if (poll.getVoters().contains(voterEmail)) { //if alr voted
-            return ResponseEntity.badRequest().body("You already voted on this poll.");
+            return ResponseEntity.badRequest().build();
         }
 
         // users first vote on this poll
