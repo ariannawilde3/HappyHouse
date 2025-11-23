@@ -30,8 +30,16 @@ public class PollsController {
     private final JwtUtil jwtUtil;
     
     public static class VoteRequest {
-        public int option;
+    private int option;
+
+    public int getOption() {
+        return option;
     }
+
+    public void setOption(int option) {
+        this.option = option;
+    }
+}
 
     //constructor
     public PollsController(PollsRepository repo, AuthService authService, JwtUtil jwtUtil) {
@@ -69,7 +77,11 @@ public class PollsController {
         }
 
         // users first vote on this poll
-        if (req.option == 1) poll.addToVotesFor1(); else poll.addToVotesFor2();
+        if (req.getOption() == 1) {
+            poll.addToVotesFor1();
+        } else {
+            poll.addToVotesFor2();
+        }
         poll.addToTotalVotes(); 
         poll.getVoters().add(voterEmail);
 
