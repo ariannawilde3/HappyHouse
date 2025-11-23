@@ -28,27 +28,24 @@ public class PollsController {
     private final PollsRepository repo; 
     private final AuthService authService;
     private final JwtUtil jwtUtil;
-        public static class VoteRequest {
+    
+    public static class VoteRequest {
         public int option;
     }
 
-
-    
+    //constructor
     public PollsController(PollsRepository repo, AuthService authService, JwtUtil jwtUtil) {
         this.repo = repo;
         this.authService = authService;
         this.jwtUtil = jwtUtil;
     }
 
-    @PostMapping("/")
+    @PostMapping("/") // create a new poll
     public void createPoll(@RequestBody PollRequest req, @RequestHeader(name = "Authorization") String authHeader) {
         String jwt = authHeader.substring(7); // remove "Bearer "
         String email = jwtUtil.extractEmail(jwt);
         User creator = authService.findByEmail(email);
 
-
-
-        
         Poll poll = new Poll(req.getTitle(), req.getVoteOption1(), req.getVoteOption2(), email, creator.getGroupChatCode());
         repo.save(poll);
     }
@@ -59,31 +56,42 @@ public class PollsController {
             @RequestHeader("Authorization") String token,
             @PathVariable("id") String pollId,
             @RequestBody VoteRequest req) {
-        String jwt = token.substring(7);
+        String jwt = token.substring(7); //set up
         String voterEmail = jwtUtil.extractEmail(jwt);
 
-        Poll poll = repo.findById(pollId).orElse(null);
-        if (poll == null) return ResponseEntity.notFound().build();
+        Poll poll = repo.findById(pollId).orElse(null); //get poll
 
-        if (poll.getVoters().contains(voterEmail)) {
+        if (poll.getVoters().contains(voterEmail)) { //if alr voted
             return ResponseEntity.badRequest().body("You already voted on this poll.");
         }
 
-        // first vote on THIS poll by THIS user
+        // users first vote on this poll
         if (req.option == 1) poll.addToVotesFor1(); else poll.addToVotesFor2();
         poll.addToTotalVotes(); 
         poll.getVoters().add(voterEmail);
 
         repo.save(poll);
-        return ResponseEntity.ok(poll);
+
+        PollView view = new PollView(
+            poll.getPollID(),
+            poll.getTitle(),
+            poll.getVoteOption1(),
+            poll.getVoteOption2(),
+            poll.getTotalVotes(),
+            poll.getVotesFor1(),
+            poll.getVotesFor2(),
+            poll.getEmailOfCreator(),
+            true
+        );
+        return ResponseEntity.ok(view);
     }
 
+    //allows to return all poll info instead of a poll itself
     record PollView(
         String id,
         String title,
         String voteOpt1,
         String voteOpt2,
-        int timeUntilTimeout,
         int totalVotes,
         int votesFor1,
         int votesFor2,
@@ -91,7 +99,7 @@ public class PollsController {
         boolean hasVoted
 ) {}
 
-    @GetMapping
+    @GetMapping // returns all polls at once for displaying in gc 
     public ResponseEntity<List<PollView>> getAllPolls(@RequestHeader("Authorization") String authHeader) {
         String jwt = authHeader.substring(7);
         String email = jwtUtil.extractEmail(jwt);
@@ -103,7 +111,6 @@ public class PollsController {
                 p.getTitle(),
                 p.getVoteOption1(),
                 p.getVoteOption2(),
-                p.getTimeUntilTimeout(),
                 p.getTotalVotes(),
                 p.getVotesFor1(),
                 p.getVotesFor2(),

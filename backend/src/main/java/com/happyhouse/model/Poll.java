@@ -8,20 +8,19 @@ import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document (collection = "polls")
 public class Poll {
-    @Id
+    @Id //for database
     private String id;  
 
+    //variables
     private String title;
     private String voteOpt1;
     private String voteOpt2;
-    private int timeUntilTimeout;
     private int totalVotes;
     private int votesFor1;
     private int votesFor2;
     private String emailOfCreator; 
     private int groupChatId; 
-
-    private static int totalPolls; //change when database added
+    private static int totalPolls; 
 
     //constructor
     public Poll(String title, String voteOpt1, String voteOpt2, String emailOfCreator, int groupChatId) {
@@ -65,16 +64,13 @@ public class Poll {
         this.voteOpt2 = voteOpt2;
     }
 
-    public int getTimeUntilTimeout(){
-        return timeUntilTimeout;
-    }
+    //voters set used to block revotes on polls
     private Set<String> voters = new HashSet<>();
-public Set<String> getVoters() { return voters; }
-public void setVoters(Set<String> voters) { this.voters = voters; }
 
-    public void setTimeUntilTimeout(int timeUntilTimeout) {
-        this.timeUntilTimeout = timeUntilTimeout;
-    }
+    public Set<String> getVoters() { return voters; }
+
+    public void setVoters(Set<String> voters) { this.voters = voters; }
+
 
     public int getTotalVotes() {
         return totalVotes;

@@ -16,6 +16,7 @@ export default function PGCSettings() {
   // handlers
   const handleHouseName = (value) => setHouseName(value);
 
+  // gets settings from user and sends to backend
   const getSett = async () => {
       const token = localStorage.getItem("token");
       const res = await fetch(`${API_URL}/gcc/`, {
@@ -33,6 +34,7 @@ export default function PGCSettings() {
       return n;
   };
 
+  //checks for requirements and then pass info to waiting room
   const handleCreateGCWait = async () => {
     if (!housename.trim()) {
       alert("Please enter a house name.");
