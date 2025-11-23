@@ -1,11 +1,15 @@
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from "react";
 import './Chat.css';
-import NavBar from './NavBar.jsx'
+import NavBar from './NavBar.jsx';
 import { usePinnedMessages } from '../sharedStoragePinnedMessages';
+
+const API_URL = "http://localhost:5000/api";
 
 export default function Chat() {
     const navigate = useNavigate();
     const { pinMessage, pinnedMessages } = usePinnedMessages();
+    const [houseName, setHouseName] = useState();
 
     const goToPins = () => {
         navigate('/pins');
@@ -16,6 +20,18 @@ export default function Chat() {
         navigate('/polls');
         console.log('polls icon clicked');
     };
+
+    useEffect(() => {
+        const fetchHouse = async () => {
+            const token = localStorage.getItem("token");
+            const res = await fetch(`${API_URL}/gcc/me`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const data = await res.json();
+            setHouseName(data.houseName);
+        };
+        fetchHouse();
+    }, []);
 
     // hard coded messages for testing currently, will delete obviously 
     const messages = [
@@ -75,7 +91,7 @@ export default function Chat() {
                     {/* Welcome text */}
                     <div className="chat-welcome-section">
                         <p className="chat-welcome-subtitle">Your</p>
-                        <h1 className="chat-welcome-title">HouseName</h1>
+                        <h1 className="chat-welcome-title">{houseName}</h1>
                     </div>
 					<div className="chat-btn-bar">
 						<button className="chat-bar-btn active-chat-bar-btn">Messages</button>

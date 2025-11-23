@@ -14,7 +14,7 @@ export default function Polls() {
     const [roommateCount, setRoommateCount] = useState(0);
 
      const createPoll = () => {
-        navigate('/makePoll');
+        navigate("/makePoll", { state: { houseName: houseName } });
         console.log('make poll icon clicked');
     };
 
@@ -114,7 +114,7 @@ export default function Polls() {
                     {/* Welcome text */}
                     <div className="polls-welcome-section">
                         <p className="polls-welcome-subtitle">Welcome to</p>
-                        <h1 className="polls-welcome-title">{houseName || "Loading..."}</h1>
+                        <h1 className="polls-welcome-title">{houseName}</h1>
                     </div>
 					<div className="chat-btn-bar">
 						<button onClick={goToChat} className="chat-bar-btn">Messages</button>

@@ -1,10 +1,15 @@
 import { useNavigate } from 'react-router-dom';
 import './Pins.css';
 import NavBar from './NavBar.jsx';
+import { useState, useEffect } from "react";
 import { usePinnedMessages } from '../sharedStoragePinnedMessages';
+
+const API_URL = "http://localhost:5000/api";
 
 export default function Pins() {
     const navigate = useNavigate();
+    const [houseName, setHouseName] = useState();
+    
 
     // get pinnned messages array, unpin fun, and loading state 
     const { pinnedMessages, unpinMessage, loading } = usePinnedMessages();
@@ -18,6 +23,19 @@ export default function Pins() {
         navigate('/polls');
         console.log('polls icon clicked');
     };
+
+    useEffect(() => {
+        const fetchHouse = async () => {
+            const token = localStorage.getItem("token");
+            const res = await fetch(`${API_URL}/gcc/me`, {
+                headers: { Authorization: `Bearer ${token}` },
+            });
+            const data = await res.json();
+            setHouseName(data.houseName);
+        };
+        fetchHouse();
+    }, []);
+    
 
     return (
         <div className="pins-outer-container">
@@ -34,7 +52,7 @@ export default function Pins() {
                     {/* Welcome text */}
                     <div className="pins-welcome-section">
                         <p className="pins-welcome-subtitle">Your</p>
-                        <h1 className="pins-welcome-title">HouseName</h1>
+                        <h1 className="pins-welcome-title">{houseName}</h1>
                     </div>
 					<div className="chat-btn-bar">
 						<button onClick={goToChat} className="chat-bar-btn">Messages</button>

@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import './CreatePoll.css';
-import NavBar from './NavBar.jsx'
+import NavBar from './NavBar.jsx';
+import { useLocation } from "react-router-dom";
 
 
 const API_URL = "http://localhost:5000/api";
@@ -16,6 +17,10 @@ export default function CreatePoll() {
     const handlePollQuestion = (value) => setTitle(value);
     const handlePollOpt1 = (value) => setVoteOpt1(value);
     const handlePollOpt2 = (value) => setVoteOpt2(value);
+
+    
+    const location = useLocation();
+    const houseName = location.state?.houseName || "House";
 
     const goToChat = () => {
         navigate('/house');
@@ -86,7 +91,7 @@ export default function CreatePoll() {
                     {/* Welcome text */}
                     <div className="polls-welcome-section">
                         <p className="polls-welcome-subtitle">Your</p>
-                        <h1 className="polls-welcome-title">HouseName</h1>
+                        <h1 className="polls-welcome-title">{houseName}</h1>
                     </div>
 					<div className="chat-btn-bar">
 						<button onClick={goToChat} className="chat-bar-btn">Messages</button>
