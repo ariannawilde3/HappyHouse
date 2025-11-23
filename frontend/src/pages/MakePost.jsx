@@ -44,7 +44,8 @@ export default function MakePostPage() {
 		setError(data.status);
 		forceUpdate();
 		if (data.status == 1) {
-			navigate('/viewPost', {status: data.id});
+			console.log("ADDING A POST HOPEFULLY!");
+			navigate('/viewPost', {state: data.id});
 		}
 	}
 
