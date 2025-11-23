@@ -14,6 +14,7 @@ import com.happyhouse.service.AuthService;
 import com.happyhouse.util.JwtUtil;
 import com.happyhouse.model.GCInfo;
 import com.happyhouse.model.User;
+import com.happyhouse.dto.CreateGCRequest;
 
 
 @RestController
@@ -36,21 +37,27 @@ public class CreateJoinGCController {
 
     //creates a new groupchat and invitecode
     @PostMapping("/")
-    public int getSettings(@RequestBody GCInfo form, 
-            @RequestHeader("Authorization") String authHeader) {
-        int code; 
-        do { //checks to see if code exists
-            code = form.createInviteCode();
+    public int getSettings(@RequestBody CreateGCRequest req,
+                       @RequestHeader("Authorization") String authHeader) {
+        GCInfo gc = new GCInfo();
+        gc.setHouseName(req.getHouseName());
+        gc.setExpectedRoomieCount(req.getExpectedRoomieCount());
+
+        int code;
+        do {
+            code = gc.createInviteCode();
         } while (repo != null && repo.existsByInviteCode(code));
-        form.addToCurrentRoomieCount(); //initiates as 1
-        repo.save(form); //adds to repo
 
-        String jwt = authHeader.substring(7); // remove "Bearer "
+        gc.addToCurrentRoomieCount();
+        repo.save(gc);
+
+        String jwt = authHeader.substring(7);
         String email = jwtUtil.extractEmail(jwt);
-        authService.updateGroupChatCodeByEmail(email, code); 
+        authService.updateGroupChatCodeByEmail(email, code);
 
-        return form.getInviteCode();  //return for the pgc settings page
+        return gc.getInviteCode();
     }
+
 
 
     //looks for a specific code

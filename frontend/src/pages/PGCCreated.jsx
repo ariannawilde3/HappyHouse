@@ -5,6 +5,8 @@ import NavBar from './NavBar.jsx';
 import { useLocation } from "react-router-dom";
 
 
+const API_URL = "http://localhost:5000/api";
+
 export default function PGCCreated() {
     const [waitingtojoin] = useState(''); //dealing with gc lock
     const { state } = useLocation(); //allows pass of info
