@@ -44,8 +44,8 @@ public class ChatService {
 
             Chat saved = chatRepository.save(defaultChat);
             logger.info("Chat created successfully!");
-            logger.info("YOUR CHAT ID → " + saved.getChatID());
-            logger.info("Copy this ID into React file → const chatId = \"" + saved.getChatID() + "\";");
+            logger.info("YOUR CHAT ID → {}", saved.getChatID());
+            logger.info("Copy this ID into React file → const chatId = \" {} \";", saved.getChatID());
         } else {
             logger.info("Chat already exists. Nothing to do.");
         }
