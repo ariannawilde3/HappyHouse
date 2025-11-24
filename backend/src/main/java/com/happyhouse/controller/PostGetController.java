@@ -22,6 +22,7 @@ import com.happyhouse.dto.SearchRequest;
 
 @RestController
 @RequestMapping("/api/viewpost")
+@CrossOrigin(origins = "*")
 public class PostGetController {
 
 	private final com.happyhouse.repository.UserRepository userRepository;
