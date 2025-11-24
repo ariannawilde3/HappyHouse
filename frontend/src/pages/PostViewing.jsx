@@ -214,6 +214,11 @@ export default function ForumPage() {
 };
 
     const addPost = () => {
+        const userType = localStorage.getItem('userType');
+        if (userType === 'GUEST') {
+            alert('Please sign up to vote on posts!');
+            return;
+        }
         navigate('/makePost');
         console.log('Post added to forum');
     };
