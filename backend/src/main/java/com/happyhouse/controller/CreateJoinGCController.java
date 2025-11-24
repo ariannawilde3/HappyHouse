@@ -45,9 +45,7 @@ public class CreateJoinGCController {
         gc.setExpectedRoomieCount(req.getExpectedRoomieCount());
 
         int code;
-        do {
-            code = gc.createInviteCode();
-        } while (repo != null && repo.existsByInviteCode(code));
+        code = gc.createInviteCode();
 
         gc.addToCurrentRoomieCount();
         repo.save(gc);
