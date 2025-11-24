@@ -19,7 +19,7 @@ public class Post {
     private List<String> downvotedBy = new ArrayList<>();
 
 
-	public List<String> tags;
+	private List<String> tags;
 	private List<Comment> comments = new ArrayList<>();
 		
 	
@@ -80,6 +80,10 @@ public class Post {
     public List<Comment> getComments() {
         return comments;
     }
+	
+	public List<String> getTags() {
+		return tags;
+	}
 
 	public Integer getVotes() {
         return votes;

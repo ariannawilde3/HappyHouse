@@ -3,7 +3,6 @@ package com.happyhouse.service;
 import com.happyhouse.model.Post;
 import com.happyhouse.repository.PostRepository;
 import com.happyhouse.repository.UserRepository;
-import com.happyhouse.dto.AddPostRequest;
 import com.happyhouse.dto.SearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,12 +15,10 @@ import java.util.List;
 public class GetPostService {
 	public static final String POST404 = "Post not found";
 	
-	private final com.happyhouse.repository.UserRepository userRepository;
     private final PostRepository postrepo;
 	@Autowired
-	public GetPostService(PostRepository postrepo, UserRepository userRepository) {
+	public GetPostService(PostRepository postrepo) {
 		this.postrepo = postrepo;
-		this.userRepository = userRepository;
 	}
 
 	public List<Post> getPostList(int page, int size) {

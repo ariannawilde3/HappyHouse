@@ -28,8 +28,8 @@ public class AddPostService {
 	// multiplies by 5 if title is too long
 	// multiplies by 7 if content is too long
 	public int checkValidInputs(AddPostRequest post) {
-		return 1 * (post.getTitle().length() > 0 ? 1 : 2) * 
-					(post.getContent().length() > 0 ? 1 : 3) *
+		return 1 * (!post.getTitle().isEmpty() ? 1 : 2) * 
+					(!post.getContent().isEmpty() ? 1 : 3) *
 					(post.getTitle().length() <= 50 ? 1 : 5) *
 					(post.getContent().length() <= 1200 ? 1 : 7);
 	}

@@ -1,9 +1,7 @@
 package com.happyhouse.dto;
 
 import java.util.List;
-import com.happyhouse.model.Post;
 
-// look into jakarta to validate? @Size?
 public class AddPostRequest {
     
     private String title;
