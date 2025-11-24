@@ -20,6 +20,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/api/viewpost")
+@CrossOrigin(origins = "*")
 public class PostGetController {
 
     @Autowired
