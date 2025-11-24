@@ -1,7 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useState } from "react";
 import './CreatePoll.css';
-import NavBar from './NavBar.jsx'
+import NavBar from './NavBar.jsx';
+import { useLocation } from "react-router-dom";
 
 
 const API_URL = "http://localhost:5000/api";
@@ -17,6 +18,10 @@ export default function CreatePoll() {
     const handlePollOpt1 = (value) => setVoteOpt1(value);
     const handlePollOpt2 = (value) => setVoteOpt2(value);
 
+    
+    const location = useLocation();
+    const houseName = location.state?.houseName || "House";
+
     const goToChat = () => {
         navigate('/house');
         console.log('chat icon clicked');
@@ -27,6 +32,8 @@ export default function CreatePoll() {
         console.log('pins icon clicked');
     };
 
+
+    //gives user input to backend and adds to database
     const addPoll = async () => {
         const token = localStorage.getItem('token');
         await fetch(`${API_URL}/pollMV/`, {
@@ -47,7 +54,7 @@ export default function CreatePoll() {
 
 
 
-    const sendPoll = () => {
+    const sendPoll = () => { // allerts if they didnt fill everytghing in
         if (!pollQuestion.trim()) {
         alert("Please enter a question.");
         return;
@@ -64,7 +71,7 @@ export default function CreatePoll() {
         addPoll();
     };
 
-    const cancelPoll = () => {
+    const cancelPoll = () => { //throw away everything
         navigate('/polls');
         console.log('polls icon clicked');
     };
@@ -84,7 +91,7 @@ export default function CreatePoll() {
                     {/* Welcome text */}
                     <div className="polls-welcome-section">
                         <p className="polls-welcome-subtitle">Your</p>
-                        <h1 className="polls-welcome-title">HouseName</h1>
+                        <h1 className="polls-welcome-title">{houseName}</h1>
                     </div>
 					<div className="chat-btn-bar">
 						<button onClick={goToChat} className="chat-bar-btn">Messages</button>

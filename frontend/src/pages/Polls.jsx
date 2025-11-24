@@ -10,12 +10,11 @@ export default function Polls() {
     const [polls, setPolls] = useState([]);
     const navigate = useNavigate();
     const [houseName, setHouseName] = useState("");
-    const [nameByEmail, setNameByEmail] = useState({});
     const [selected, setSelected] = useState({});
     const [roommateCount, setRoommateCount] = useState(0);
 
      const createPoll = () => {
-        navigate('/makePoll');
+        navigate("/makePoll", { state: { houseName: houseName } });
         console.log('make poll icon clicked');
     };
 
@@ -29,11 +28,16 @@ export default function Polls() {
         console.log('pins icon clicked');
     };
 
-    
+    //when user votes
     const onChoose = async (pollId, option) => {
+        const poll = polls.find(p => p.id === pollId); 
+        if (poll?.hasVoted || selected[pollId]) {  //if alr voted or closed
+            alert("You've already voted on this poll!"); 
+            return; 
+        }
         setSelected(prev => ({ ...prev, [pollId]: option }));
 
-        const token = localStorage.getItem("token");
+        const token = localStorage.getItem("token"); //gives backend choice
         const res = await fetch(`${API_URL}/pollMV/${pollId}/vote`, {
             method: "POST",
             headers: {
@@ -48,7 +52,7 @@ export default function Polls() {
         // update counts in local state
         setPolls(prev =>
             prev.map(p =>
-            (p.pid === updated.id)
+            (p.id === updated.id)
                 ? {
                     ...p,
                     totalVotes: updated.totalVotes,
@@ -58,9 +62,10 @@ export default function Polls() {
                 : p
             )
         );
-        console.log(`Voted option ${option} on poll ${pollId}`);
+        console.log(`Voted option ${option} on poll ${pollId}`); //debugging
     };
 
+    //displays all polls when user clicks on poll tab
     useEffect(() => {
         const fetchPolls = async () => {
         const token = localStorage.getItem("token");
@@ -72,10 +77,10 @@ export default function Polls() {
 
         const houseRes = await fetch(`${API_URL}/gcc/me`, { headers });
         const houseData = await houseRes.json();
-        const roomieCount = houseData.expectedRoomieCount;
-        const housename = houseData.houseName;
+        const roomieCount = houseData.expectedRoomieCount; //for totals
+        const housename = houseData.houseName; //just to display
 
-        const pollsWithNames = await Promise.all(
+        const pollsWithNames = await Promise.all( // gets user names to see whos voted
             data.map(async (poll) => {
                 const url = `${API_URL}/users/anonymous-name?email=${encodeURIComponent(poll.emailOfCreator)}`;
                 const userRes = await fetch(url, { headers });
@@ -109,7 +114,7 @@ export default function Polls() {
                     {/* Welcome text */}
                     <div className="polls-welcome-section">
                         <p className="polls-welcome-subtitle">Welcome to</p>
-                        <h1 className="polls-welcome-title">{houseName || "Loading..."}</h1>
+                        <h1 className="polls-welcome-title">{houseName}</h1>
                     </div>
 					<div className="chat-btn-bar">
 						<button onClick={goToChat} className="chat-bar-btn">Messages</button>
@@ -144,7 +149,8 @@ export default function Polls() {
   className={
     `poll-option-btn` +
     (resolved && opt1Wins ? " poll-option-winner" : "") +
-    (resolved && isTie    ? " poll-option-tie"     : "") 
+    (resolved && isTie    ? " poll-option-tie"     : "") +
+    (resolved && opt2Wins ? " poll-option-loser"   : "")
   }
 >
   <input
@@ -152,8 +158,9 @@ export default function Polls() {
     type="radio"
     name={`poll-${pid}`}
     checked={selected[pid] === 1}
-    disabled={locked || resolved}     // optional: lock when resolved
+    disabled={resolved}     // optional: lock when resolved
     onChange={() => onChoose(pid, 1)}
+    readOnly
   />
   {p.voteOpt1 ?? p.voteOption1}
 </div>
@@ -163,7 +170,8 @@ export default function Polls() {
   className={
     `poll-option-btn` +
     (resolved && opt2Wins ? " poll-option-winner" : "") +
-    (resolved && isTie    ? " poll-option-tie"     : "")
+    (resolved && isTie    ? " poll-option-tie"     : "") +
+    (resolved && opt1Wins ? " poll-option-loser"   : "")
   }
 >
   <input
@@ -171,15 +179,16 @@ export default function Polls() {
     type="radio"
     name={`poll-${pid}`}
     checked={selected[pid] === 2}
-    disabled={locked || resolved}  
+    disabled={resolved}  
     onChange={() => onChoose(pid, 2)}
+    readOnly
   />
   {p.voteOpt2 ?? p.voteOption2}
 </div>
 
 
-                            <span key = {pid}className="poll-votes">
-                                {(p.totalVotes)} votes.
+                            <span key = {pid} className="poll-votes">
+                                {(p.totalVotes)}/{roommateCount} votes.
                             </span>
                         </div>);
             }).reverse()}

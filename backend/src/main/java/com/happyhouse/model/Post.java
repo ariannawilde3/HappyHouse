@@ -6,25 +6,25 @@ import java.util.List;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.index.Indexed;
-import org.springframework.data.mongodb.core.mapping.Field;
-import org.springframework.data.mongodb.core.mapping.FieldType;
 
 @Document(collection = "posts")
 public class Post {
 	@Id
-	public String objID;
-	//public int ermid;
-	public String content;
+	private String objID;
+	private String content;
 	@Indexed
-	public String title;
-	public int votes;
+	private String title;
+	private int votes;
+	private List<String> upvotedBy = new ArrayList<>();
+    private List<String> downvotedBy = new ArrayList<>();
+
+
 	public List<String> tags;
 	private List<Comment> comments = new ArrayList<>();
 		
 	
 	// only for testing
-	public Post(int id, String title, String content, int votes, List<String> tagList, List<Comment> comments) {
-		//this.ermid = id;
+	public Post(String title, String content, int votes, List<String> tagList, List<Comment> comments) {
 		this.content = content;
 		this.title = title;
 		this.votes = votes;
@@ -33,7 +33,6 @@ public class Post {
 	}
 	
 	public Post(String title, String content, List<String> tagList) {
-		//this.ermid = -1;
 		this.content = content;
 		this.title = title;
 		this.votes = 0;
@@ -42,12 +41,27 @@ public class Post {
 	}
 	
 	public Post() {
-		//this.ermid = 0;
 		this.content = "HELP!";
 		this.title = "i really can't";
 		this.votes = 0;
 		this.tags = null;
 		this.comments = null;
+	}
+	
+	public String getObjID() {
+		return this.objID;
+	}
+
+    public String getContent() {
+        return content;
+    }
+	
+	public void setContent(String content) {
+        this.content = content;
+    }
+	
+	public String getTitle() {
+		return title;
 	}
 	
 	public void addComment(Comment comment) {
@@ -65,6 +79,64 @@ public class Post {
     
     public List<Comment> getComments() {
         return comments;
+    }
+
+	public Integer getVotes() {
+        return votes;
+    }
+
+    public void setVotes(Integer votes) {
+        this.votes = votes;
+    }
+
+	public List<String> getUpvotedBy() {
+        return upvotedBy;
+    }
+    
+    public void setUpvotedBy(List<String> upvotedBy) {
+        this.upvotedBy = upvotedBy;
+    }
+    
+    public List<String> getDownvotedBy() {
+        return downvotedBy;
+    }
+    
+    public void setDownvotedBy(List<String> downvotedBy) {
+        this.downvotedBy = downvotedBy;
+    }
+    
+    public void upvote(String userId) {
+        // Remove from downvoted if previously downvoted
+        if (downvotedBy.contains(userId)) {
+            downvotedBy.remove(userId);
+            votes++;
+        }
+        
+        // Add upvote if not already upvoted
+        if (!upvotedBy.contains(userId)) {
+            upvotedBy.add(userId);
+            votes++;
+        }
+    }
+    
+    public void downvote(String userId) {
+        // Remove from upvoted if previously upvoted
+        if (upvotedBy.contains(userId)) {
+            upvotedBy.remove(userId);
+            votes--;
+        }
+        
+        // Add downvote if not already downvoted
+        if (!downvotedBy.contains(userId)) {
+            downvotedBy.add(userId);
+            votes--;
+        }
+    }
+
+    public String getUserVote(String userId) {
+        if (upvotedBy.contains(userId)) return "up";
+        if (downvotedBy.contains(userId)) return "down";
+        return null;
     }
 
 	@Override

@@ -79,7 +79,7 @@ public class Comment {
         this.anonymousUsername = anonymousUsername;
     }
 
-       public List<String> getUpvotedBy() {
+    public List<String> getUpvotedBy() {
         return upvotedBy;
     }
     

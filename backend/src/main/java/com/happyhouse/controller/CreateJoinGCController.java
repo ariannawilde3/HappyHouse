@@ -14,6 +14,7 @@ import com.happyhouse.service.AuthService;
 import com.happyhouse.util.JwtUtil;
 import com.happyhouse.model.GCInfo;
 import com.happyhouse.model.User;
+import com.happyhouse.dto.CreateGCRequest;
 
 
 @RestController
@@ -27,6 +28,7 @@ public class CreateJoinGCController {
     private final AuthService authService;
     private final JwtUtil jwtUtil;
 
+    //constructor
     public CreateJoinGCController(AllGroupChats repo, AuthService authService, JwtUtil jwtUtil) {
         this.repo = repo;
         this.authService = authService;
@@ -36,21 +38,27 @@ public class CreateJoinGCController {
 
     //creates a new groupchat and invitecode
     @PostMapping("/")
-    public int getSettings(@RequestBody GCInfo form, 
-            @RequestHeader("Authorization") String authHeader) {
-        int code; 
-        do { //checks to see if code exists
-            code = form.createInviteCode();
+    public int getSettings(@RequestBody CreateGCRequest req,
+                       @RequestHeader("Authorization") String authHeader) {
+        GCInfo gc = new GCInfo();
+        gc.setHouseName(req.getHouseName());
+        gc.setExpectedRoomieCount(req.getExpectedRoomieCount());
+
+        int code;
+        do {
+            code = gc.createInviteCode();
         } while (repo != null && repo.existsByInviteCode(code));
-        form.addToCurrentRoomieCount(); //initiates as 1
-        repo.save(form); //adds to repo
 
-        String jwt = authHeader.substring(7); // remove "Bearer "
+        gc.addToCurrentRoomieCount();
+        repo.save(gc);
+
+        String jwt = authHeader.substring(7);
         String email = jwtUtil.extractEmail(jwt);
-        authService.updateGroupChatCodeByEmail(email, code); 
+        authService.updateGroupChatCodeByEmail(email, code);
 
-        return form.getInviteCode();  //return for the pgc settings page
+        return gc.getInviteCode();
     }
+
 
 
     //looks for a specific code
@@ -62,6 +70,7 @@ public class CreateJoinGCController {
         .orElse(false);
     }
 
+    //finds info by code
     @GetMapping("/by-code/{code}")
     public ResponseEntity<GCInfo> getByInviteCode(@PathVariable int code) {
         return repo.findByInviteCode(code)
@@ -69,16 +78,13 @@ public class CreateJoinGCController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @GetMapping("/me")
+    @GetMapping("/me") //gets the gc of the current user
     public ResponseEntity<GCInfo> getMyGroupChat(
             @RequestHeader(value = "Authorization", required = false) String authHeader) {
 
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return ResponseEntity.status(401).build();  // no string body
-        }
 
         final String jwt = authHeader.substring(7);
-        final String email = jwtUtil.extractEmail(jwt); // wrap in try/catch if you want 401 instead of 500
+        final String email = jwtUtil.extractEmail(jwt); 
 
         final User user = authService.findByEmail(email);
         if (user == null || user.getGroupChatCode() <= 0) {
@@ -91,36 +97,36 @@ public class CreateJoinGCController {
     }
 
     @PostMapping("/join/{code}")
-public ResponseEntity<GCInfo> join(@PathVariable int code,
-                                   @RequestHeader("Authorization") String authHeader) {
-    // who is joining?
-    String email = jwtUtil.extractEmail(authHeader.substring(7));
-    User user = authService.findByEmail(email);
+    public ResponseEntity<GCInfo> join(@PathVariable int code, @RequestHeader("Authorization") String authHeader) {
 
-    // load GC
-    return repo.findByInviteCode(code)
-        .map(gc -> {
-            // avoid double-count if user is already in this GC
-            if (user != null && user.getGroupChatCode() == code) {
-                return ResponseEntity.ok(gc);
-            }
+        // who joining
+        String email = jwtUtil.extractEmail(authHeader.substring(7));
+        User user = authService.findByEmail(email);
 
-            // increment (naive; good enough for small apps)
-            if (gc.getCurrentRoomieCount() < gc.getExpectedRoomieCount()) {
-                gc.addToCurrentRoomieCount();
-                if (gc.getCurrentRoomieCount() >= gc.getExpectedRoomieCount()) {
-                    gc.setUnlocked(true);
+        // load GC
+        return repo.findByInviteCode(code)
+            .map(gc -> {
+                // avoid double-count if user is already in this GC
+                if (user != null && user.getGroupChatCode() == code) {
+                    return ResponseEntity.ok(gc);
                 }
-                repo.save(gc);
-            }
 
-            // attach user to this GC
-            if (user != null) {
-                authService.updateGroupChatCodeByEmail(email, code);
-            }
+                // increment 
+                if (gc.getCurrentRoomieCount() < gc.getExpectedRoomieCount()) {
+                    gc.addToCurrentRoomieCount();
+                    if (gc.getCurrentRoomieCount() >= gc.getExpectedRoomieCount()) {
+                        gc.setUnlocked(true);
+                    }
+                    repo.save(gc);
+                }
 
-            return ResponseEntity.ok(gc);
-        })
+                // update user info
+                if (user != null) {
+                    authService.updateGroupChatCodeByEmail(email, code);
+                }
+
+                return ResponseEntity.ok(gc);
+            })
         .orElseGet(() -> ResponseEntity.notFound().build());
 }
 }

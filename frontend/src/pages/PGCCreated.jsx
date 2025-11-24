@@ -5,6 +5,8 @@ import NavBar from './NavBar.jsx';
 import { useLocation } from "react-router-dom";
 
 
+const API_URL = "http://localhost:5000/api";
+
 export default function PGCCreated() {
     const [waitingtojoin] = useState(''); //dealing with gc lock
     const { state } = useLocation(); //allows pass of info
@@ -14,15 +16,13 @@ export default function PGCCreated() {
     const inviteCode = state?.inviteCode ?? ""; // sets "" as default
 
    useEffect(() => {
-    if (!inviteCode) return;
-
     const load = async () => {
       const r = await fetch(`${API_URL}/gcc/by-code/${inviteCode}`, {
         headers: { Accept: "application/json" },
       });
-      if (!r.ok) return;
+
       const gc = await r.json();
-      setCurrentRoommates(gc.currentRoomieCount ?? 1);
+      setCurrentRoommates(gc.currentRoomieCount);
     };
 
     load(); // initial load

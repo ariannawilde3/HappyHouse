@@ -8,27 +8,24 @@ const API_URL = "http://localhost:5000/api";
 
 
 export default function PGCJoined() {
-  //const [waitingtojoin] = useState('');
-  const navigate = useNavigate();
   const location = useLocation();
-  const { invitecode } = location.state ?? {};
+  const { invitecode } = location.state ?? {}; //get invite code from previous page
 
-  const [houseName, setHouseName] = useState("");
+  const [houseName, setHouseName] = useState(""); //get house name from backend
   const [expectedRoommates, setExpected] = useState(0);
   const [currentRoommates, setCurrent] = useState(0);
 
+  //get house info to display
   useEffect(() => {
     const token = localStorage.getItem("token");
     const run = async () => {
-        if (invitecode) {
-          const r = await fetch(`${API_URL}/gcc/by-code/${invitecode}`, { headers: { Accept: "application/json" }});
-          const t = await r.text();
-          const gc = JSON.parse(t);
-          setHouseName(gc.houseName ?? "");
-          setExpected(gc.expectedRoomieCount ?? 0);
-          setCurrent(gc.currentRoomieCount ?? 0);
-          return;
-        }
+      const r = await fetch(`${API_URL}/gcc/by-code/${invitecode}`, { headers: { Accept: "application/json" }});
+      const t = await r.text();
+      const gc = JSON.parse(t);
+      setHouseName(gc.houseName ?? "");
+      setExpected(gc.expectedRoomieCount ?? 0);
+      setCurrent(gc.currentRoomieCount ?? 0);
+      return;
     };
     run();
   }, [invitecode]);

@@ -16,6 +16,7 @@ export default function MakePostPage() {
 		{text: "Safety", selected: false},
 		{text: "Landlord", selected: false}
         ]);
+	const [error, setError] = useState(1);
 	const [, forceUpdate] = useReducer(x => x + 1, 0);
 
 		
@@ -39,7 +40,13 @@ export default function MakePostPage() {
 			}),
 		}).then(response => response.json());
         console.log("Server response:", data);
-		navigate('/viewPost', {state: data.id});
+		
+		setError(data.status);
+		forceUpdate();
+		if (data.status == 1) {
+			console.log("ADDING A POST HOPEFULLY!");
+			navigate('/viewPost', {state: data.id});
+		}
 	}
 
     const handlePostSubmit = () => {
@@ -72,6 +79,14 @@ export default function MakePostPage() {
 
                     {/* Post input fields */}
                     <div className="post-container">
+						{error == 1 ? <div></div> :
+							<div className="error-message">
+								<p> ERROR!</p>
+								{error%2 == 0 ? <p>Your post must have a title</p> : <div></div>}
+								{error % 5 == 0 ? <p>Your title can't have more than 50 characters</p> : <div></div>}
+								{error % 3 == 0 ? <p>Your post must have a body</p> : <div></div>}
+								{error % 7 == 0 ? <p>Your body can't have more than 1200 characters</p> : <div></div>}
+							</div>}
                         <form onSubmit={handlePostSubmit} className="post-form">
                             <input
                                 type="text"
