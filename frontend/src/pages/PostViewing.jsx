@@ -24,6 +24,8 @@ const API_URL = 'http://localhost:5000/api';
 
 export default function ForumPage() {
 	
+	const [loading, setLoading] = useState(true);
+	
 	/*for the main post part*/
     const [post, setPost] = useState({
         id: null,
@@ -58,6 +60,8 @@ export default function ForumPage() {
 			tags: data.tags,
 			comments: data.comments
 		});
+		
+		setLoading(false);
 		
 		await loadComments(data.objID || data._id || data.id || location.state);
 	};
@@ -256,7 +260,8 @@ export default function ForumPage() {
                     </div>
 
                     {/*Main Post Section*/}
-                    <div style={{
+					{loading ? <p>Post is loading...</p> :
+					<div style={{
                         backgroundColor: 'white',
                         borderRadius: '12px',
                         padding: '1.5rem',
@@ -410,7 +415,7 @@ export default function ForumPage() {
                                 </button>
                             </div>
                         </div>
-                    </div>
+					</div>}
                     {/* END OF MAIN POST SECTION */}
 
                     {/* Comments Section Title */}
