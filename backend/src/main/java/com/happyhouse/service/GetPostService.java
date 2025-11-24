@@ -2,7 +2,6 @@ package com.happyhouse.service;
 
 import com.happyhouse.model.Post;
 import com.happyhouse.repository.PostRepository;
-import com.happyhouse.repository.UserRepository;
 import com.happyhouse.dto.SearchRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
