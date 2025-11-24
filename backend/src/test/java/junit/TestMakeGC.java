@@ -32,7 +32,6 @@ public class TestMakeGC {
         // get code to check everything worked
         int code = controller.getSettings(req, "Bearer token123");
         assertTrue(code >= 100000 && code <= 999999);
-        assertNotNull(code);
     }
 
     @Test

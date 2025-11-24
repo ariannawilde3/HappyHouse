@@ -26,9 +26,8 @@ public class TestPolls {
         JwtUtil jwt = mock(JwtUtil.class);
 
         PollsController controller = new PollsController(repo, auth, jwt);
-        PollRequest req = new PollRequest();
 
-        req = new PollRequest() {
+        PollRequest req = new PollRequest() {
             @Override public String getTitle() { return "Best dinner?"; }
             @Override public String getVoteOption1() { return "Pizza"; }
             @Override public String getVoteOption2() { return "Tacos"; }
