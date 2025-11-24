@@ -37,7 +37,6 @@ public class ChatController{
 
     @PostMapping("/")
     public Chat createChat(String chatID, String chatName, List<User> members, List<Message> messages) {
-        //Chat chat = new Chat(chatID, chatName, members, messages);
         Chat chat = new Chat("1", "Test Chat", new ArrayList<>(), new ArrayList<>());
         chatService.saveChat(chat);  // <- this writes it to the database
         return chat;

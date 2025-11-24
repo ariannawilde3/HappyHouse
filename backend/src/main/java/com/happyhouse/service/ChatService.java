@@ -5,9 +5,11 @@ import com.happyhouse.model.Message;
 import com.happyhouse.model.User;
 import com.happyhouse.repository.ChatRepository;
 import jakarta.annotation.PostConstruct;
-import org.jboss.logging.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,8 +17,8 @@ import java.util.List;
 @Service
 public class ChatService {
 
-    @Autowired
     private ChatRepository chatRepository;
+    private static final Logger logger = LoggerFactory.getLogger(ChatService.class);
 
     /**
      * Save a chat message to the database
@@ -28,7 +30,7 @@ public class ChatService {
     @PostConstruct
     public void createDefaultChatIfNotExists() {
         if (chatRepository.count() == 0) {
-            System.out.println("No chat found → creating the one and only house chat...");
+            logger.info("No chat found → creating the one and only house chat...");
 
             Chat defaultChat = new Chat();
             defaultChat.setChatName("Happy House");
@@ -36,11 +38,11 @@ public class ChatService {
             defaultChat.setMessages(new ArrayList<>());
 
             Chat saved = chatRepository.save(defaultChat);
-            System.out.println("Chat created successfully!");
-            System.out.println("YOUR CHAT ID → " + saved.getChatID());
-            System.out.println("Copy this ID into React file → const chatId = \"" + saved.getChatID() + "\";");
+            logger.info("Chat created successfully!");
+            logger.info("YOUR CHAT ID → " + saved.getChatID());
+            logger.info("Copy this ID into React file → const chatId = \"" + saved.getChatID() + "\";");
         } else {
-            System.out.println("Chat already exists. Nothing to do.");
+            logger.info("Chat already exists. Nothing to do.");
         }
     }
 
@@ -64,12 +66,6 @@ public class ChatService {
 
         return message;
     }
-
-//    public Chat addMessageToChat(Long chatId, Message message) {
-//        Chat chat = chatRepository.findById(chatId).orElseThrow();
-//        chat.getMessages().add(message);
-//        return chatRepository.save(chat);
-//    }
 
 
 }
