@@ -291,3 +291,35 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
   background-color: #6a8b6e;
 }
+
+.tag {
+  color: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 6px 12px;
+  background:#374151;
+  box-shadow: 0px 4px 5px rgba(0, 0, 0, 0.25);
+  border-radius: 6px;
+  border: none;
+  font-size: 14px;
+  cursor: pointer;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+.tag:hover {
+  transform: scale(1.05); /* grow effect on hover */
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  background-color: #6a8b6e;
+}
+
+.tag-selected {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  background-color: #6a8b6e;
+}
+
+.tag-active {
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  background-color: #6a8b6e;
+}

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Forum.css';
 import NavBar from './NavBar.jsx'
@@ -13,11 +13,29 @@ export default function ForumPage() {
 	const [page, setPage] = useState(1);
 	const [loading, setLoading] = useState(true);
 	const [reachedEnd, setReachedEnd] = useState(false);
+	
+	const [tags, setTags] = useState([
+		{text: "Legal", selected: false},
+		{text: "Finding a Roommate", selected: false},
+		{text: "Safety", selected: false},
+		{text: "Landlord", selected: false}
+        ]);
+	const [, forceUpdate] = useReducer(x => x + 1, 0);
+	const [selectedTags, setSelectedTags] = useState(new Set());
+	
+
+
 		
 	const loadContent = async () => {
 		// add setError later
-		var data = await fetch(`${API_URL}/viewpost/all/0`)
-		.then(response => response.json());
+		var data = await fetch(`${API_URL}/viewpost/search/0`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+			title: "",
+			tags: []
+			}),
+		}).then(response => response.json());
 		// console.log(data);
 		
 		/*for the main post part*/
@@ -37,8 +55,14 @@ export default function ForumPage() {
 	const [backgroundColor, setBackgroundColor] = useState("white");
 
 	const loadMorePosts = async () => {
-		var data = await fetch(`${API_URL}/viewpost/all/${page}`)
-		.then(response => response.json());
+		var data = await fetch(`${API_URL}/viewpost/search/${page}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+			title: searchQuery,
+			tags: Array.from(selectedTags)
+			}),
+		}).then(response => response.json());
 		setPage(page+1);
 		if (data.length == 0) {
 			console.log("Reached end");
@@ -53,6 +77,29 @@ export default function ForumPage() {
 			setLoading(true);
 			console.log("Loading more!");
 			loadMorePosts();
+		}
+	};
+	
+	const searchFunc = async () => {
+		console.log("searching");
+		console.log(page, searchQuery, Array.from(selectedTags));
+		//var data = await fetch(`${API_URL}/viewpost/search`);
+		setPage(1);
+		setReachedEnd(false);
+		setLoading(true);
+		var data = await fetch(`${API_URL}/viewpost/search/0`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+			title: searchQuery,
+			tags: Array.from(selectedTags)
+			}),
+		}).then(response => response.json());
+		console.log(data);
+		setPostList(data);
+		setLoading(false);
+		if (data == []) {
+			setReachedEnd(true);
 		}
 	};
 	
@@ -81,6 +128,7 @@ export default function ForumPage() {
     const handleSearchSubmit = (e) => {
         e.preventDefault();
         console.log('Search submitted: ', searchQuery);
+		searchFunc();
     };
 
     const handleSearch = (e) => {
@@ -158,15 +206,17 @@ export default function ForumPage() {
                     {/* Tags */}
                     <div className="tags-container">
                         <p className="tags-label">Tags:</p>
-                        <button type="button" onClick={updateTags} className="tag">
-                            Most Popular
-                        </button>
-                        <button type="button" onClick={updateTags} className="tag">
-                            Finding a Roommate
-                        </button>
-                        <button type="button" onClick={updateTags} className="tag">
-                            Safety
-                        </button>
+                        {tags.map((tag, index) => (
+							<button type="button"
+							onClick={() => {
+								(tag.selected ? selectedTags.delete(tag.text) : setSelectedTags(selectedTags.add(tag.text)));
+								tag.selected = !tag.selected;
+								forceUpdate();
+							}}
+							className={tag.selected ? "tag tag-selected" : "tag"}>
+								{tag.text}
+							</button>
+						))}
                     </div>
 
                     {/* No Posts Placeholder

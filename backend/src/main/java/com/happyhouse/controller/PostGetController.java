@@ -13,11 +13,12 @@ import com.happyhouse.model.Post;
 import com.happyhouse.model.User;
 import com.happyhouse.repository.PostRepository;
 import com.happyhouse.repository.UserRepository;
-import org.springframework.data.domain.*;
+
 import java.util.List;
 import java.util.Map;
-import java.util.ArrayList;
-import java.util.Arrays;
+
+import com.happyhouse.service.GetPostService;
+import com.happyhouse.dto.SearchRequest;
 
 @RestController
 @RequestMapping("/api/viewpost")
@@ -32,41 +33,35 @@ public class PostGetController {
     public static final String POST404 = "Post not found";
 	
 	private final PostRepository postrepo;
+	private final GetPostService getPostService;
 	@Autowired
-	public PostGetController(PostRepository postrepo, UserRepository userRepository) {
+	public PostGetController(PostRepository postrepo, UserRepository userRepository, GetPostService getPostService) {
 		this.postrepo = postrepo;
 		this.userRepository = userRepository;
+		this.getPostService = getPostService;
 	}
 
 	@GetMapping("/all/{page}")
 	public List<Post> getPostList(@PathVariable int page) {
-		Pageable pageable = PageRequest.of(page, 3, Sort.by("_id").descending());
-		return postrepo.findAll(pageable).getContent();
+		return getPostService.getPostList(page, 3);
+	}
+	
+	@PostMapping("/search/{page}")
+	public List<Post> getPostSearch(@RequestBody SearchRequest search, @PathVariable int page) {
+		return getPostService.getPostSearch(search, page, 3);
 	}
 
     @GetMapping("/{id}")
     public Post getPost(@PathVariable String id) {
-        return postrepo.findById(id)
-		.orElseThrow(() -> new RuntimeException(POST404));
+        return getPostService.getPost(id);
     }
-	
-	@GetMapping("/add")
-	public Post addPost() {
-		Post newPost = new Post(
-		"test content",
-		"test title",
-		new ArrayList<>(Arrays.asList("test tag", "two tag")));
-		
-		postrepo.save(newPost);
-		return newPost;
-	}
 
 	/**
      * POST /api/posts/{postId}/upvote
      * Upvote a post
      */
     @PostMapping("/{id}/upvote")
-    public ResponseEntity<Object> upvoteComment(@PathVariable String id) {
+    public ResponseEntity<Object> upvotePost(@PathVariable String id) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             
@@ -109,7 +104,7 @@ public class PostGetController {
      * POST /api/posts/{postId}/downvote
      */
     @PostMapping("/{id}/downvote")
-    public ResponseEntity<Object> downvoteComment(@PathVariable String id) {
+    public ResponseEntity<Object> downvotePost(@PathVariable String id) {
         try {
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             
