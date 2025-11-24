@@ -16,13 +16,26 @@ export default function Chat() {
   const [newMessage, setNewMessage] = useState("");
   const [loading, setLoading] = useState(true);
   const [chatId, setChatId] = useState(null);
-  const [houseName, setHouseName] = useState("HouseName");
+  // const [houseName, setHouseName] = useState("HouseName");
+  const [houseName, setHouseName] = useState();
   const chatContainerRef = useRef(null);
 
   const anonymousUsername = localStorage.getItem("anonymousUsername");
   const userId = localStorage.getItem("userId");
   const token = localStorage.getItem("token");
   
+  useEffect(() => {
+      const fetchHouse = async () => {
+          const token = localStorage.getItem("token");
+          const res = await fetch(`${API_URL}/gcc/me`, {
+              headers: { Authorization: `Bearer ${token}` },
+          });
+          const data = await res.json();
+          setHouseName(data.houseName);
+      };
+      fetchHouse();
+  }, []);
+
   // Fetch user's group chat
   useEffect(() => {
     const fetchUserChat = async () => {
@@ -44,7 +57,8 @@ export default function Chat() {
         }
 
         setChatId(chatData.id);
-        setHouseName(chatData.housename || "HouseName");
+        //setHouseName(chatData.housename || "HouseName");
+        //setHouseName(data.houseName);
         localStorage.setItem("chatId", chatData._id);
         localStorage.setItem("inviteCode", chatData.inviteCode.toString());
 
