@@ -18,13 +18,13 @@ public class ChatTest {
 
 
     @Test
-    public void testMessagesLoopZero() {
+    public void testMessagesZero() {
         Chat chat = new Chat("1", "Test", new ArrayList<>(), new ArrayList<>());
         assertEquals(0, chat.getMessages().size());
     }
 
     @Test
-    public void testMessagesLoopOne() {
+    public void testMessagesOne() {
         Chat chat = new Chat("1", "Test", new ArrayList<>(), new ArrayList<>());
         Message msg = new Message(new User(), "Message 1");
         chat.addMessage(msg);
@@ -32,7 +32,7 @@ public class ChatTest {
     }
 
     @Test
-    public void testMessagesLoopTwo() {
+    public void testMessagesTwo() {
         Chat chat = new Chat("1", "Test", new ArrayList<>(), new ArrayList<>());
         Message msg1 = new Message(new User(), "Message 1");
         Message msg2 = new Message(new User(), "Message 2");
@@ -42,13 +42,13 @@ public class ChatTest {
     }
 
     @Test
-    public void testMembersLoopZero() {
+    public void testMembersZero() {
         Chat chat = new Chat("1", "Test", new ArrayList<>(), new ArrayList<>());
         assertEquals(0, chat.getMembers().size());
     }
 
     @Test
-    public void testMembersLoopOne() {
+    public void testMembersOne() {
         Chat chat = new Chat("1", "Test", new ArrayList<>(), new ArrayList<>());
         User user = new User();
         chat.getMembers().add(user);
@@ -56,7 +56,7 @@ public class ChatTest {
     }
 
     @Test
-    public void testMembersLoopTwo() {
+    public void testMembersTwo() {
         Chat chat = new Chat("1", "Test", new ArrayList<>(), new ArrayList<>());
         User user1 = new User();
         User user2 = new User();
