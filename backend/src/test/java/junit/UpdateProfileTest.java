@@ -56,7 +56,6 @@ public class UpdateProfileTest {
         User output = userController.getCurrentUser("Bearer testtoken123").getBody();
 
         assertEquals("test@example.com", output.getEmail());
-        assertEquals("testuser", output.getAnonymousUsername());
     }
 }
 

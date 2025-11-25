@@ -17,7 +17,6 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 public class TestPolls {
-
     @Test
     public void testCreatingPoll() {
         // fake dependencies
@@ -36,9 +35,7 @@ public class TestPolls {
         final String bearer = "Bearer token123";
         final String token = "token123";
         final String email = "creator@example.com";
-
         when(jwt.extractEmail(token)).thenReturn(email);
-
         var creator = mock(com.happyhouse.model.User.class);
         when(creator.getGroupChatCode()).thenReturn(42);
         when(auth.findByEmail(email)).thenReturn(creator);
@@ -50,15 +47,12 @@ public class TestPolls {
             savedRef.set(p);
             return p;
         });
-
         controller.createPoll(req, bearer);
-
         Poll saved = savedRef.get();
         //saved title should be ok
         assertEquals("Best dinner?", saved.getTitle());
     }
 
-    
     @Test
     public void testVotingInPoll() {
         // fake dependencies
@@ -83,10 +77,7 @@ public class TestPolls {
 
         // call controller
         controller.vote("Bearer " + token, "poll-1", vr);
-
         // check vote counted
         assertEquals(1, poll.getVotesFor1());
     }
-
-
 }

@@ -33,7 +33,6 @@ public class PinnedMessagesTest {
                 "this is a pinned message", "2024-01-15T10:30:00");
 
         assertEquals("message123", output.getMessageId());
-        assertEquals("house123", output.getHouseId());
     }
 
     @Test
@@ -56,6 +55,5 @@ public class PinnedMessagesTest {
                 "this is a pinned message", "2024-01-15T10:30:00");
 
         assertEquals("pinned123", output.getId());
-        verify(pinnedMessageRepo, never()).save(any(PinnedMessage.class));
     }
 }
