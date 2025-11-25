@@ -1,22 +1,10 @@
 package junit;
 
-import com.happyhouse.model.Chat;
-import com.happyhouse.model.Message;
-import com.happyhouse.model.User;
-import com.happyhouse.repository.ChatRepository;
-import com.happyhouse.service.ChatService;
 import com.happyhouse.util.AnonymousUsernameGenerator;
 import org.junit.Test;
 
-import java.util.Arrays;
-import java.util.List;
-
-
-import java.util.ArrayList;
-import java.util.Optional;
 
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 public class AnonymousUsernameTest {
     @Test
