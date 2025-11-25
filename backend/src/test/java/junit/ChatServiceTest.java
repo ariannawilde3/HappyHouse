@@ -16,9 +16,9 @@ import static org.mockito.Mockito.*;
 
 public class ChatServiceTest {
 
-    //passes
+    // Unit Test 1: Verify message is created with correct content
     @Test
-    public void testSendMessage() {
+    public void testSendMessageContent() {
         ChatRepository repo = mock(ChatRepository.class);
         String chatId = "1";
         Chat chat = new Chat(chatId, "Test Chat", new ArrayList<>(), new ArrayList<>());
@@ -26,17 +26,48 @@ public class ChatServiceTest {
         when(repo.save(any(Chat.class))).thenReturn(chat);
 
         ChatService service = new ChatService(repo);
-        User sender = new User();  // Assume User has default constructor
+        User sender = new User();
         String content = "Hello";
         Message msg = service.sendMessage(chatId, sender, content);
 
-        assertNotNull(msg);
         assertEquals(content, msg.getContent());
+    }
+
+    // Unit Test 2: Verify message is added to chat
+    @Test
+    public void testSendMessageAddsToChat() {
+        ChatRepository repo = mock(ChatRepository.class);
+        String chatId = "1";
+        Chat chat = new Chat(chatId, "Test Chat", new ArrayList<>(), new ArrayList<>());
+        when(repo.findById(chatId)).thenReturn(Optional.of(chat));
+        when(repo.save(any(Chat.class))).thenReturn(chat);
+
+        ChatService service = new ChatService(repo);
+        User sender = new User();
+        String content = "Hello";
+        service.sendMessage(chatId, sender, content);
+
         assertEquals(1, chat.getMessages().size());
+    }
+
+    // Unit Test 3: Verify repository save is called
+    @Test
+    public void testSendMessageSavesChat() {
+        ChatRepository repo = mock(ChatRepository.class);
+        String chatId = "1";
+        Chat chat = new Chat(chatId, "Test Chat", new ArrayList<>(), new ArrayList<>());
+        when(repo.findById(chatId)).thenReturn(Optional.of(chat));
+        when(repo.save(any(Chat.class))).thenReturn(chat);
+
+        ChatService service = new ChatService(repo);
+        User sender = new User();
+        String content = "Hello";
+        service.sendMessage(chatId, sender, content);
+
         verify(repo).save(chat);
     }
 
-    //passes
+    // Unit Test 4: Verify exception when chat not found
     @Test(expected = RuntimeException.class)
     public void testGetMessagesChatNotFound() {
         ChatRepository repo = mock(ChatRepository.class);
@@ -47,7 +78,7 @@ public class ChatServiceTest {
         service.getMessages(chatId);
     }
 
-    // Negative Test 1: Send message with null content
+    // Negative Test: Send message with null content
     @Test(expected = IllegalArgumentException.class)
     public void testSendMessageWithNullContent() {
         ChatRepository repo = mock(ChatRepository.class);
@@ -57,7 +88,6 @@ public class ChatServiceTest {
 
         ChatService service = new ChatService(repo);
         User sender = new User();
-        // Sending null content should throw IllegalArgumentException
         service.sendMessage(chatId, sender, null);
     }
 }
