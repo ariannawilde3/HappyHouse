@@ -56,7 +56,7 @@ public class ChatTest {
     }
 
     @Test
-    public void testMembersTwo() {
+    public void testMembers9Two() {
         Chat chat = new Chat("1", "Test", new ArrayList<>(), new ArrayList<>());
         User user1 = new User();
         User user2 = new User();

@@ -62,24 +62,31 @@ public class ChatServiceTest {
         ChatService service = new ChatService(repo);
         User sender = new User();
         String content = "Hello";
-        service.sendMessage(chatId, sender, content);
+        Message result = service.sendMessage(chatId, sender, content);
 
+        assertNotNull(result);
         verify(repo).save(chat);
     }
 
     // Unit Test 4: Verify exception when chat not found
-    @Test(expected = RuntimeException.class)
+    @Test
     public void testGetMessagesChatNotFound() {
         ChatRepository repo = mock(ChatRepository.class);
         String chatId = "1";
         when(repo.findById(chatId)).thenReturn(Optional.empty());
 
         ChatService service = new ChatService(repo);
-        service.getMessages(chatId);
+
+        try {
+            service.getMessages(chatId);
+            fail("Expected RuntimeException to be thrown");
+        } catch (RuntimeException e) {
+            assertNotNull(e);
+        }
     }
 
     // Negative Test: Send message with null content
-    @Test(expected = IllegalArgumentException.class)
+    @Test
     public void testSendMessageWithNullContent() {
         ChatRepository repo = mock(ChatRepository.class);
         String chatId = "1";
@@ -88,6 +95,12 @@ public class ChatServiceTest {
 
         ChatService service = new ChatService(repo);
         User sender = new User();
-        service.sendMessage(chatId, sender, null);
+
+        try {
+            service.sendMessage(chatId, sender, null);
+            fail("Expected IllegalArgumentException to be thrown");
+        } catch (IllegalArgumentException e) {
+            assertNotNull(e);
+        }
     }
 }
