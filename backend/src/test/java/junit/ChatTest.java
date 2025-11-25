@@ -85,6 +85,10 @@ public class ChatTest {
         String content = "Acceptance test message";
         Message sentMsg = service.sendMessage(chatId, sender, content);
 
+        assertNotNull(sentMsg);
+        assertEquals(content, sentMsg.getContent());
+        assertEquals(sender, sentMsg.getSender());
+
         List<Message> retrieved = service.getMessages(chatId);
         assertEquals(1, retrieved.size());
         assertEquals(content, retrieved.get(0).getContent());
