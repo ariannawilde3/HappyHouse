@@ -63,6 +63,13 @@ public class ChatService {
     }
 
     public Message sendMessage(String chatId, User sender, String content) {
+        if (sender == null) {
+            throw new IllegalArgumentException("Sender cannot be null");
+        }
+        if (content == null || content.isEmpty()) {
+            throw new IllegalArgumentException("Content cannot be null or empty");
+        }
+
         Chat chat = chatRepository.findById(chatId).orElseThrow(() -> new RuntimeException("Chat not found"));
         Message message = new Message(sender, content);
 
