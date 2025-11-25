@@ -85,6 +85,8 @@ public class Post {
 		return tags;
 	}
 
+    // vote getter and setters
+
 	public Integer getVotes() {
         return votes;
     }
@@ -110,13 +112,13 @@ public class Post {
     }
     
     public void upvote(String userId) {
-        // Remove from downvoted if previously downvoted
+        // Remove if previously downvoted
         if (downvotedBy.contains(userId)) {
             downvotedBy.remove(userId);
             votes++;
         }
         
-        // Add upvote if not already upvoted
+        // upvote if not already upvoted
         if (!upvotedBy.contains(userId)) {
             upvotedBy.add(userId);
             votes++;
@@ -124,13 +126,13 @@ public class Post {
     }
     
     public void downvote(String userId) {
-        // Remove from upvoted if previously upvoted
+        // Remove if previously upvoted
         if (upvotedBy.contains(userId)) {
             upvotedBy.remove(userId);
             votes--;
         }
         
-        // Add downvote if not already downvoted
+        // downvote if not already downvoted
         if (!downvotedBy.contains(userId)) {
             downvotedBy.add(userId);
             votes--;
