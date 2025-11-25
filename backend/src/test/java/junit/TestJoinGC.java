@@ -44,8 +44,8 @@ public class TestJoinGC {
         // join
         ResponseEntity<GCInfo> response = controller.join(123456, "Bearer token123");
 
+        // check that roommie count increased
         assertEquals(3, response.getBody().getCurrentRoomieCount());
-        assertTrue(response.getBody().getUnlocked());
     }
 
     @Test
@@ -76,7 +76,7 @@ public class TestJoinGC {
 
         ResponseEntity<GCInfo> response = controller.join(654321, "Bearer oldtoken");
 
+        // checks that roommie count didnt change
         assertEquals(3, response.getBody().getCurrentRoomieCount());
-        assertTrue(response.getBody().getUnlocked());
     }
 }

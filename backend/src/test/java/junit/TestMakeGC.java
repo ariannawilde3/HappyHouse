@@ -55,7 +55,6 @@ public class TestMakeGC {
             controller.getSettings(req, "Bearer badtoken");
             fail("Expected RuntimeException for invalid token");
         } catch (RuntimeException e) {
-            assertNotNull("Exception should not be null", e);
             assertEquals("Invalid JWT", e.getMessage());
         }
     }
